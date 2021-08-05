@@ -226,12 +226,10 @@ type
     N31: TMenuItem;
     ToolButton3: TToolButton;
     SpeedButton6: TSpeedButton;
-    slave: TMyQuery;
+    mq_slave: TMyQuery;
     frxReport1: TfrxReport;
-    master: TMyQuery;
+    mq_master: TMyQuery;
     masterDBfrx: TfrxDBDataset;
-    masterDS: TDataSource;
-    slaveDS: TDataSource;
     slaveDBfrx: TfrxDBDataset;
     PopupMenu4: TPopupMenu;
     N32: TMenuItem;
@@ -590,8 +588,8 @@ begin
   MyQuery7.Connection:=DM.MyConnection1;//中药
   MyQuery8.Connection:=DM.MyConnection1;//当前患者历史就诊记录treat_slave
   MyQuery9.Connection:=DM.MyConnection1;//检查
-  master.Connection:=DM.MyConnection1;//打印处方头
-  slave.Connection:=DM.MyConnection1;//打印处方明细
+  mq_master.Connection:=DM.MyConnection1;//打印处方头
+  mq_slave.Connection:=DM.MyConnection1;//打印处方明细
 
   SetWindowLong(LabeledEdit2.Handle, GWL_STYLE, GetWindowLong(LabeledEdit2.Handle, GWL_STYLE) or ES_NUMBER);//组号.只能输入数字
   SetWindowLong(LabeledEdit7.Handle, GWL_STYLE, GetWindowLong(LabeledEdit7.Handle, GWL_STYLE) or ES_NUMBER);//天数.只能输入数字
@@ -2547,19 +2545,19 @@ begin
     exit;
   end;
 
-  master.Close;
-  master.SQL.Clear;
-  master.SQL.Text:='select tm.*,'+
+  mq_master.Close;
+  mq_master.SQL.Clear;
+  mq_master.SQL.Text:='select tm.*,'+
     '(select use_method from treat_slave where tm_unid=tm.unid and item_type=''中药'' LIMIT 1) as Chinese_Medicine_Use_Method, '+
     '(select drug_days from treat_slave where tm_unid=tm.unid and item_type=''中药'' LIMIT 1) as Chinese_Medicine_Drug_Days, '+
     '(SELECT GROUP_CONCAT(ts.item_name SEPARATOR '';'') FROM treat_slave ts WHERE ts.item_type=''诊断'' and ts.tm_unid=tm.unid) as diagnose '+
     'from treat_master tm where tm.unid='+sUnid;
-  master.Open;
-  if master.RecordCount<>1 then exit;
+  mq_master.Open;
+  if mq_master.RecordCount<>1 then exit;
   
-  slave.Close;
-  slave.SQL.Clear;
-  slave.SQL.Text:='select ts.*,'+
+  mq_slave.Close;
+  mq_slave.SQL.Clear;
+  mq_slave.SQL.Text:='select ts.*,'+
     ' dm.min_content, '+
     ' (select pack_name from drug_pack where drug_unid=ts.item_unid and unit_min_content=1 LIMIT 1) as unit_min_content '+
     ' from treat_slave ts '+
@@ -2567,8 +2565,8 @@ begin
     ' where ts.tm_unid='+sUnid+
     ' and ts.item_type not in (''体温'',''收缩压'',''舒张压'',''心率'',''主诉'',''简要病史'',''体查'',''辅助检查'',''嘱托'',''诊断'') '+
     ' order by ts.item_type,ts.group_num ';
-  slave.Open;
-  if slave.RecordCount<=0 then exit;
+  mq_slave.Open;
+  if mq_slave.RecordCount<=0 then exit;
 
   if ifAutoCheck and(sAudit_Doctor='') then
   begin

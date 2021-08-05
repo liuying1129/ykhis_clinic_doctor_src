@@ -1868,7 +1868,7 @@ object frmMain: TfrmMain
       OnClick = N27Click
     end
   end
-  object slave: TMyQuery
+  object mq_slave: TMyQuery
     SQL.Strings = (
       'select *,'
       '0 as min_content,'#39'1'#39' as unit_min_content,'
@@ -2696,7 +2696,7 @@ object frmMain: TfrmMain
       end
     end
   end
-  object master: TMyQuery
+  object mq_master: TMyQuery
     SQL.Strings = (
       'select * from treat_master')
     Left = 689
@@ -2705,20 +2705,10 @@ object frmMain: TfrmMain
   object masterDBfrx: TfrxDBDataset
     UserName = 'master'
     CloseDataSource = False
-    DataSource = masterDS
+    DataSet = mq_master
     BCDToCurrency = False
-    Left = 757
+    Left = 721
     Top = 7
-  end
-  object masterDS: TDataSource
-    DataSet = master
-    Left = 721
-    Top = 8
-  end
-  object slaveDS: TDataSource
-    DataSet = slave
-    Left = 721
-    Top = 40
   end
   object slaveDBfrx: TfrxDBDataset
     UserName = 'slave'
@@ -2760,9 +2750,9 @@ object frmMain: TfrmMain
       'min_content=min_content'
       'unit_min_content=unit_min_content'
       'amount=amount')
-    DataSource = slaveDS
+    DataSet = mq_slave
     BCDToCurrency = False
-    Left = 757
+    Left = 721
     Top = 40
   end
   object PopupMenu4: TPopupMenu

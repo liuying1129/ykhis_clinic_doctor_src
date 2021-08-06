@@ -1886,7 +1886,7 @@ object frmMain: TfrmMain
     PrintOptions.Printer = #39044#35774
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 44337.913513217600000000
-    ReportOptions.LastChange = 44412.992898900460000000
+    ReportOptions.LastChange = 44414.455360439820000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'begin'
@@ -1957,8 +1957,8 @@ object frmMain: TfrmMain
           Width = 18.897650000000000000
           Height = 41.574830000000000000
           Memo.UTF8 = (
-            ''
-            '')
+            #32457'?'
+            #37714'?')
         end
         object Memo6: TfrxMemoView
           Left = 303.141930000000000000
@@ -2015,8 +2015,13 @@ object frmMain: TfrmMain
           Font.Style = [fsBold]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[SCSYDW][slave."item_type"]'#28598#21228#26591)
+            '[SCSYDW]'#28598#21228#26591)
           ParentFont = False
+          Formats = <
+            item
+            end
+            item
+            end>
         end
         object Memo14: TfrxMemoView
           Left = 419.527830000000000000
@@ -2029,7 +2034,7 @@ object frmMain: TfrmMain
           Font.Style = []
           HAlign = haCenter
           Memo.UTF8 = (
-            '')
+            #37829#57792#8364#27692#58921#37826'?')
           ParentFont = False
         end
         object Memo15: TfrxMemoView
@@ -2063,7 +2068,7 @@ object frmMain: TfrmMain
           Height = 18.897650000000000000
           DataSetName = 'UmasterDBfrx'
           Memo.UTF8 = (
-            '')
+            #38338#12584#30230#37721'?[master."unid"]')
         end
         object Line1: TfrxLineView
           Left = 3.779530000000000000
@@ -2139,7 +2144,7 @@ object frmMain: TfrmMain
       object PageFooter1: TfrxPageFooter
         FillType = ftBrush
         Height = 68.031540000000000000
-        Top = 377.953000000000000000
+        Top = 408.189240000000000000
         Width = 483.779840000000000000
         object Memo17: TfrxMemoView
           Left = 11.338590000000000000
@@ -2155,7 +2160,7 @@ object frmMain: TfrmMain
           Width = 151.181200000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            '')
+            #28729#8451#29299#38000'?[master."audit_doctor"]')
         end
         object Memo19: TfrxMemoView
           Left = 181.417440000000000000
@@ -2163,7 +2168,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            '')
+            #37824#24816#22402#37723'?')
         end
         object Memo20: TfrxMemoView
           Left = 181.417440000000000000
@@ -2171,7 +2176,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            '')
+            #29835#20910#21412#37723'?')
         end
         object Memo21: TfrxMemoView
           Left = 336.378170000000000000
@@ -2179,7 +2184,7 @@ object frmMain: TfrmMain
           Width = 143.622140000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            '')
+            #38322#25126#58754'('#37711'?:[Sum(<slave."drug_num">*<slave."unit_price">)]')
         end
         object Memo22: TfrxMemoView
           Left = 336.378170000000000000
@@ -2187,7 +2192,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            '')
+            #37721#25123#23874#37723'?')
         end
         object TotalPages1: TfrxMemoView
           Left = 11.338590000000000000
@@ -2201,7 +2206,7 @@ object frmMain: TfrmMain
           Font.Style = []
           HAlign = haCenter
           Memo.UTF8 = (
-            '')
+            '('#37711#30453'TotalPages#]'#26916'?'#32471#29724'Page#]'#26916'?')
           ParentFont = False
           Formats = <
             item
@@ -2218,11 +2223,13 @@ object frmMain: TfrmMain
       object MasterData1: TfrxMasterData
         FillType = ftBrush
         Height = 49.133890000000000000
-        Top = 268.346630000000000000
+        Top = 298.582870000000000000
         Width = 483.779840000000000000
         DataSet = slaveDBfrx
         DataSetName = 'slave'
         Filter = '<slave."item_type"><>'#39#20013#33647#39
+        KeepFooter = True
+        KeepHeader = True
         RowCount = 0
         Stretched = True
         object Memo2: TfrxMemoView
@@ -2251,7 +2258,7 @@ object frmMain: TfrmMain
           Height = 18.897650000000000000
           DataSetName = 'UmasterDBfrx'
           Memo.UTF8 = (
-            '')
+            '[slave."use_method"] [slave."drug_freq"]*[slave."drug_days"]'#28598'?')
           Formats = <
             item
             end
@@ -2293,10 +2300,21 @@ object frmMain: TfrmMain
       end
       object GroupHeader1: TfrxGroupHeader
         FillType = ftBrush
+        Height = 30.236240000000000000
         Top = 245.669450000000000000
         Width = 483.779840000000000000
         Condition = 'slave."item_type"'
         StartNewPage = True
+        object Memo49: TfrxMemoView
+          Left = 41.574830000000000000
+          Top = 3.779530000000000000
+          Width = 94.488250000000000000
+          Height = 18.897650000000000000
+          StretchMode = smActualHeight
+          DataSetName = 'UmasterDBfrx'
+          Memo.UTF8 = (
+            '[slave."item_type"]')
+        end
       end
     end
     object Page_Chinese_Medicine: TfrxReportPage
@@ -2346,8 +2364,8 @@ object frmMain: TfrmMain
           Width = 18.897650000000000000
           Height = 41.574830000000000000
           Memo.UTF8 = (
-            ''
-            '')
+            #32457'?'
+            #37714'?')
         end
         object Memo29: TfrxMemoView
           Left = 303.141930000000000000
@@ -2404,7 +2422,7 @@ object frmMain: TfrmMain
           Font.Style = [fsBold]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[SCSYDW][slave."item_type"]'#28598#21228#26591'2')
+            '[SCSYDW]'#28051#57697#23874#28598#21228#26591)
           ParentFont = False
           Formats = <
             item
@@ -2423,7 +2441,7 @@ object frmMain: TfrmMain
           Font.Style = []
           HAlign = haCenter
           Memo.UTF8 = (
-            '')
+            #37829#57792#8364#27692#58921#37826'?')
           ParentFont = False
         end
         object Memo36: TfrxMemoView
@@ -2457,7 +2475,7 @@ object frmMain: TfrmMain
           Height = 18.897650000000000000
           DataSetName = 'UmasterDBfrx'
           Memo.UTF8 = (
-            '')
+            #38338#12584#30230#37721'?[master."unid"]')
         end
         object Line10: TfrxLineView
           Left = 3.779530000000000000
@@ -2533,7 +2551,7 @@ object frmMain: TfrmMain
       object PageFooter2: TfrxPageFooter
         FillType = ftBrush
         Height = 68.031540000000000000
-        Top = 377.953000000000000000
+        Top = 483.779840000000000000
         Width = 483.779840000000000000
         object Memo40: TfrxMemoView
           Left = 11.338590000000000000
@@ -2549,7 +2567,7 @@ object frmMain: TfrmMain
           Width = 151.181200000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            '')
+            #28729#8451#29299#38000'?[master."audit_doctor"]')
         end
         object Memo42: TfrxMemoView
           Left = 181.417440000000000000
@@ -2557,7 +2575,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            '')
+            #37824#24816#22402#37723'?')
         end
         object Memo43: TfrxMemoView
           Left = 181.417440000000000000
@@ -2565,7 +2583,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            '')
+            #29835#20910#21412#37723'?')
         end
         object Memo44: TfrxMemoView
           Left = 336.378170000000000000
@@ -2573,7 +2591,7 @@ object frmMain: TfrmMain
           Width = 143.622140000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            '')
+            #38322#25126#58754'('#37711'?:[Sum(<slave."drug_num">*<slave."unit_price">)]')
         end
         object Memo45: TfrxMemoView
           Left = 336.378170000000000000
@@ -2581,7 +2599,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            '')
+            #37721#25123#23874#37723'?')
         end
         object Memo46: TfrxMemoView
           Left = 11.338590000000000000
@@ -2595,7 +2613,7 @@ object frmMain: TfrmMain
           Font.Style = []
           HAlign = haCenter
           Memo.UTF8 = (
-            '')
+            '('#37711#30453'TotalPages#]'#26916'?'#32471#29724'Page#]'#26916'?')
           ParentFont = False
           Formats = <
             item
@@ -2612,87 +2630,84 @@ object frmMain: TfrmMain
       object MasterData2: TfrxMasterData
         FillType = ftBrush
         Height = 49.133890000000000000
-        Top = 268.346630000000000000
+        Top = 298.582870000000000000
         Width = 483.779840000000000000
-        Columns = 2
-        ColumnWidth = 241.889763779528000000
+        Columns = 3
+        ColumnWidth = 160.629921259843000000
         DataSet = slaveDBfrx
         DataSetName = 'slave'
         Filter = '<slave."item_type">='#39#20013#33647#39
         RowCount = 0
         Stretched = True
-        object Memo47: TfrxMemoView
-          Left = 11.338590000000000000
-          Top = 3.779530000000000000
-          Width = 26.456710000000000000
-          Height = 18.897650000000000000
-          DataSetName = 'UmasterDBfrx'
-          Memo.UTF8 = (
-            '[slave."group_num"]')
-        end
         object Memo48: TfrxMemoView
-          Left = 41.574830000000000000
-          Top = 3.779530000000000000
-          Width = 56.692950000000000000
+          Left = 19.779530000000000000
+          Top = 7.559060000000000000
+          Width = 132.283550000000000000
           Height = 18.897650000000000000
           StretchMode = smActualHeight
           DataSetName = 'UmasterDBfrx'
           Memo.UTF8 = (
-            '[slave."item_name"]')
-        end
-        object Memo49: TfrxMemoView
-          Left = 181.417440000000000000
-          Top = 3.779530000000000000
-          Width = 56.692950000000000000
-          Height = 18.897650000000000000
-          DataSetName = 'UmasterDBfrx'
-          Memo.UTF8 = (
-            '')
-          Formats = <
-            item
-            end
-            item
-            end
-            item
-            end>
-        end
-        object Memo50: TfrxMemoView
-          Left = 101.976500000000000000
-          Top = 26.456710000000000000
-          Width = 71.811070000000000000
-          Height = 18.897650000000000000
-          AutoWidth = True
-          Memo.UTF8 = (
-            #37922#12582#30838':[slave."dosage"][slave."unit_dosage"]')
-          Formats = <
-            item
-            end
-            item
-            end>
-        end
-        object Memo51: TfrxMemoView
-          Left = 101.976500000000000000
-          Top = 3.779530000000000000
-          Width = 71.811070000000000000
-          Height = 18.897650000000000000
-          AutoWidth = True
-          Memo.UTF8 = (
-            
-              '[slave."min_content"][slave."unit_min_content"]*[slave."drug_num' +
-              '"][slave."unit_drug"]')
-          Formats = <
-            item
-            end
-            item
-            end>
+            '[slave."item_name"] [slave."dosage"][slave."unit_dosage"]')
         end
       end
       object GroupHeader2: TfrxGroupHeader
         FillType = ftBrush
+        Height = 30.236240000000000000
         Top = 245.669450000000000000
         Width = 483.779840000000000000
         Condition = 'slave."item_type"'
         StartNewPage = True
+        object Memo50: TfrxMemoView
+          Left = 45.354360000000000000
+          Top = 3.779530000000000000
+          Width = 94.488250000000000000
+          Height = 18.897650000000000000
+          StretchMode = smActualHeight
+          DataSetName = 'UmasterDBfrx'
+          Memo.UTF8 = (
+            '[slave."item_type"]')
+        end
+        object Memo51: TfrxMemoView
+          Left = 177.637910000000000000
+          Top = 3.779530000000000000
+          Width = 94.488250000000000000
+          Height = 18.897650000000000000
+          StretchMode = smActualHeight
+          DataSetName = 'UmasterDBfrx'
+          Memo.UTF8 = (
+            '[slave."drug_days"]')
+        end
+        object Memo52: TfrxMemoView
+          Left = 294.803340000000000000
+          Top = 3.779530000000000000
+          Width = 94.488250000000000000
+          Height = 18.897650000000000000
+          StretchMode = smActualHeight
+          DataSetName = 'UmasterDBfrx'
+          Memo.UTF8 = (
+            '[slave."use_method"]')
+        end
+      end
+      object GroupFooter1: TfrxGroupFooter
+        FillType = ftBrush
+        Height = 52.913420000000000000
+        Top = 370.393940000000000000
+        Width = 483.779840000000000000
+        object Memo47: TfrxMemoView
+          Left = 18.897650000000000000
+          Top = 30.236240000000000000
+          Width = 321.259952360000000000
+          Height = 18.897650000000000000
+          Memo.UTF8 = (
+            
+              #37922#12582#30838':[master."Chinese_Medicine_Use_Method"]  '#37813#59169'master."Chinese_Me' +
+              'dicine_Drug_Days"]'#37715'?')
+          Formats = <
+            item
+            end
+            item
+            end>
+        end
       end
     end
   end

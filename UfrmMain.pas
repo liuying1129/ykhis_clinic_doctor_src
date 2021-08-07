@@ -1776,7 +1776,7 @@ begin
     Label17.Caption:='';
     //LabeledEdit35.Clear;//¼ÁÊý
 
-    if LabeledEdit35.CanFocus then LabeledEdit35.SetFocus;
+    if LabeledEdit21.CanFocus then LabeledEdit21.SetFocus;
 end;
 
 procedure TfrmMain.UpdateMyQuery7;

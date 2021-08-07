@@ -1957,8 +1957,8 @@ object frmMain: TfrmMain
           Width = 18.897650000000000000
           Height = 41.574830000000000000
           Memo.UTF8 = (
-            #32457'?'
-            #37714'?')
+            ''
+            '')
         end
         object Memo6: TfrxMemoView
           Left = 303.141930000000000000
@@ -2034,7 +2034,7 @@ object frmMain: TfrmMain
           Font.Style = []
           HAlign = haCenter
           Memo.UTF8 = (
-            #37829#57792#8364#27692#58921#37826'?')
+            '')
           ParentFont = False
         end
         object Memo15: TfrxMemoView
@@ -2068,7 +2068,7 @@ object frmMain: TfrmMain
           Height = 18.897650000000000000
           DataSetName = 'UmasterDBfrx'
           Memo.UTF8 = (
-            #38338#12584#30230#37721'?[master."unid"]')
+            '')
         end
         object Line1: TfrxLineView
           Left = 3.779530000000000000
@@ -2160,7 +2160,7 @@ object frmMain: TfrmMain
           Width = 151.181200000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            #28729#8451#29299#38000'?[master."audit_doctor"]')
+            '')
         end
         object Memo19: TfrxMemoView
           Left = 181.417440000000000000
@@ -2168,7 +2168,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            #37824#24816#22402#37723'?')
+            '')
         end
         object Memo20: TfrxMemoView
           Left = 181.417440000000000000
@@ -2176,7 +2176,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            #29835#20910#21412#37723'?')
+            '')
         end
         object Memo21: TfrxMemoView
           Left = 336.378170000000000000
@@ -2184,7 +2184,7 @@ object frmMain: TfrmMain
           Width = 143.622140000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            #38322#25126#58754'('#37711'?:[Sum(<slave."drug_num">*<slave."unit_price">)]')
+            '')
         end
         object Memo22: TfrxMemoView
           Left = 336.378170000000000000
@@ -2192,7 +2192,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            #37721#25123#23874#37723'?')
+            '')
         end
         object TotalPages1: TfrxMemoView
           Left = 11.338590000000000000
@@ -2206,7 +2206,7 @@ object frmMain: TfrmMain
           Font.Style = []
           HAlign = haCenter
           Memo.UTF8 = (
-            '('#37711#30453'TotalPages#]'#26916'?'#32471#29724'Page#]'#26916'?')
+            '')
           ParentFont = False
           Formats = <
             item
@@ -2258,7 +2258,7 @@ object frmMain: TfrmMain
           Height = 18.897650000000000000
           DataSetName = 'UmasterDBfrx'
           Memo.UTF8 = (
-            '[slave."use_method"] [slave."drug_freq"]*[slave."drug_days"]'#28598'?')
+            '')
           Formats = <
             item
             end
@@ -2364,8 +2364,8 @@ object frmMain: TfrmMain
           Width = 18.897650000000000000
           Height = 41.574830000000000000
           Memo.UTF8 = (
-            #32457'?'
-            #37714'?')
+            ''
+            '')
         end
         object Memo29: TfrxMemoView
           Left = 303.141930000000000000
@@ -2441,7 +2441,7 @@ object frmMain: TfrmMain
           Font.Style = []
           HAlign = haCenter
           Memo.UTF8 = (
-            #37829#57792#8364#27692#58921#37826'?')
+            '')
           ParentFont = False
         end
         object Memo36: TfrxMemoView
@@ -2475,7 +2475,7 @@ object frmMain: TfrmMain
           Height = 18.897650000000000000
           DataSetName = 'UmasterDBfrx'
           Memo.UTF8 = (
-            #38338#12584#30230#37721'?[master."unid"]')
+            '')
         end
         object Line10: TfrxLineView
           Left = 3.779530000000000000
@@ -2567,7 +2567,7 @@ object frmMain: TfrmMain
           Width = 151.181200000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            #28729#8451#29299#38000'?[master."audit_doctor"]')
+            '')
         end
         object Memo42: TfrxMemoView
           Left = 181.417440000000000000
@@ -2575,7 +2575,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            #37824#24816#22402#37723'?')
+            '')
         end
         object Memo43: TfrxMemoView
           Left = 181.417440000000000000
@@ -2583,7 +2583,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            #29835#20910#21412#37723'?')
+            '')
         end
         object Memo44: TfrxMemoView
           Left = 336.378170000000000000
@@ -2591,7 +2591,7 @@ object frmMain: TfrmMain
           Width = 143.622140000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            #38322#25126#58754'('#37711'?:[Sum(<slave."drug_num">*<slave."unit_price">)]')
+            '')
         end
         object Memo45: TfrxMemoView
           Left = 336.378170000000000000
@@ -2599,7 +2599,7 @@ object frmMain: TfrmMain
           Width = 52.913420000000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            #37721#25123#23874#37723'?')
+            '')
         end
         object Memo46: TfrxMemoView
           Left = 11.338590000000000000
@@ -2613,7 +2613,7 @@ object frmMain: TfrmMain
           Font.Style = []
           HAlign = haCenter
           Memo.UTF8 = (
-            '('#37711#30453'TotalPages#]'#26916'?'#32471#29724'Page#]'#26916'?')
+            '')
           ParentFont = False
           Formats = <
             item
@@ -2699,9 +2699,7 @@ object frmMain: TfrmMain
           Width = 321.259952360000000000
           Height = 18.897650000000000000
           Memo.UTF8 = (
-            
-              #37922#12582#30838':[master."Chinese_Medicine_Use_Method"]  '#37813#59169'master."Chinese_Me' +
-              'dicine_Drug_Days"]'#37715'?')
+            '')
           Formats = <
             item
             end

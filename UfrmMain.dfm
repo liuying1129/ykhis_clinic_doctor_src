@@ -191,376 +191,36 @@ object frmMain: TfrmMain
       end
     end
   end
-  object Panel1: TPanel
+  object Panel2: TPanel
     Left = 0
     Top = 37
     Width = 1086
-    Height = 41
-    Align = alTop
-    TabOrder = 2
-    object Panel3: TPanel
-      Left = 1
-      Top = 1
-      Width = 100
-      Height = 39
-      Align = alLeft
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlue
-      Font.Height = -24
-      Font.Name = #23435#20307
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 0
-    end
-    object Panel36: TPanel
-      Left = 985
-      Top = 1
-      Width = 100
-      Height = 39
-      Align = alRight
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clRed
-      Font.Height = -24
-      Font.Name = #23435#20307
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 1
-    end
-    object Panel37: TPanel
-      Left = 885
-      Top = 1
-      Width = 100
-      Height = 39
-      Align = alRight
-      Caption = #24635#37329#39069':'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clRed
-      Font.Height = -24
-      Font.Name = #23435#20307
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 2
-    end
-  end
-  object Panel2: TPanel
-    Left = 0
-    Top = 78
-    Width = 1086
-    Height = 492
+    Height = 533
     Align = alClient
-    TabOrder = 3
+    TabOrder = 2
     object PageControl1: TPageControl
       Left = 321
       Top = 1
       Width = 764
-      Height = 490
-      ActivePage = TabSheet7
+      Height = 531
+      ActivePage = TabSheet5
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change
       object TabSheet5: TTabSheet
         Caption = #30149#21382
         ImageIndex = 4
-        object Panel13: TPanel
-          Left = 0
-          Top = 0
-          Width = 756
-          Height = 357
-          Align = alClient
-          TabOrder = 0
-          object Panel24: TPanel
-            Left = 1
-            Top = 1
-            Width = 88
-            Height = 355
-            Align = alLeft
-            TabOrder = 0
-          end
-          object Panel25: TPanel
-            Left = 89
-            Top = 1
-            Width = 664
-            Height = 355
-            Align = alClient
-            TabOrder = 1
-            object Panel6: TPanel
-              Left = 1
-              Top = 1
-              Width = 662
-              Height = 32
-              Align = alTop
-              TabOrder = 0
-              object Label4: TLabel
-                Left = 102
-                Top = 8
-                Width = 13
-                Height = 13
-                Caption = #8451
-              end
-              object Label5: TLabel
-                Left = 358
-                Top = 8
-                Width = 28
-                Height = 13
-                Caption = 'mmHg'
-              end
-              object Label6: TLabel
-                Left = 488
-                Top = 8
-                Width = 41
-                Height = 13
-                Caption = #27425'/min'
-              end
-              object Label15: TLabel
-                Left = 554
-                Top = 8
-                Width = 123
-                Height = 13
-                Caption = #27880':'#25442#34892':Ctrl+Enter'
-                Font.Charset = ANSI_CHARSET
-                Font.Color = clBlue
-                Font.Height = -13
-                Font.Name = #23435#20307
-                Font.Style = []
-                ParentFont = False
-              end
-              object LabeledEdit4: TLabeledEdit
-                Left = 49
-                Top = 5
-                Width = 50
-                Height = 21
-                EditLabel.Width = 26
-                EditLabel.Height = 13
-                EditLabel.Caption = #20307#28201
-                LabelPosition = lpLeft
-                TabOrder = 0
-                OnExit = LabeledEdit4Exit
-              end
-              object LabeledEdit5: TLabeledEdit
-                Left = 209
-                Top = 5
-                Width = 50
-                Height = 21
-                EditLabel.Width = 72
-                EditLabel.Height = 13
-                EditLabel.Caption = #34880#21387'-'#25910#32553#21387
-                LabelPosition = lpLeft
-                TabOrder = 1
-                OnExit = LabeledEdit4Exit
-              end
-              object LabeledEdit6: TLabeledEdit
-                Left = 305
-                Top = 5
-                Width = 50
-                Height = 21
-                EditLabel.Width = 39
-                EditLabel.Height = 13
-                EditLabel.Caption = #33298#24352#21387
-                LabelPosition = lpLeft
-                TabOrder = 2
-                OnExit = LabeledEdit4Exit
-              end
-              object LabeledEdit12: TLabeledEdit
-                Left = 435
-                Top = 5
-                Width = 50
-                Height = 21
-                EditLabel.Width = 26
-                EditLabel.Height = 13
-                EditLabel.Caption = #24515#29575
-                LabelPosition = lpLeft
-                TabOrder = 3
-                OnExit = LabeledEdit4Exit
-              end
-            end
-            object Panel22: TPanel
-              Left = 1
-              Top = 33
-              Width = 662
-              Height = 78
-              Align = alTop
-              TabOrder = 1
-              object Panel23: TPanel
-                Left = 1
-                Top = 1
-                Width = 65
-                Height = 76
-                Align = alLeft
-                Caption = #20027#35785
-                TabOrder = 0
-              end
-              object Memo1: TMemo
-                Left = 66
-                Top = 1
-                Width = 410
-                Height = 76
-                Align = alClient
-                ScrollBars = ssBoth
-                TabOrder = 1
-                OnExit = LabeledEdit4Exit
-              end
-              object Panel8: TPanel
-                Left = 476
-                Top = 1
-                Width = 185
-                Height = 76
-                Align = alRight
-                TabOrder = 2
-              end
-            end
-            object Panel20: TPanel
-              Left = 1
-              Top = 111
-              Width = 662
-              Height = 78
-              Align = alTop
-              TabOrder = 2
-              object Panel21: TPanel
-                Left = 1
-                Top = 1
-                Width = 65
-                Height = 76
-                Align = alLeft
-                Caption = #31616#35201#30149#21490
-                TabOrder = 0
-              end
-              object Memo2: TMemo
-                Left = 66
-                Top = 1
-                Width = 410
-                Height = 76
-                Align = alClient
-                ScrollBars = ssBoth
-                TabOrder = 1
-                OnExit = LabeledEdit4Exit
-              end
-              object Panel7: TPanel
-                Left = 476
-                Top = 1
-                Width = 185
-                Height = 76
-                Align = alRight
-                TabOrder = 2
-              end
-            end
-            object Panel18: TPanel
-              Left = 1
-              Top = 189
-              Width = 662
-              Height = 78
-              Align = alTop
-              TabOrder = 3
-              object Panel19: TPanel
-                Left = 1
-                Top = 1
-                Width = 65
-                Height = 76
-                Align = alLeft
-                Caption = #20307#26597
-                TabOrder = 0
-              end
-              object Memo3: TMemo
-                Left = 66
-                Top = 1
-                Width = 410
-                Height = 76
-                Align = alClient
-                ScrollBars = ssBoth
-                TabOrder = 1
-                OnExit = LabeledEdit4Exit
-              end
-              object Panel9: TPanel
-                Left = 476
-                Top = 1
-                Width = 185
-                Height = 76
-                Align = alRight
-                TabOrder = 2
-              end
-            end
-            object Panel16: TPanel
-              Left = 1
-              Top = 267
-              Width = 662
-              Height = 78
-              Align = alTop
-              TabOrder = 4
-              object Panel17: TPanel
-                Left = 1
-                Top = 1
-                Width = 65
-                Height = 76
-                Align = alLeft
-                Caption = #36741#21161#26816#26597
-                TabOrder = 0
-              end
-              object Memo4: TMemo
-                Left = 66
-                Top = 1
-                Width = 410
-                Height = 76
-                Align = alClient
-                ScrollBars = ssBoth
-                TabOrder = 1
-                OnExit = LabeledEdit4Exit
-              end
-              object Panel10: TPanel
-                Left = 476
-                Top = 1
-                Width = 185
-                Height = 76
-                Align = alRight
-                TabOrder = 2
-              end
-            end
-            object Panel14: TPanel
-              Left = 1
-              Top = 345
-              Width = 662
-              Height = 9
-              Align = alClient
-              TabOrder = 5
-              object Panel15: TPanel
-                Left = 1
-                Top = 1
-                Width = 65
-                Height = 7
-                Align = alLeft
-                Caption = #22065#25176
-                TabOrder = 0
-              end
-              object Memo5: TMemo
-                Left = 66
-                Top = 1
-                Width = 410
-                Height = 7
-                Align = alClient
-                ScrollBars = ssBoth
-                TabOrder = 1
-                OnExit = LabeledEdit4Exit
-              end
-              object Panel11: TPanel
-                Left = 476
-                Top = 1
-                Width = 185
-                Height = 7
-                Align = alRight
-                TabOrder = 2
-              end
-            end
-          end
-        end
         object Panel26: TPanel
           Left = 0
-          Top = 357
+          Top = 398
           Width = 756
           Height = 105
           Align = alBottom
-          TabOrder = 1
+          TabOrder = 0
           object Panel27: TPanel
             Left = 1
             Top = 1
-            Width = 155
+            Width = 65
             Height = 103
             Align = alLeft
             Caption = #35786#26029
@@ -593,7 +253,7 @@ object frmMain: TfrmMain
               Width = 157
               Height = 21
               DropDownCount = 20
-              ItemHeight = 0
+              ItemHeight = 13
               TabOrder = 0
             end
             object ComboBox7: TComboBox
@@ -602,7 +262,7 @@ object frmMain: TfrmMain
               Width = 157
               Height = 21
               DropDownCount = 20
-              ItemHeight = 0
+              ItemHeight = 13
               TabOrder = 1
             end
             object BitBtn4: TBitBtn
@@ -632,9 +292,9 @@ object frmMain: TfrmMain
             end
           end
           object DBGrid4: TDBGrid
-            Left = 156
+            Left = 66
             Top = 1
-            Width = 237
+            Width = 327
             Height = 103
             Align = alClient
             DataSource = DataSource4
@@ -646,6 +306,279 @@ object frmMain: TfrmMain
             TitleFont.Height = -13
             TitleFont.Name = #23435#20307
             TitleFont.Style = []
+          end
+        end
+        object Panel25: TPanel
+          Left = 0
+          Top = 0
+          Width = 756
+          Height = 398
+          Align = alClient
+          TabOrder = 1
+          object Panel6: TPanel
+            Left = 1
+            Top = 1
+            Width = 754
+            Height = 32
+            Align = alTop
+            TabOrder = 0
+            object Label4: TLabel
+              Left = 102
+              Top = 8
+              Width = 13
+              Height = 13
+              Caption = #8451
+            end
+            object Label5: TLabel
+              Left = 358
+              Top = 8
+              Width = 28
+              Height = 13
+              Caption = 'mmHg'
+            end
+            object Label6: TLabel
+              Left = 488
+              Top = 8
+              Width = 41
+              Height = 13
+              Caption = #27425'/min'
+            end
+            object Label15: TLabel
+              Left = 554
+              Top = 8
+              Width = 123
+              Height = 13
+              Caption = #27880':'#25442#34892':Ctrl+Enter'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlue
+              Font.Height = -13
+              Font.Name = #23435#20307
+              Font.Style = []
+              ParentFont = False
+            end
+            object LabeledEdit4: TLabeledEdit
+              Left = 49
+              Top = 5
+              Width = 50
+              Height = 21
+              EditLabel.Width = 26
+              EditLabel.Height = 13
+              EditLabel.Caption = #20307#28201
+              LabelPosition = lpLeft
+              TabOrder = 0
+              OnExit = LabeledEdit4Exit
+            end
+            object LabeledEdit5: TLabeledEdit
+              Left = 209
+              Top = 5
+              Width = 50
+              Height = 21
+              EditLabel.Width = 72
+              EditLabel.Height = 13
+              EditLabel.Caption = #34880#21387'-'#25910#32553#21387
+              LabelPosition = lpLeft
+              TabOrder = 1
+              OnExit = LabeledEdit4Exit
+            end
+            object LabeledEdit6: TLabeledEdit
+              Left = 305
+              Top = 5
+              Width = 50
+              Height = 21
+              EditLabel.Width = 39
+              EditLabel.Height = 13
+              EditLabel.Caption = #33298#24352#21387
+              LabelPosition = lpLeft
+              TabOrder = 2
+              OnExit = LabeledEdit4Exit
+            end
+            object LabeledEdit12: TLabeledEdit
+              Left = 435
+              Top = 5
+              Width = 50
+              Height = 21
+              EditLabel.Width = 26
+              EditLabel.Height = 13
+              EditLabel.Caption = #24515#29575
+              LabelPosition = lpLeft
+              TabOrder = 3
+              OnExit = LabeledEdit4Exit
+            end
+          end
+          object Panel22: TPanel
+            Left = 1
+            Top = 33
+            Width = 754
+            Height = 78
+            Align = alTop
+            TabOrder = 1
+            object Panel23: TPanel
+              Left = 1
+              Top = 1
+              Width = 65
+              Height = 76
+              Align = alLeft
+              Caption = #20027#35785
+              TabOrder = 0
+            end
+            object Memo1: TMemo
+              Left = 66
+              Top = 1
+              Width = 502
+              Height = 76
+              Align = alClient
+              ScrollBars = ssBoth
+              TabOrder = 1
+              OnExit = LabeledEdit4Exit
+            end
+            object Panel8: TPanel
+              Left = 568
+              Top = 1
+              Width = 185
+              Height = 76
+              Align = alRight
+              TabOrder = 2
+            end
+          end
+          object Panel20: TPanel
+            Left = 1
+            Top = 111
+            Width = 754
+            Height = 64
+            Align = alTop
+            TabOrder = 2
+            object Panel21: TPanel
+              Left = 1
+              Top = 1
+              Width = 65
+              Height = 62
+              Align = alLeft
+              Caption = #31616#35201#30149#21490
+              TabOrder = 0
+            end
+            object Memo2: TMemo
+              Left = 66
+              Top = 1
+              Width = 502
+              Height = 62
+              Align = alClient
+              ScrollBars = ssBoth
+              TabOrder = 1
+              OnExit = LabeledEdit4Exit
+            end
+            object Panel7: TPanel
+              Left = 568
+              Top = 1
+              Width = 185
+              Height = 62
+              Align = alRight
+              TabOrder = 2
+            end
+          end
+          object Panel18: TPanel
+            Left = 1
+            Top = 175
+            Width = 754
+            Height = 64
+            Align = alTop
+            TabOrder = 3
+            object Panel19: TPanel
+              Left = 1
+              Top = 1
+              Width = 65
+              Height = 62
+              Align = alLeft
+              Caption = #20307#26597
+              TabOrder = 0
+            end
+            object Memo3: TMemo
+              Left = 66
+              Top = 1
+              Width = 502
+              Height = 62
+              Align = alClient
+              ScrollBars = ssBoth
+              TabOrder = 1
+              OnExit = LabeledEdit4Exit
+            end
+            object Panel9: TPanel
+              Left = 568
+              Top = 1
+              Width = 185
+              Height = 62
+              Align = alRight
+              TabOrder = 2
+            end
+          end
+          object Panel16: TPanel
+            Left = 1
+            Top = 239
+            Width = 754
+            Height = 64
+            Align = alTop
+            TabOrder = 4
+            object Panel17: TPanel
+              Left = 1
+              Top = 1
+              Width = 65
+              Height = 62
+              Align = alLeft
+              Caption = #36741#21161#26816#26597
+              TabOrder = 0
+            end
+            object Memo4: TMemo
+              Left = 66
+              Top = 1
+              Width = 502
+              Height = 62
+              Align = alClient
+              ScrollBars = ssBoth
+              TabOrder = 1
+              OnExit = LabeledEdit4Exit
+            end
+            object Panel10: TPanel
+              Left = 568
+              Top = 1
+              Width = 185
+              Height = 62
+              Align = alRight
+              TabOrder = 2
+            end
+          end
+          object Panel14: TPanel
+            Left = 1
+            Top = 303
+            Width = 754
+            Height = 94
+            Align = alClient
+            TabOrder = 5
+            object Panel15: TPanel
+              Left = 1
+              Top = 1
+              Width = 65
+              Height = 92
+              Align = alLeft
+              Caption = #22065#25176
+              TabOrder = 0
+            end
+            object Memo5: TMemo
+              Left = 66
+              Top = 1
+              Width = 502
+              Height = 92
+              Align = alClient
+              ScrollBars = ssBoth
+              TabOrder = 1
+              OnExit = LabeledEdit4Exit
+            end
+            object Panel11: TPanel
+              Left = 568
+              Top = 1
+              Width = 185
+              Height = 92
+              Align = alRight
+              TabOrder = 2
+            end
           end
         end
       end
@@ -877,7 +810,7 @@ object frmMain: TfrmMain
           Left = 0
           Top = 65
           Width = 756
-          Height = 397
+          Height = 438
           Align = alClient
           DataSource = DataSource3
           PopupMenu = PopupMenu3
@@ -1016,7 +949,7 @@ object frmMain: TfrmMain
             Width = 58
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 6
             OnChange = LabeledEdit26Change
             OnExit = LabeledEdit26Change
@@ -1081,7 +1014,7 @@ object frmMain: TfrmMain
             Width = 75
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 4
             OnKeyDown = ComboBox17KeyDown
           end
@@ -1110,7 +1043,7 @@ object frmMain: TfrmMain
           Left = 0
           Top = 65
           Width = 756
-          Height = 397
+          Height = 438
           Align = alClient
           DataSource = DataSource7
           PopupMenu = PopupMenu7
@@ -1281,7 +1214,7 @@ object frmMain: TfrmMain
           Left = 0
           Top = 65
           Width = 756
-          Height = 397
+          Height = 438
           Align = alClient
           DataSource = DataSource5
           PopupMenu = PopupMenu5
@@ -1398,7 +1331,7 @@ object frmMain: TfrmMain
           Left = 0
           Top = 65
           Width = 756
-          Height = 397
+          Height = 438
           Align = alClient
           DataSource = DataSource9
           PopupMenu = PopupMenu9
@@ -1533,7 +1466,7 @@ object frmMain: TfrmMain
           Left = 0
           Top = 65
           Width = 756
-          Height = 397
+          Height = 438
           Align = alClient
           DataSource = DataSource6
           PopupMenu = PopupMenu6
@@ -1589,13 +1522,13 @@ object frmMain: TfrmMain
       Left = 1
       Top = 1
       Width = 320
-      Height = 490
+      Height = 531
       Align = alLeft
       Caption = #25105#30340#35786#30103#24037#20316
       TabOrder = 1
       object DBGrid2: TDBGrid
         Left = 2
-        Top = 15
+        Top = 56
         Width = 316
         Height = 473
         Align = alClient
@@ -1608,6 +1541,57 @@ object frmMain: TfrmMain
         TitleFont.Height = -13
         TitleFont.Name = #23435#20307
         TitleFont.Style = []
+      end
+      object Panel1: TPanel
+        Left = 2
+        Top = 15
+        Width = 316
+        Height = 41
+        Align = alTop
+        TabOrder = 1
+        object Panel3: TPanel
+          Left = 1
+          Top = 1
+          Width = 100
+          Height = 39
+          Align = alLeft
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlue
+          Font.Height = -24
+          Font.Name = #23435#20307
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+        end
+        object Panel36: TPanel
+          Left = 215
+          Top = 1
+          Width = 100
+          Height = 39
+          Align = alRight
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -24
+          Font.Name = #23435#20307
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+        end
+        object Panel37: TPanel
+          Left = 115
+          Top = 1
+          Width = 100
+          Height = 39
+          Align = alRight
+          Caption = #24635#37329#39069':'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -24
+          Font.Name = #23435#20307
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+        end
       end
     end
   end

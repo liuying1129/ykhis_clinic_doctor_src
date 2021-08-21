@@ -203,7 +203,7 @@ object frmMain: TfrmMain
       Top = 1
       Width = 764
       Height = 531
-      ActivePage = TabSheet5
+      ActivePage = TabSheet4
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change
@@ -253,7 +253,7 @@ object frmMain: TfrmMain
               Width = 157
               Height = 21
               DropDownCount = 20
-              ItemHeight = 13
+              ItemHeight = 0
               TabOrder = 0
             end
             object ComboBox7: TComboBox
@@ -262,7 +262,7 @@ object frmMain: TfrmMain
               Width = 157
               Height = 21
               DropDownCount = 20
-              ItemHeight = 13
+              ItemHeight = 0
               TabOrder = 1
             end
             object BitBtn4: TBitBtn
@@ -1490,9 +1490,10 @@ object frmMain: TfrmMain
           Left = 0
           Top = 0
           Width = 275
-          Height = 462
+          Height = 503
           Align = alLeft
           DataSource = DataSource1
+          PopupMenu = PopupMenu1
           ReadOnly = True
           TabOrder = 0
           TitleFont.Charset = ANSI_CHARSET
@@ -1504,8 +1505,8 @@ object frmMain: TfrmMain
         object DBGrid8: TDBGrid
           Left = 275
           Top = 0
-          Width = 479
-          Height = 462
+          Width = 481
+          Height = 503
           Align = alClient
           DataSource = DataSource8
           ReadOnly = True
@@ -1715,7 +1716,7 @@ object frmMain: TfrmMain
   object PopupMenu2: TPopupMenu
     AutoHotkeys = maManual
     Left = 153
-    Top = 175
+    Top = 176
     object N15: TMenuItem
       Caption = #20462#25913#24180#40836
       OnClick = N15Click
@@ -1726,6 +1727,13 @@ object frmMain: TfrmMain
     object N36: TMenuItem
       Caption = #21478#23384#20026#27169#26495
       OnClick = N36Click
+    end
+    object N42: TMenuItem
+      Caption = '-'
+    end
+    object N43: TMenuItem
+      Caption = #31896#36148#30149#21382'/'#22788#26041
+      OnClick = N43Click
     end
   end
   object DataSource4: TDataSource
@@ -2766,6 +2774,29 @@ object frmMain: TfrmMain
     object N34: TMenuItem
       Caption = #21024#38500#35786#26029
       OnClick = N34Click
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    AutoHotkeys = maManual
+    Left = 405
+    Top = 232
+    object N37: TMenuItem
+      Caption = #22797#21046#30149#21382
+      OnClick = N37Click
+    end
+    object N38: TMenuItem
+      Caption = '-'
+    end
+    object N39: TMenuItem
+      Caption = #22797#21046#22788#26041
+      OnClick = N37Click
+    end
+    object N40: TMenuItem
+      Caption = '-'
+    end
+    object N41: TMenuItem
+      Caption = #22797#21046#30149#21382'+'#22788#26041
+      OnClick = N37Click
     end
   end
 end

@@ -240,6 +240,14 @@ type
     Panel3: TPanel;
     Panel36: TPanel;
     Panel37: TPanel;
+    PopupMenu1: TPopupMenu;
+    N37: TMenuItem;
+    N38: TMenuItem;
+    N39: TMenuItem;
+    N40: TMenuItem;
+    N41: TMenuItem;
+    N42: TMenuItem;
+    N43: TMenuItem;
     procedure FormShow(Sender: TObject);
     procedure N3Click(Sender: TObject);
     procedure N5Click(Sender: TObject);
@@ -345,6 +353,8 @@ type
       Shift: TShiftState);
     procedure LabeledEdit25KeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure N37Click(Sender: TObject);
+    procedure N43Click(Sender: TObject);
   private
     { Private declarations }
     //==为了通过发送消息更新主窗体状态栏而增加==//
@@ -389,9 +399,13 @@ var
   g_group_num:integer;//西药组号
   g_zhiliao_group_num:integer;//治疗组号
   g_jiancha_group_num:integer;//检查组号
-  //g_zhongyao_group_num:integer;//中药组号
   g_jianyan_group_num:integer;//检验组号
-  //ifNewAddDiagnose:boolean;
+
+  Copy_Type:String;//复制类型.病历,处方,病历+处方
+  Copy_Unid:String;//复制treat_master.unid
+  Copy_ifCompleted:integer;
+  Copy_Creat_Date_Time:String;
+  Copy_Patient_Name:String;
 
 {$R *.dfm}
 
@@ -3032,6 +3046,181 @@ begin
   LabeledEdit35.Text:=adotemp12.fieldbyname('drug_days').AsString;
   LabeledEdit31.Text:=adotemp12.fieldbyname('item_advice').AsString;
   adotemp12.Free;
+end;
+
+procedure TfrmMain.N37Click(Sender: TObject);
+begin
+  if not MyQuery1.Active then exit;
+  if MyQuery1.RecordCount<=0 then exit;
+
+  Copy_Type:=StringReplace(TMenuItem(Sender).Caption,'复制','',[rfReplaceAll]);
+  Copy_Unid:=MyQuery1.fieldbyname('unid').AsString;
+  Copy_ifCompleted:=MyQuery1.fieldbyname('ifCompleted').AsInteger;
+  Copy_Creat_Date_Time:=FormatDateTime('yyyy-mm-dd',MyQuery1.fieldbyname('创建日期').AsDateTime);
+  Copy_Patient_Name:=MyQuery1.fieldbyname('姓名').AsString;
+end;
+
+procedure TfrmMain.N43Click(Sender: TObject);
+var
+  adotemp11,adotemp22:TMyQuery;
+  type_name:String;
+  content:string;
+  i_tm_unid,i_item_unid,i_group_num,i_drug_days:integer;
+  item_unid:string;
+  name:string;
+  group_num:string;
+  dosage:string;
+  unit_dosage:string;
+  use_method:string;
+  drug_freq:string;
+  drug_days:string;
+  drug_num:string;
+  unit_drug:string;
+  f_dosage,f_drug_num,f_unit_price:single;
+  s_unit_price:string;//单价
+  Insert_Identity:integer;
+begin
+  if not MyQuery2.Active then exit;
+  if MyQuery2.RecordCount<=0 then exit;
+
+  if(Copy_Type<>'病历')and(Copy_Type<>'处方')and(Copy_Type<>'病历+处方') then exit;
+  if Copy_Unid='' then exit;
+  if(Copy_ifCompleted<>0)and(Copy_ifCompleted<>1) then exit;
+
+  if not ifhaspower(sender,operator_id) then exit;//权限检查
+
+  if (MessageDlg('确实要复制【'+Copy_Creat_Date_Time+' '+Copy_Patient_Name+'】的'+Copy_Type+'吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+
+  adotemp22:=TMyQuery.Create(nil);
+  adotemp22.Connection:=DM.MyConnection1;
+  adotemp22.Close;
+  adotemp22.SQL.Clear;
+  adotemp22.SQL.Text:='select * from '+
+                     ifThen(Copy_ifCompleted=0,'treat_slave','treat_slave_bak')+
+                     ' where tm_unid='+Copy_Unid;
+  adotemp22.Open;
+  while not adotemp22.Eof do
+  begin
+    type_name:=adotemp22.FieldByName('item_type').AsString;
+    content:=adotemp22.fieldbyname('item_value').AsString;
+    item_unid:=adotemp22.fieldbyname('item_unid').AsString;
+    name:=adotemp22.fieldbyname('item_name').AsString;
+    group_num:=adotemp22.fieldbyname('group_num').AsString;
+    dosage:=adotemp22.fieldbyname('dosage').AsString;
+    unit_dosage:=adotemp22.fieldbyname('unit_dosage').AsString;
+    use_method:=adotemp22.fieldbyname('use_method').AsString;
+    drug_freq:=adotemp22.fieldbyname('drug_freq').AsString;
+    drug_days:=adotemp22.fieldbyname('drug_days').AsString;
+    drug_num:=adotemp22.fieldbyname('drug_num').AsString;
+    unit_drug:=adotemp22.fieldbyname('unit_drug').AsString;
+
+    if((Copy_Type='病历')or(Copy_Type='病历+处方'))and('主诉'=type_name) then
+    begin
+      Memo1.Lines.Add(content);
+      SaveMedicalRecord(Memo1);
+    end;
+    if((Copy_Type='病历')or(Copy_Type='病历+处方'))and('简要病史'=type_name) then
+    begin
+      Memo2.Lines.Add(content);
+      SaveMedicalRecord(Memo2);
+    end;
+    if((Copy_Type='病历')or(Copy_Type='病历+处方'))and('体查'=type_name) then
+    begin
+      Memo3.Lines.Add(content);
+      SaveMedicalRecord(Memo3);
+    end;
+    if((Copy_Type='病历')or(Copy_Type='病历+处方'))and('辅助检查'=type_name) then
+    begin
+      Memo4.Lines.Add(content);
+      SaveMedicalRecord(Memo4);
+    end;
+    if((Copy_Type='病历')or(Copy_Type='病历+处方'))and('嘱托'=type_name) then
+    begin
+      Memo5.Lines.Add(content);
+      SaveMedicalRecord(Memo5);
+    end;
+    if(((Copy_Type='病历')or(Copy_Type='病历+处方'))and('诊断'=type_name))
+    or(((Copy_Type='处方')or(Copy_Type='病历+处方'))and(('西药'=type_name)or('中药'=type_name)or('治疗'=type_name)or('检验'=type_name)or('检查'=type_name))) then
+    BEGIN
+      adotemp11:=TMyQuery.Create(nil);
+      adotemp11.Connection:=DM.MyConnection1;
+      adotemp11.Close;
+      adotemp11.SQL.Clear;
+      adotemp11.SQL.Add('Insert into treat_slave (tm_unid,item_Type,item_unid,item_name,group_num,dosage,unit_dosage,use_method,drug_freq,drug_days,drug_num,unit_drug,unit_price) values '+' (:tm_unid,:item_Type,:item_unid,:item_name,:group_num,:dosage,:unit_dosage,:use_method,:drug_freq,:drug_days,:drug_num,:unit_drug,:unit_price)');
+      //执行多条MySQL语句，要用分号分隔
+      adotemp11.SQL.Add('; SELECT LAST_INSERT_ID() AS Insert_Identity ');
+      if trystrtoint(MyQuery2.fieldbyname('unid').AsString,i_tm_unid) then
+        adotemp11.ParamByName('tm_unid').Value:=i_tm_unid
+      else adotemp11.ParamByName('tm_unid').Value:=null;
+      adotemp11.ParamByName('item_Type').Value:=type_name;
+      if trystrtoint(item_unid,i_item_unid) then
+        adotemp11.ParamByName('item_unid').Value:=i_item_unid
+      else adotemp11.ParamByName('item_unid').Value:=null;
+      adotemp11.ParamByName('item_name').Value:=name;
+      if trystrtoint(group_num,i_group_num) then
+        adotemp11.ParamByName('group_num').Value:=i_group_num
+      else adotemp11.ParamByName('group_num').Value:=null;
+      if trystrtofloat(dosage,f_dosage) then
+        adotemp11.ParamByName('dosage').Value:=f_dosage
+      else adotemp11.ParamByName('dosage').Value:=null;
+      adotemp11.ParamByName('unit_dosage').Value:=unit_dosage;
+      adotemp11.ParamByName('use_method').Value:=use_method;
+      adotemp11.ParamByName('drug_freq').Value:=drug_freq;
+      if trystrtoint(drug_days,i_drug_days) then
+        adotemp11.ParamByName('drug_days').Value:=i_drug_days
+      else adotemp11.ParamByName('drug_days').Value:=null;
+      if trystrtofloat(drug_num,f_drug_num) then
+        adotemp11.ParamByName('drug_num').Value:=f_drug_num
+      else adotemp11.ParamByName('drug_num').Value:=null;
+      adotemp11.ParamByName('unit_drug').Value:=unit_drug;
+
+      if('西药'=type_name)or('中药'=type_name)then
+        s_unit_price:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select unit_price from drug_pack where drug_unid='+inttostr(i_item_unid)+' and pack_name='''+unit_drug+''' ')
+        else if('治疗'=type_name)or('检验'=type_name)or('检查'=type_name) then
+          s_unit_price:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select reserve7 from commcode where unid='+inttostr(i_item_unid));
+      if trystrtofloat(s_unit_price,f_unit_price) then
+        adotemp11.ParamByName('unit_price').Value:=f_unit_price
+      else adotemp11.ParamByName('unit_price').Value:=null;
+      adotemp11.Open;
+      Insert_Identity:=adotemp11.fieldbyname('Insert_Identity').AsInteger;
+      adotemp11.Free;
+      
+      if((Copy_Type='病历')or(Copy_Type='病历+处方'))and('诊断'=type_name)and(MyQuery4.Active) then
+      begin
+        MyQuery4.Refresh;
+        MyQuery4.Locate('Unid',Insert_Identity,[loCaseInsensitive]) ;
+      end;
+      if((Copy_Type='处方')or(Copy_Type='病历+处方'))and('西药'=type_name)and(MyQuery3.Active) then
+      begin
+        MyQuery3.Refresh;
+        MyQuery3.Locate('Unid',Insert_Identity,[loCaseInsensitive]) ;
+      end;
+      if((Copy_Type='处方')or(Copy_Type='病历+处方'))and('中药'=type_name)and(MyQuery7.Active) then
+      begin
+        MyQuery7.Refresh;
+        MyQuery7.Locate('Unid',Insert_Identity,[loCaseInsensitive]) ;
+      end;
+      if((Copy_Type='处方')or(Copy_Type='病历+处方'))and('治疗'=type_name)and(MyQuery5.Active) then
+      begin
+        MyQuery5.Refresh;
+        MyQuery5.Locate('Unid',Insert_Identity,[loCaseInsensitive]) ;
+      end;
+      if((Copy_Type='处方')or(Copy_Type='病历+处方'))and('检验'=type_name)and(MyQuery9.Active) then
+      begin
+        MyQuery9.Refresh;
+        MyQuery9.Locate('Unid',Insert_Identity,[loCaseInsensitive]) ;
+      end;
+      if((Copy_Type='处方')or(Copy_Type='病历+处方'))and('检查'=type_name)and(MyQuery6.Active) then
+      begin
+        MyQuery6.Refresh;
+        MyQuery6.Locate('Unid',Insert_Identity,[loCaseInsensitive]) ;
+      end;
+    END;
+    adotemp22.Next;
+  end;
+  adotemp22.Free;
+  
+  Copy_Type:='';Copy_Unid:='';Copy_ifCompleted:=-1;
 end;
 
 end.

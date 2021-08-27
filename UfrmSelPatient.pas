@@ -43,6 +43,7 @@ type
     N3: TMenuItem;
     Label5: TLabel;
     LabeledEdit2: TLabeledEdit;
+    Label6: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -193,7 +194,7 @@ procedure TfrmSelPatient.BitBtn1Click(Sender: TObject);
 var
   adotemp11,adotemp12:TMyQuery;
   sqlstr:string;
-  iUnid,Unid_TreatMaster:integer;
+  iUnid{,Unid_TreatMaster}:integer;
 begin
   if trim(LabeledEdit1.Text)='' then
   begin
@@ -235,8 +236,6 @@ begin
     adotemp12.ParamByName('unid').Value:=iUnid;
     adotemp12.ExecSQL;
     adotemp12.Free;
-    MyQuery1.Refresh;
-    MyQuery1.Locate('Unid',iUnid,[loCaseInsensitive]) ;
     
     Panel4.Caption:='新增';
     Panel3.Caption:='';
@@ -284,13 +283,16 @@ begin
     end;
     adotemp11.Free;
 
-    Unid_TreatMaster:=InsertTreatMaster(iUnid);
-    
-    frmMain.MyQuery2.Refresh;
-    frmMain.MyQuery2.Locate('unid',Unid_TreatMaster,[loCaseInsensitive]);
+    //Unid_TreatMaster:=InsertTreatMaster(iUnid);
 
-    close;
+    //frmMain.MyQuery2.Refresh;
+    //frmMain.MyQuery2.Locate('unid',Unid_TreatMaster,[loCaseInsensitive]);
+
+    //close;
   end;
+
+  MyQuery1.Refresh;
+  MyQuery1.Locate('Unid',iUnid,[loCaseInsensitive]) ;
 end;
 
 procedure TfrmSelPatient.N1Click(Sender: TObject);
@@ -381,23 +383,44 @@ end;
 
 function TfrmSelPatient.InsertTreatMaster(const APatient_Unid:integer):integer;
 var
-  adotemp11:TMyQuery;
+  adotemp11,adotemp22:TMyQuery;
   sqlstr:string;
 begin
   Result:=-1;
   
+  adotemp22:=TMyQuery.Create(nil);
+  adotemp22.Connection:=DM.MyConnection1;
+  adotemp22.Close;
+  adotemp22.SQL.Clear;
+  adotemp22.SQL.Text:='select TIMESTAMPDIFF(YEAR,patient_birthday,CURDATE()) as patient_age,pi.* from patient_info pi where unid='+inttostr(APatient_Unid);
+  adotemp22.Open;
+  if adotemp22.RecordCount<>1 then begin adotemp22.Free;exit;end;
+
   adotemp11:=TMyQuery.Create(nil);
   adotemp11.Connection:=DM.MyConnection1;
 
   sqlstr:='Insert into treat_master ('+
-                      ' patient_unid,operator,department) values ('+
-                      ' :patient_unid,:operator,:department) ';
+                      ' patient_unid, patient_name, patient_sex, patient_age, certificate_type, certificate_num, clinic_card_num, health_care_num, address, work_company, work_address, if_marry, native_place, telephone, operator, department) values ('+
+                      ':patient_unid,:patient_name,:patient_sex,:patient_age,:certificate_type,:certificate_num,:clinic_card_num,:health_care_num,:address,:work_company,:work_address,:if_marry,:native_place,:telephone,:operator,:department) ';
   adotemp11.Close;
   adotemp11.SQL.Clear;
   adotemp11.SQL.Add(sqlstr);
   //执行多条MySQL语句，要用分号分隔
   adotemp11.SQL.Add('; SELECT LAST_INSERT_ID() AS Insert_Identity ');
   adotemp11.ParamByName('patient_unid').Value:=APatient_Unid;
+  adotemp11.ParamByName('patient_name').Value:=adotemp22.fieldbyname('patient_name').AsString;
+  adotemp11.ParamByName('patient_sex').Value:=adotemp22.fieldbyname('patient_sex').AsString;
+  adotemp11.ParamByName('patient_age').Value:=adotemp22.fieldbyname('patient_age').AsString;
+  adotemp11.ParamByName('certificate_type').Value:=adotemp22.fieldbyname('certificate_type').AsString;
+  adotemp11.ParamByName('certificate_num').Value:=adotemp22.fieldbyname('certificate_num').AsString;
+  adotemp11.ParamByName('clinic_card_num').Value:=adotemp22.fieldbyname('clinic_card_num').AsString;
+  adotemp11.ParamByName('health_care_num').Value:=adotemp22.fieldbyname('health_care_num').AsString;
+  adotemp11.ParamByName('address').Value:=adotemp22.fieldbyname('address').AsString;
+  adotemp11.ParamByName('work_company').Value:=adotemp22.fieldbyname('work_company').AsString;
+  adotemp11.ParamByName('work_address').Value:=adotemp22.fieldbyname('work_address').AsString;
+  adotemp11.ParamByName('if_marry').Value:=adotemp22.fieldbyname('if_marry').AsString;
+  adotemp11.ParamByName('native_place').Value:=adotemp22.fieldbyname('native_place').AsString;
+  adotemp11.ParamByName('telephone').Value:=adotemp22.fieldbyname('telephone').AsString;
   adotemp11.ParamByName('operator').Value:=operator_name;
   adotemp11.ParamByName('department').Value:=operator_dep_name;
   try
@@ -406,6 +429,7 @@ begin
     on E:Exception do
     begin
       adotemp11.Free;
+      adotemp22.Free;
       MESSAGEDLG('新增诊疗记录失败!'+E.Message,mtError,[mbOK],0);
       exit;
     end;
@@ -413,6 +437,8 @@ begin
 
   Result:=adotemp11.fieldbyname('Insert_Identity').AsInteger;
   adotemp11.Free;
+
+  adotemp22.Free;
 end;
 
 procedure TfrmSelPatient.ComboBox3KeyDown(Sender: TObject; var Key: Word;

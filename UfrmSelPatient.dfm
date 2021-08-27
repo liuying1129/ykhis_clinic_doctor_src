@@ -3,7 +3,7 @@ object frmSelPatient: TfrmSelPatient
   Top = 131
   Width = 870
   Height = 464
-  Caption = #36873#21462'/'#26032#22686#24739#32773
+  Caption = #24739#32773#20449#24687
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -275,6 +275,19 @@ object frmSelPatient: TfrmSelPatient
       Font.Style = []
       ParentFont = False
       TabOrder = 1
+      object Label6: TLabel
+        Left = 374
+        Top = 32
+        Width = 274
+        Height = 13
+        Caption = #27880':'#21452#20987#24739#32773','#23558#20026#35813#24739#32773#29983#25104#19968#26465#26032#30340#23601#35786#35760#24405
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -13
+        Font.Name = #23435#20307
+        Font.Style = []
+        ParentFont = False
+      end
       object Panel4: TPanel
         Left = 1
         Top = 1

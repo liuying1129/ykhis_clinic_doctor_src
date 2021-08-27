@@ -571,7 +571,7 @@ begin
   MyQuery1.SQL.Clear;
   MyQuery1.SQL.Text:='select * from ('+
                      'select creat_date_time as 创建日期,patient_name as 姓名,patient_sex as 性别,patient_age AS 年龄,audit_doctor as 审核者,'+
-                     'patient_birthday as 出生日期,certificate_type as 证件类型,certificate_num as 证件号码,'+
+                     'certificate_type as 证件类型,certificate_num as 证件号码,'+
                      'clinic_card_num as 诊疗卡号,health_care_num as 医保卡号,address as 住址,work_company as 工作单位,work_address as 工作地址,'+
                      'if_marry as 婚否,native_place as 籍贯,telephone as 联系电话,remark as 备注,audit_date as 审核时间,patient_unid,unid, '+
                      ' 0 AS ifCompleted '+
@@ -579,7 +579,7 @@ begin
                      ' where patient_unid='+MyQuery2.fieldbyname('patient_unid').AsString+
                      ' union all '+
                      'select creat_date_time as 创建日期,patient_name as 姓名,patient_sex as 性别,patient_age AS 年龄,audit_doctor as 审核者,'+
-                     'patient_birthday as 出生日期,certificate_type as 证件类型,certificate_num as 证件号码,'+
+                     'certificate_type as 证件类型,certificate_num as 证件号码,'+
                      'clinic_card_num as 诊疗卡号,health_care_num as 医保卡号,address as 住址,work_company as 工作单位,work_address as 工作地址,'+
                      'if_marry as 婚否,native_place as 籍贯,telephone as 联系电话,remark as 备注,audit_date as 审核时间,patient_unid,unid, '+
                      ' 1 AS ifCompleted '+
@@ -630,17 +630,16 @@ begin
   dbgrid1.Columns.Items[1].Width:=42;//姓名
   dbgrid1.Columns.Items[2].Width:=30;//性别
   dbgrid1.Columns.Items[3].Width:=30;//年龄
-  dbgrid1.Columns.Items[4].Width:=72;//出生日期
-  dbgrid1.Columns.Items[5].Width:=55;//证件类型
-  dbgrid1.Columns.Items[6].Width:=130;//证件号码
-  dbgrid1.Columns.Items[7].Width:=120;//诊疗卡号
+  dbgrid1.Columns.Items[4].Width:=55;//证件类型
+  dbgrid1.Columns.Items[5].Width:=130;//证件号码
+  dbgrid1.Columns.Items[6].Width:=120;//诊疗卡号
+  dbgrid1.Columns.Items[7].Width:=120;//
   dbgrid1.Columns.Items[8].Width:=120;//
   dbgrid1.Columns.Items[9].Width:=120;//
-  dbgrid1.Columns.Items[10].Width:=120;//
-  dbgrid1.Columns.Items[11].Width:=40;//
+  dbgrid1.Columns.Items[10].Width:=40;//
+  dbgrid1.Columns.Items[11].Width:=120;//
   dbgrid1.Columns.Items[12].Width:=120;//
   dbgrid1.Columns.Items[13].Width:=120;//
-  dbgrid1.Columns.Items[14].Width:=120;//
 end;
 
 procedure TfrmMain.UpdateMyQuery2(const AUnid:integer);
@@ -648,7 +647,7 @@ begin
   MyQuery2.Close;
   MyQuery2.SQL.Clear;
   MyQuery2.SQL.Text:='select creat_date_time as 创建日期,patient_name as 姓名,patient_sex as 性别,patient_age AS 年龄,audit_doctor as 审核者,'+
-                     'patient_birthday as 出生日期,certificate_type as 证件类型,certificate_num as 证件号码,'+
+                     'certificate_type as 证件类型,certificate_num as 证件号码,'+
                      'clinic_card_num as 诊疗卡号,health_care_num as 医保卡号,address as 住址,work_company as 工作单位,work_address as 工作地址,'+
                      'if_marry as 婚否,native_place as 籍贯,telephone as 联系电话,remark as 备注,audit_date as 审核时间,department as 科别,patient_unid,unid from treat_master '+
                      ' where operator='''+operator_name+''' order by unid desc';
@@ -665,19 +664,18 @@ begin
   dbgrid2.Columns.Items[2].Width:=30;//性别
   dbgrid2.Columns.Items[3].Width:=30;//年龄
   dbgrid2.Columns.Items[4].Width:=42;//审核者
-  dbgrid2.Columns.Items[5].Width:=72;//出生日期
-  dbgrid2.Columns.Items[6].Width:=55;//证件类型
-  dbgrid2.Columns.Items[7].Width:=130;//证件号码
-  dbgrid2.Columns.Items[8].Width:=130;//诊疗卡号
-  dbgrid2.Columns.Items[9].Width:=130;//医保卡号
-  dbgrid2.Columns.Items[10].Width:=120;//住址
-  dbgrid2.Columns.Items[11].Width:=120;//工作单位
-  dbgrid2.Columns.Items[12].Width:=120;//工作地址
-  dbgrid2.Columns.Items[13].Width:=42;//婚否
-  dbgrid2.Columns.Items[14].Width:=55;//籍贯
-  dbgrid2.Columns.Items[15].Width:=80;//联系电话
-  dbgrid2.Columns.Items[16].Width:=100;//备注
-  dbgrid2.Columns.Items[17].Width:=135;//审核时间
+  dbgrid2.Columns.Items[5].Width:=55;//证件类型
+  dbgrid2.Columns.Items[6].Width:=130;//证件号码
+  dbgrid2.Columns.Items[7].Width:=130;//诊疗卡号
+  dbgrid2.Columns.Items[8].Width:=130;//医保卡号
+  dbgrid2.Columns.Items[9].Width:=120;//住址
+  dbgrid2.Columns.Items[10].Width:=120;//工作单位
+  dbgrid2.Columns.Items[11].Width:=120;//工作地址
+  dbgrid2.Columns.Items[12].Width:=42;//婚否
+  dbgrid2.Columns.Items[13].Width:=55;//籍贯
+  dbgrid2.Columns.Items[14].Width:=80;//联系电话
+  dbgrid2.Columns.Items[15].Width:=100;//备注
+  dbgrid2.Columns.Items[16].Width:=135;//审核时间
 end;
 
 procedure TfrmMain.MyQuery2AfterScroll(DataSet: TDataSet);

@@ -60,7 +60,6 @@ type
     LabeledEdit9: TLabeledEdit;
     LabeledEdit10: TLabeledEdit;
     LabeledEdit11: TLabeledEdit;
-    ComboBox1: TComboBox;
     Label1: TLabel;
     ComboBox2: TComboBox;
     Label2: TLabel;
@@ -246,6 +245,7 @@ type
     N41: TMenuItem;
     N42: TMenuItem;
     N43: TMenuItem;
+    CheckBox1: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure N3Click(Sender: TObject);
     procedure N5Click(Sender: TObject);
@@ -774,7 +774,7 @@ begin
     else adotemp12.ParamByName('dosage').Value:=null;
     adotemp12.ParamByName('unit_dosage').Value:=trim(ComboBox4.Text);
     adotemp12.ParamByName('use_method').Value:=trim(ComboBox5.Text);
-    adotemp12.ParamByName('if_skin_test').Value:=trim(ComboBox1.Text);
+    adotemp12.ParamByName('if_skin_test').Value:=CheckBox1.Checked;
     adotemp12.ParamByName('drug_freq').Value:=trim(ComboBox2.Text);
     if trystrtoint(LabeledEdit7.Text,i_drug_days) then
       adotemp12.ParamByName('drug_days').Value:=i_drug_days
@@ -824,7 +824,7 @@ begin
     else adotemp11.ParamByName('dosage').Value:=null;
     adotemp11.ParamByName('unit_dosage').Value:=trim(ComboBox4.Text);
     adotemp11.ParamByName('use_method').Value:=trim(ComboBox5.Text);
-    adotemp11.ParamByName('if_skin_test').Value:=trim(ComboBox1.Text);
+    adotemp11.ParamByName('if_skin_test').Value:=CheckBox1.Checked;
     adotemp11.ParamByName('drug_freq').Value:=trim(ComboBox2.Text);
     if trystrtoint(LabeledEdit7.Text,i_drug_days) then
       adotemp11.ParamByName('drug_days').Value:=i_drug_days
@@ -873,9 +873,11 @@ begin
   MyQuery3.Close;
   MyQuery3.SQL.Clear;
   MyQuery3.SQL.Text:='select item_name as 项目,group_num as 组号,dosage as 用量,unit_dosage as 用量单位,'+
-                     'use_method as 用法,if_skin_test as 皮试,drug_freq as 频次,drug_days as 天数,'+
+                     'use_method as 用法,'+
+                     '(case if_skin_test when 1 then ''是'' else null end) as 皮试,'+
+                     'drug_freq as 频次,drug_days as 天数,'+
                      'drug_num as 数量,unit_drug as 数量单位,unit_price as 单价,drug_num*unit_price as 金额,'+
-                     'hosp_inje_num as 院注次数,item_advice as 项目嘱托,creat_date_time as 创建时间,unid,tm_unid,item_unid '+
+                     'hosp_inje_num as 院注次数,item_advice as 项目嘱托,creat_date_time as 创建时间,if_skin_test,unid,tm_unid,item_unid '+
                      ' from treat_slave '+
                      ' where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type=''西药'' order by group_num';
   MyQuery3.Open;
@@ -909,7 +911,7 @@ begin
     LabeledEdit3.Clear;
     ComboBox4.Text:='';
     ComboBox5.Text:='';
-    ComboBox1.Text:='';
+    CheckBox1.Checked:=false;
     ComboBox2.Text:='';
     LabeledEdit7.Clear;
     LabeledEdit8.Clear;
@@ -949,7 +951,7 @@ begin
   LabeledEdit3.Text:=MyQuery3.fieldbyname('用量').AsString;
   ComboBox4.Text:=MyQuery3.fieldbyname('用量单位').AsString;
   ComboBox5.Text:=MyQuery3.fieldbyname('用法').AsString;
-  ComboBox1.Text:=MyQuery3.fieldbyname('皮试').AsString;
+  CheckBox1.Checked:=MyQuery3.fieldbyname('if_skin_test').AsBoolean;
   ComboBox2.Text:=MyQuery3.fieldbyname('频次').AsString;
   LabeledEdit7.Text:=MyQuery3.fieldbyname('天数').AsString;
   LabeledEdit8.Text:=MyQuery3.fieldbyname('数量').AsString;
@@ -3018,7 +3020,7 @@ begin
   adotemp12.SQL.Text:='select * from treat_slave Where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and group_num='+TLabeledEdit(Sender).Text+' and item_type=''西药'' LIMIT 1';
   adotemp12.Open;
   ComboBox5.Text:=adotemp12.fieldbyname('use_method').AsString;
-  ComboBox1.Text:=adotemp12.fieldbyname('if_skin_test').AsString;
+  CheckBox1.Checked:=adotemp12.fieldbyname('if_skin_test').AsBoolean;
   ComboBox2.Text:=adotemp12.fieldbyname('drug_freq').AsString;
   LabeledEdit7.Text:=adotemp12.fieldbyname('drug_days').AsString;
   LabeledEdit10.Text:=adotemp12.fieldbyname('hosp_inje_num').AsString;

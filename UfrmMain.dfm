@@ -203,7 +203,7 @@ object frmMain: TfrmMain
       Top = 1
       Width = 764
       Height = 531
-      ActivePage = TabSheet5
+      ActivePage = TabSheet6
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change
@@ -593,7 +593,7 @@ object frmMain: TfrmMain
           Align = alTop
           TabOrder = 0
           object Label1: TLabel
-            Left = 323
+            Left = 330
             Top = 21
             Width = 26
             Height = 13
@@ -711,24 +711,13 @@ object frmMain: TfrmMain
             EditLabel.Caption = #39033#30446#22065#25176
             TabOrder = 12
           end
-          object ComboBox1: TComboBox
-            Left = 323
-            Top = 37
-            Width = 40
-            Height = 21
-            ItemHeight = 13
-            TabOrder = 5
-            Items.Strings = (
-              #26159
-              #21542)
-          end
           object ComboBox2: TComboBox
             Left = 364
             Top = 37
             Width = 58
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 6
             OnChange = LabeledEdit3Change
             OnSelect = LabeledEdit3Change
@@ -792,7 +781,7 @@ object frmMain: TfrmMain
             Width = 75
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 4
             OnKeyDown = ComboBox5KeyDown
           end
@@ -804,6 +793,13 @@ object frmMain: TfrmMain
             TabOrder = 9
             OnChange = Edit2Change
             OnKeyDown = Edit2KeyDown
+          end
+          object CheckBox1: TCheckBox
+            Left = 331
+            Top = 39
+            Width = 25
+            Height = 17
+            TabOrder = 5
           end
         end
         object DBGrid3: TDBGrid
@@ -949,7 +945,7 @@ object frmMain: TfrmMain
             Width = 58
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 6
             OnChange = LabeledEdit26Change
             OnExit = LabeledEdit26Change
@@ -1014,7 +1010,7 @@ object frmMain: TfrmMain
             Width = 75
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 4
             OnKeyDown = ComboBox17KeyDown
           end
@@ -1155,7 +1151,7 @@ object frmMain: TfrmMain
             Width = 58
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 2
             OnChange = ComboBox9Change
             OnSelect = ComboBox9Change
@@ -1166,7 +1162,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 5
             OnKeyDown = ComboBox10KeyDown
           end
@@ -1201,7 +1197,7 @@ object frmMain: TfrmMain
             Width = 62
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 7
             OnKeyDown = ComboBox8KeyDown
           end
@@ -1293,7 +1289,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 3
             OnKeyDown = ComboBox18KeyDown
           end
@@ -1418,7 +1414,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 3
             OnKeyDown = ComboBox12KeyDown
           end
@@ -1453,7 +1449,7 @@ object frmMain: TfrmMain
             Width = 62
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 5
             OnKeyDown = ComboBox13KeyDown
           end

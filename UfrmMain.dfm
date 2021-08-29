@@ -203,7 +203,7 @@ object frmMain: TfrmMain
       Top = 1
       Width = 764
       Height = 531
-      ActivePage = TabSheet4
+      ActivePage = TabSheet5
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change
@@ -728,7 +728,7 @@ object frmMain: TfrmMain
             Width = 58
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 6
             OnChange = LabeledEdit3Change
             OnSelect = LabeledEdit3Change
@@ -792,7 +792,7 @@ object frmMain: TfrmMain
             Width = 75
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 4
             OnKeyDown = ComboBox5KeyDown
           end
@@ -949,7 +949,7 @@ object frmMain: TfrmMain
             Width = 58
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 6
             OnChange = LabeledEdit26Change
             OnExit = LabeledEdit26Change
@@ -1014,7 +1014,7 @@ object frmMain: TfrmMain
             Width = 75
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 4
             OnKeyDown = ComboBox17KeyDown
           end
@@ -1055,10 +1055,6 @@ object frmMain: TfrmMain
           TitleFont.Name = #23435#20307
           TitleFont.Style = []
         end
-      end
-      object TabSheet8: TTabSheet
-        Caption = #20013#25104#33647
-        ImageIndex = 7
       end
       object TabSheet3: TTabSheet
         Caption = #27835#30103
@@ -1159,7 +1155,7 @@ object frmMain: TfrmMain
             Width = 58
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 2
             OnChange = ComboBox9Change
             OnSelect = ComboBox9Change
@@ -1170,7 +1166,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 5
             OnKeyDown = ComboBox10KeyDown
           end
@@ -1205,7 +1201,7 @@ object frmMain: TfrmMain
             Width = 62
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 7
             OnKeyDown = ComboBox8KeyDown
           end
@@ -1297,7 +1293,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 3
             OnKeyDown = ComboBox18KeyDown
           end
@@ -1422,7 +1418,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 3
             OnKeyDown = ComboBox12KeyDown
           end
@@ -1457,7 +1453,7 @@ object frmMain: TfrmMain
             Width = 62
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 5
             OnKeyDown = ComboBox13KeyDown
           end
@@ -1478,10 +1474,6 @@ object frmMain: TfrmMain
           TitleFont.Name = #23435#20307
           TitleFont.Style = []
         end
-      end
-      object TabSheet9: TTabSheet
-        Caption = #27602#40635#33647
-        ImageIndex = 8
       end
       object TabSheet4: TTabSheet
         Caption = #23601#35786#21382#21490
@@ -1542,6 +1534,7 @@ object frmMain: TfrmMain
         TitleFont.Height = -13
         TitleFont.Name = #23435#20307
         TitleFont.Style = []
+        OnDrawColumnCell = DBGrid2DrawColumnCell
       end
       object Panel1: TPanel
         Left = 2

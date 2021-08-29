@@ -50,8 +50,6 @@ type
     TabSheet5: TTabSheet;
     TabSheet6: TTabSheet;
     TabSheet7: TTabSheet;
-    TabSheet8: TTabSheet;
-    TabSheet9: TTabSheet;
     Panel4: TPanel;
     DBGrid3: TDBGrid;
     LabeledEdit1: TLabeledEdit;
@@ -355,6 +353,8 @@ type
       Shift: TShiftState);
     procedure N37Click(Sender: TObject);
     procedure N43Click(Sender: TObject);
+    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
   private
     { Private declarations }
     //==为了通过发送消息更新主窗体状态栏而增加==//
@@ -646,7 +646,9 @@ procedure TfrmMain.UpdateMyQuery2(const AUnid:integer);
 begin
   MyQuery2.Close;
   MyQuery2.SQL.Clear;
-  MyQuery2.SQL.Text:='select creat_date_time as 创建日期,patient_name as 姓名,patient_sex as 性别,patient_age AS 年龄,audit_doctor as 审核者,'+
+  MyQuery2.SQL.Text:='select creat_date_time as 创建日期,patient_name as 姓名,patient_sex as 性别,patient_age AS 年龄,'+
+                     '(SELECT GROUP_CONCAT(ts.item_name SEPARATOR '';'') FROM treat_slave ts WHERE ts.item_type=''诊断'' and ts.tm_unid=treat_master.unid) as 诊断,'+
+                     'audit_doctor as 审核者,'+
                      'certificate_type as 证件类型,certificate_num as 证件号码,'+
                      'clinic_card_num as 诊疗卡号,health_care_num as 医保卡号,address as 住址,work_company as 工作单位,work_address as 工作地址,'+
                      'if_marry as 婚否,native_place as 籍贯,telephone as 联系电话,remark as 备注,audit_date as 审核时间,department as 科别,patient_unid,unid from treat_master '+
@@ -659,23 +661,24 @@ procedure TfrmMain.MyQuery2AfterOpen(DataSet: TDataSet);
 begin
   if not DataSet.Active then exit;
 
-  dbgrid2.Columns.Items[0].Width:=135;//创建日期
+  dbgrid2.Columns.Items[0].Width:=72;//创建日期135
   dbgrid2.Columns.Items[1].Width:=42;//姓名
   dbgrid2.Columns.Items[2].Width:=30;//性别
   dbgrid2.Columns.Items[3].Width:=30;//年龄
-  dbgrid2.Columns.Items[4].Width:=42;//审核者
-  dbgrid2.Columns.Items[5].Width:=55;//证件类型
-  dbgrid2.Columns.Items[6].Width:=130;//证件号码
-  dbgrid2.Columns.Items[7].Width:=130;//诊疗卡号
-  dbgrid2.Columns.Items[8].Width:=130;//医保卡号
-  dbgrid2.Columns.Items[9].Width:=120;//住址
-  dbgrid2.Columns.Items[10].Width:=120;//工作单位
-  dbgrid2.Columns.Items[11].Width:=120;//工作地址
-  dbgrid2.Columns.Items[12].Width:=42;//婚否
-  dbgrid2.Columns.Items[13].Width:=55;//籍贯
-  dbgrid2.Columns.Items[14].Width:=80;//联系电话
-  dbgrid2.Columns.Items[15].Width:=100;//备注
-  dbgrid2.Columns.Items[16].Width:=135;//审核时间
+  dbgrid2.Columns.Items[4].Width:=105;//诊断
+  dbgrid2.Columns.Items[5].Width:=42;//审核者
+  dbgrid2.Columns.Items[6].Width:=55;//证件类型
+  dbgrid2.Columns.Items[7].Width:=130;//证件号码
+  dbgrid2.Columns.Items[8].Width:=130;//诊疗卡号
+  dbgrid2.Columns.Items[9].Width:=130;//医保卡号
+  dbgrid2.Columns.Items[10].Width:=120;//住址
+  dbgrid2.Columns.Items[11].Width:=120;//工作单位
+  dbgrid2.Columns.Items[12].Width:=120;//工作地址
+  dbgrid2.Columns.Items[13].Width:=42;//婚否
+  dbgrid2.Columns.Items[14].Width:=55;//籍贯
+  dbgrid2.Columns.Items[15].Width:=80;//联系电话
+  dbgrid2.Columns.Items[16].Width:=100;//备注
+  dbgrid2.Columns.Items[17].Width:=135;//审核时间
 end;
 
 procedure TfrmMain.MyQuery2AfterScroll(DataSet: TDataSet);
@@ -713,7 +716,7 @@ begin
   tmpADOLYGetcode.InField:='code,gene_name,gene_pinyin,gene_wbm,chem_name,chem_pinyin,chem_wbm,latin_name,english_name';
   tmpADOLYGetcode.InValue:=tLabeledEdit(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+tLabeledEdit(SENDER).Left+tLabeledEdit(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+tLabeledEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+tLabeledEdit(SENDER).Top+tLabeledEdit(SENDER).Parent.Top+tLabeledEdit(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+tLabeledEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+tLabeledEdit(SENDER).Top+tLabeledEdit(SENDER).Parent.Top+tLabeledEdit(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -1044,7 +1047,7 @@ procedure TfrmMain.N15Click(Sender: TObject);
 begin
   if not MyQuery2.Active then exit;
   if MyQuery2.RecordCount<=0 then exit;
-  
+
   if not ifhaspower(sender,operator_id) then exit;//权限检查
 
   if not Check_audit_doctor then
@@ -1275,16 +1278,16 @@ begin
       EXIT;
     END;
 
-    Insert_Identity:=MyQuery4.fieldbyname('Unid').AsInteger;
+    Insert_Identity:=MyQuery4.fieldbyname('unid').AsInteger;
     
     adotemp11.Close;
     adotemp11.SQL.Clear;
     adotemp11.SQL.Text:=' Update treat_slave  '+
     '  set item_name=:item_name,item_value=:item_value '+
-    '  Where Unid=:Unid ';
+    '  Where unid=:unid ';
     adotemp11.ParamByName('item_name').Value:=trim(ComboBox6.Text);
     adotemp11.ParamByName('item_value').Value:=trim(ComboBox7.Text);
-    adotemp11.ParamByName('Unid').Value:=Insert_Identity;
+    adotemp11.ParamByName('unid').Value:=Insert_Identity;
     adotemp11.ExecSQL;
     
     Panel38.Caption:='新增';
@@ -1307,9 +1310,10 @@ begin
   end;
 
   adotemp11.Free;
-  
-  MyQuery4.Refresh;
-  MyQuery4.Locate('Unid',Insert_Identity,[loCaseInsensitive]);
+
+  MyQuery2.Refresh;
+  //MyQuery4.Refresh;//上面的MyQuery2时会自动刷新MyQuery4
+  MyQuery4.Locate('unid',Insert_Identity,[loCaseInsensitive]);
 
   ComboBox6.Text:='';
   ComboBox7.Text:='';
@@ -1533,7 +1537,7 @@ begin
   tmpADOLYGetcode.InField:='code,name,pinyin,wbm';
   tmpADOLYGetcode.InValue:=tLabeledEdit(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+tLabeledEdit(SENDER).Left+tLabeledEdit(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+tLabeledEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+tLabeledEdit(SENDER).Top+tLabeledEdit(SENDER).Parent.Top+tLabeledEdit(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+tLabeledEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+tLabeledEdit(SENDER).Top+tLabeledEdit(SENDER).Parent.Top+tLabeledEdit(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -1632,7 +1636,7 @@ begin
   tmpADOLYGetcode.InField:='code,name,pinyin,wbm';
   tmpADOLYGetcode.InValue:=tLabeledEdit(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+tLabeledEdit(SENDER).Left+tLabeledEdit(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+tLabeledEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+tLabeledEdit(SENDER).Top+tLabeledEdit(SENDER).Parent.Top+tLabeledEdit(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+tLabeledEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+tLabeledEdit(SENDER).Top+tLabeledEdit(SENDER).Parent.Top+tLabeledEdit(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -1845,7 +1849,7 @@ begin
   tmpADOLYGetcode.InField:='code,gene_name,gene_pinyin,gene_wbm,chem_name,chem_pinyin,chem_wbm,latin_name,english_name';
   tmpADOLYGetcode.InValue:=tLabeledEdit(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+tLabeledEdit(SENDER).Left+tLabeledEdit(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+tLabeledEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+tLabeledEdit(SENDER).Top+tLabeledEdit(SENDER).Parent.Top+tLabeledEdit(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+tLabeledEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+tLabeledEdit(SENDER).Top+tLabeledEdit(SENDER).Parent.Top+tLabeledEdit(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2263,7 +2267,7 @@ begin
   tmpADOLYGetcode.InField:='code,name,pinyin,wbm';
   tmpADOLYGetcode.InValue:=tLabeledEdit(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+tLabeledEdit(SENDER).Left+tLabeledEdit(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+tLabeledEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+tLabeledEdit(SENDER).Top+tLabeledEdit(SENDER).Parent.Top+tLabeledEdit(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+tLabeledEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+tLabeledEdit(SENDER).Top+tLabeledEdit(SENDER).Parent.Top+tLabeledEdit(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2507,18 +2511,18 @@ begin
     UpdateMyQuery4;//耗时40ms
   end;
 
-  if PageControl1.ActivePageIndex=8 then//历史就诊记录
-    UpdateMyQuery1;//耗时236ms
   if PageControl1.ActivePageIndex=1 then//西药
     UpdateMyQuery3;//耗时45ms
-  if PageControl1.ActivePageIndex=4 then//治疗
-    UpdateMyQuery5;//耗时31ms
-  if PageControl1.ActivePageIndex=6 then//检查
-    UpdateMyQuery6;
   if PageControl1.ActivePageIndex=2 then//中药
     UpdateMyQuery7;//耗时40ms
-  if PageControl1.ActivePageIndex=5 then//检验
+  if PageControl1.ActivePageIndex=3 then//治疗
+    UpdateMyQuery5;//耗时31ms
+  if PageControl1.ActivePageIndex=4 then//检验
     UpdateMyQuery9;//耗时16ms
+  if PageControl1.ActivePageIndex=5 then//检查
+    UpdateMyQuery6;
+  if PageControl1.ActivePageIndex=6 then//历史就诊记录
+    UpdateMyQuery1;//耗时236ms
 end;
 
 procedure TfrmMain.N30Click(Sender: TObject);
@@ -2650,6 +2654,8 @@ begin
   if (MessageDlg('确实要删除该记录吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
 
   MyQuery4.Delete;
+  
+  MyQuery2.Refresh;
 end;
 
 procedure TfrmMain.N32Click(Sender: TObject);
@@ -2709,7 +2715,7 @@ begin
   tmpADOLYGetcode.InField:='code,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TComboBox(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TComboBox(SENDER).Left+TComboBox(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2730,7 +2736,7 @@ begin
   tmpADOLYGetcode.InField:='code,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TComboBox(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TComboBox(SENDER).Left+TComboBox(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2752,7 +2758,7 @@ begin
   tmpADOLYGetcode.InField:='code,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TComboBox(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TComboBox(SENDER).Left+TComboBox(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2774,7 +2780,7 @@ begin
   tmpADOLYGetcode.InField:='code,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TComboBox(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TComboBox(SENDER).Left+TComboBox(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2796,7 +2802,7 @@ begin
   tmpADOLYGetcode.InField:='code,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TComboBox(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TComboBox(SENDER).Left+TComboBox(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2818,7 +2824,7 @@ begin
   tmpADOLYGetcode.InField:='code,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TComboBox(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TComboBox(SENDER).Left+TComboBox(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2840,7 +2846,7 @@ begin
   tmpADOLYGetcode.InField:='code,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TComboBox(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TComboBox(SENDER).Left+TComboBox(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2861,7 +2867,7 @@ begin
   tmpADOLYGetcode.InField:='code,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TComboBox(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TComboBox(SENDER).Left+TComboBox(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2882,7 +2888,7 @@ begin
   tmpADOLYGetcode.InField:='code,name,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TComboBox(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TComboBox(SENDER).Left+TComboBox(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2903,7 +2909,7 @@ begin
   tmpADOLYGetcode.InField:='code,name,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TComboBox(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TComboBox(SENDER).Left+TComboBox(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TComboBox(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TComboBox(SENDER).Top+TComboBox(SENDER).Parent.Top+TComboBox(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2950,7 +2956,7 @@ begin
   tmpADOLYGetcode.InField:='code,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TEdit(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TEdit(SENDER).Left+TEdit(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TEdit(SENDER).Top+TEdit(SENDER).Parent.Top+TEdit(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TEdit(SENDER).Top+TEdit(SENDER).Parent.Top+TEdit(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -2984,7 +2990,7 @@ begin
   tmpADOLYGetcode.InField:='code,pinyin,wbm';
   tmpADOLYGetcode.InValue:=TEdit(sender).Text;
   tmpADOLYGetcode.ShowX:=GroupBox2.Width+left+TEdit(SENDER).Left+TEdit(SENDER).Parent.Left;
-  tmpADOLYGetcode.ShowY:=CoolBar1.Height+Panel1.Height+TEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TEdit(SENDER).Top+TEdit(SENDER).Parent.Top+TEdit(SENDER).Parent.Parent.Top;
+  tmpADOLYGetcode.ShowY:=CoolBar1.Height+TEdit(SENDER).Height+top+22{当前窗体标题栏高度}+21{当前窗体菜单高度}+10{补偿高度}+TEdit(SENDER).Top+TEdit(SENDER).Parent.Top+TEdit(SENDER).Parent.Parent.Top;
 
   if tmpADOLYGetcode.Execute then
   begin
@@ -3219,6 +3225,25 @@ begin
   adotemp22.Free;
   
   Copy_Type:='';Copy_Unid:='';Copy_ifCompleted:=-1;
+end;
+
+procedure TfrmMain.DBGrid2DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  audit_doctor:string;
+begin
+ //======================审核过的创建日期列变化颜色======================//
+  if datacol=0 then
+  begin
+    audit_doctor:=TDBGrid(Sender).DataSource.DataSet.fieldbyname('审核者').AsString;
+    IF audit_doctor<>'' then
+    begin
+      TDBGrid(Sender).Canvas.Font.Color:=clred;
+      TDBGrid(Sender).DefaultDrawColumnCell(rect,datacol,column,state);
+    end;
+  end;
+ //==========================================================================//
 end;
 
 end.

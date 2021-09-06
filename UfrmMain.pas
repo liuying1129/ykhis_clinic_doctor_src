@@ -3019,6 +3019,8 @@ begin
   adotemp12.SQL.Clear;
   adotemp12.SQL.Text:='select * from treat_slave Where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and group_num='+TLabeledEdit(Sender).Text+' and item_type=''Î÷Ò©'' LIMIT 1';
   adotemp12.Open;
+  if adotemp12.RecordCount<=0 then begin adotemp12.Free;exit;end;
+  
   ComboBox5.Text:=adotemp12.fieldbyname('use_method').AsString;
   CheckBox1.Checked:=adotemp12.fieldbyname('if_skin_test').AsBoolean;
   ComboBox2.Text:=adotemp12.fieldbyname('drug_freq').AsString;
@@ -3046,6 +3048,8 @@ begin
   adotemp12.SQL.Clear;
   adotemp12.SQL.Text:='select * from treat_slave Where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and group_num='+TLabeledEdit(Sender).Text+' and item_type=''ÖÐÒ©'' LIMIT 1';
   adotemp12.Open;
+  if adotemp12.RecordCount<=0 then begin adotemp12.Free;exit;end;
+
   ComboBox17.Text:=adotemp12.fieldbyname('use_method').AsString;
   ComboBox11.Text:=adotemp12.fieldbyname('made_method').AsString;
   ComboBox14.Text:=adotemp12.fieldbyname('drug_freq').AsString;

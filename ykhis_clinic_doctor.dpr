@@ -10,7 +10,8 @@ uses
   UfrmModifyAge in 'UfrmModifyAge.pas' {frmModifyAge},
   UfrmDgnsBigTemp in 'UfrmDgnsBigTemp.pas' {frmDgnsBigTemp},
   UfrmCommQuery in 'UfrmCommQuery.pas' {frmCommQuery},
-  UfrmSaveAsTemp in 'UfrmSaveAsTemp.pas' {frmSaveAsTemp};
+  UfrmSaveAsTemp in 'UfrmSaveAsTemp.pas' {frmSaveAsTemp},
+  softMeter_globalVar in 'softMeter_globalVar.pas';
 
 {$R *.res}
 

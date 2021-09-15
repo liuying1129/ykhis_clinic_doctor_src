@@ -394,7 +394,7 @@ var
 implementation
 
 uses UfrmLogin, UDM, UfrmModifyPwd, UfrmSelPatient, UfrmModifyAge,
-  UfrmDgnsBigTemp, UfrmCommQuery, UfrmSaveAsTemp;
+  UfrmDgnsBigTemp, UfrmCommQuery, UfrmSaveAsTemp, softMeter_globalVar;
 var
   g_group_num:integer;//西药组号
   g_zhiliao_group_num:integer;//治疗组号
@@ -447,6 +447,9 @@ begin
 
   SendMessage(ComboBox15.handle,CB_SETDROPPEDWIDTH,48,0);
   SendMessage(ComboBox3.handle,CB_SETDROPPEDWIDTH,48,0);
+
+  // send a pageView hit on Form Show
+  dllSoftMeter.sendPageview(PChar(UTF8Encode(SCSYDW)+'/'+UTF8Encode(operator_id)),'frmMain Show Event');
 end;
 
 procedure TfrmMain.updatestatusBar(const text: string);

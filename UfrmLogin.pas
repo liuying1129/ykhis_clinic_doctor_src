@@ -42,7 +42,7 @@ type
 function  frmLogin: TfrmLogin;
 
 implementation
-uses  UDM, UfrmMain;
+uses  UDM, UfrmMain, softMeter_globalVar;
 
 var
   ffrmLogin: TfrmLogin;

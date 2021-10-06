@@ -137,7 +137,7 @@ procedure TfrmCommQuery.ADObasicAfterScroll(DataSet: TDataSet);
 begin
   ADOQuery1.Close;
   ADOQuery1.SQL.Clear;
-  ADOQuery1.SQL.Text:='select item_type,item_name,group_num as 组号,dosage as 用量,unit_dosage as 用量单位,'+
+  ADOQuery1.SQL.Text:='select item_type,prescription_no as 处方序号,item_name,group_num as 组号,dosage as 用量,unit_dosage as 用量单位,'+
                      'made_method as 煎法,use_method as 用法,if_skin_test as 皮试,drug_freq as 频次,'+
                      'drug_days as 天数,drug_num as 数量,unit_drug as 数量单位,unit_price as 单价,drug_num*unit_price as 金额,'+
                      'hosp_inje_num as 院注次数,item_advice as 项目嘱托,item_value as 结果,body_position as 部位,'+

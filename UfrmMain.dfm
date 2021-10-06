@@ -203,7 +203,7 @@ object frmMain: TfrmMain
       Top = 1
       Width = 764
       Height = 531
-      ActivePage = TabSheet6
+      ActivePage = TabSheet4
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change
@@ -253,7 +253,7 @@ object frmMain: TfrmMain
               Width = 157
               Height = 21
               DropDownCount = 20
-              ItemHeight = 0
+              ItemHeight = 13
               TabOrder = 0
             end
             object ComboBox7: TComboBox
@@ -262,7 +262,7 @@ object frmMain: TfrmMain
               Width = 157
               Height = 21
               DropDownCount = 20
-              ItemHeight = 0
+              ItemHeight = 13
               TabOrder = 1
             end
             object BitBtn4: TBitBtn
@@ -802,16 +802,33 @@ object frmMain: TfrmMain
             TabOrder = 5
           end
         end
-        object DBGrid3: TDBGrid
+        object RadioGroup1: TRadioGroup
           Left = 0
           Top = 65
           Width = 756
-          Height = 438
+          Height = 40
+          Align = alTop
+          Columns = 5
+          ItemIndex = 0
+          Items.Strings = (
+            #22788#26041'1'
+            #22788#26041'2'
+            #22788#26041'3'
+            #22788#26041'4'
+            #22788#26041'5')
+          TabOrder = 1
+          OnClick = RadioGroup1Click
+        end
+        object DBGrid3: TDBGrid
+          Left = 0
+          Top = 105
+          Width = 756
+          Height = 398
           Align = alClient
           DataSource = DataSource3
           PopupMenu = PopupMenu3
           ReadOnly = True
-          TabOrder = 1
+          TabOrder = 2
           TitleFont.Charset = ANSI_CHARSET
           TitleFont.Color = clWindowText
           TitleFont.Height = -13
@@ -945,7 +962,7 @@ object frmMain: TfrmMain
             Width = 58
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 6
             OnChange = LabeledEdit26Change
             OnExit = LabeledEdit26Change
@@ -1010,7 +1027,7 @@ object frmMain: TfrmMain
             Width = 75
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 4
             OnKeyDown = ComboBox17KeyDown
           end
@@ -1037,9 +1054,9 @@ object frmMain: TfrmMain
         end
         object DBGrid7: TDBGrid
           Left = 0
-          Top = 65
+          Top = 105
           Width = 756
-          Height = 438
+          Height = 398
           Align = alClient
           DataSource = DataSource7
           PopupMenu = PopupMenu7
@@ -1050,6 +1067,23 @@ object frmMain: TfrmMain
           TitleFont.Height = -13
           TitleFont.Name = #23435#20307
           TitleFont.Style = []
+        end
+        object RadioGroup2: TRadioGroup
+          Left = 0
+          Top = 65
+          Width = 756
+          Height = 40
+          Align = alTop
+          Columns = 5
+          ItemIndex = 0
+          Items.Strings = (
+            #22788#26041'1'
+            #22788#26041'2'
+            #22788#26041'3'
+            #22788#26041'4'
+            #22788#26041'5')
+          TabOrder = 2
+          OnClick = RadioGroup2Click
         end
       end
       object TabSheet3: TTabSheet
@@ -1151,7 +1185,7 @@ object frmMain: TfrmMain
             Width = 58
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 2
             OnChange = ComboBox9Change
             OnSelect = ComboBox9Change
@@ -1162,7 +1196,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 5
             OnKeyDown = ComboBox10KeyDown
           end
@@ -1197,7 +1231,7 @@ object frmMain: TfrmMain
             Width = 62
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 7
             OnKeyDown = ComboBox8KeyDown
           end
@@ -1289,7 +1323,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 3
             OnKeyDown = ComboBox18KeyDown
           end
@@ -1414,7 +1448,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 3
             OnKeyDown = ComboBox12KeyDown
           end
@@ -1449,7 +1483,7 @@ object frmMain: TfrmMain
             Width = 62
             Height = 21
             DropDownCount = 20
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 5
             OnKeyDown = ComboBox13KeyDown
           end
@@ -1852,6 +1886,7 @@ object frmMain: TfrmMain
   object mq_slave: TMyQuery
     SQL.Strings = (
       'select *,'
+      #39#39' as GroupCondition,'
       '0 as min_content,'#39'1'#39' as unit_min_content,'
       '0 as amount'
       'from treat_slave')
@@ -2741,6 +2776,7 @@ object frmMain: TfrmMain
       'reserve10=reserve10'
       'creat_date_time=creat_date_time'
       'update_date_time=update_date_time'
+      'GroupCondition=GroupCondition'
       'min_content=min_content'
       'unit_min_content=unit_min_content'
       'amount=amount')

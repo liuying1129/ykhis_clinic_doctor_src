@@ -51,7 +51,6 @@ type
     TabSheet6: TTabSheet;
     TabSheet7: TTabSheet;
     Panel4: TPanel;
-    DBGrid3: TDBGrid;
     LabeledEdit1: TLabeledEdit;
     LabeledEdit2: TLabeledEdit;
     LabeledEdit3: TLabeledEdit;
@@ -246,6 +245,9 @@ type
     N42: TMenuItem;
     N43: TMenuItem;
     CheckBox1: TCheckBox;
+    RadioGroup1: TRadioGroup;
+    DBGrid3: TDBGrid;
+    RadioGroup2: TRadioGroup;
     procedure FormShow(Sender: TObject);
     procedure N3Click(Sender: TObject);
     procedure N5Click(Sender: TObject);
@@ -355,6 +357,8 @@ type
     procedure N43Click(Sender: TObject);
     procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure RadioGroup2Click(Sender: TObject);
   private
     { Private declarations }
     //==为了通过发送消息更新主窗体状态栏而增加==//
@@ -366,7 +370,7 @@ type
     procedure ReadConfig;
     procedure UpdateMyQuery1;
     procedure UpdateMyQuery2(const AUnid:integer);
-    procedure UpdateMyQuery3;
+    procedure UpdateMyQuery3(const APrescription_No:integer);
     procedure ClearXiyaoEdit;
     function Check_audit_doctor: boolean;
     procedure UpdateMyQuery4;
@@ -374,7 +378,7 @@ type
     procedure ClearZhiLiaoEdit;
     procedure UpdateMyQuery6;
     procedure ClearJianChaEdit;
-    procedure UpdateMyQuery7;
+    procedure UpdateMyQuery7(const APrescription_No:integer);
     procedure ClearZhongYaoEdit;
     procedure UpdateMyQuery8(const AifCompleted:integer);
     procedure UpdateMyQuery9;
@@ -807,8 +811,8 @@ begin
     adotemp11.Connection:=DM.MyConnection1;
 
     sqlstr:='Insert into treat_slave ('+
-                        ' item_type,tm_unid,item_name,group_num,dosage,unit_dosage,use_method,if_skin_test,drug_freq,drug_days,drug_num,unit_drug,unit_price,hosp_inje_num,item_advice,item_unid) values ('+
-                        ' :item_type,:tm_unid,:item_name,:group_num,:dosage,:unit_dosage,:use_method,:if_skin_test,:drug_freq,:drug_days,:drug_num,:unit_drug,:unit_price,:hosp_inje_num,:item_advice,:item_unid) ';
+                        ' item_type,tm_unid,item_name,group_num,dosage,unit_dosage,use_method,if_skin_test,drug_freq,drug_days,drug_num,unit_drug,unit_price,hosp_inje_num,item_advice,item_unid,prescription_no) values ('+
+                        ' :item_type,:tm_unid,:item_name,:group_num,:dosage,:unit_dosage,:use_method,:if_skin_test,:drug_freq,:drug_days,:drug_num,:unit_drug,:unit_price,:hosp_inje_num,:item_advice,:item_unid,:prescription_no) ';
     adotemp11.Close;
     adotemp11.SQL.Clear;
     adotemp11.SQL.Add(sqlstr);
@@ -846,6 +850,7 @@ begin
     if trystrtoint(Label16.Caption,i_item_unid) then
       adotemp11.ParamByName('item_unid').Value:=i_item_unid
     else adotemp11.ParamByName('item_unid').Value:=null;
+    adotemp11.ParamByName('prescription_no').Value:=RadioGroup1.ItemIndex;
     try
       adotemp11.ExecSQL;
       iUnid:=adotemp11.fieldbyname('Insert_Identity').AsInteger;
@@ -868,7 +873,7 @@ begin
   Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
 
-procedure TfrmMain.UpdateMyQuery3;
+procedure TfrmMain.UpdateMyQuery3(const APrescription_No:integer);
 begin
   if not MyQuery2.Active then exit;
   if MyQuery2.RecordCount=0 then exit;
@@ -882,7 +887,7 @@ begin
                      'drug_num as 数量,unit_drug as 数量单位,unit_price as 单价,drug_num*unit_price as 金额,'+
                      'hosp_inje_num as 院注次数,item_advice as 项目嘱托,creat_date_time as 创建时间,if_skin_test,unid,tm_unid,item_unid '+
                      ' from treat_slave '+
-                     ' where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type=''西药'' order by group_num';
+                     ' where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type=''西药'' and prescription_no='+inttostr(APrescription_No)+' order by group_num';
   MyQuery3.Open;
 end;
 
@@ -1798,7 +1803,7 @@ begin
     if LabeledEdit21.CanFocus then LabeledEdit21.SetFocus;
 end;
 
-procedure TfrmMain.UpdateMyQuery7;
+procedure TfrmMain.UpdateMyQuery7(const APrescription_No:integer);
 begin
   if not MyQuery2.Active then exit;
   if MyQuery2.RecordCount=0 then exit;
@@ -1810,7 +1815,7 @@ begin
                      'drug_num as 数量,unit_drug as 数量单位,unit_price as 单价,drug_num*unit_price as 金额,'+
                      'item_advice as 项目嘱托,creat_date_time as 创建时间,drug_days as 剂数,unid,tm_unid,item_unid '+
                      ' from treat_slave '+
-                     ' where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type=''中药'' order by group_num';
+                     ' where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type=''中药'' and prescription_no='+inttostr(APrescription_No)+' order by group_num';
   MyQuery7.Open;
 end;
 
@@ -1940,8 +1945,8 @@ begin
     adotemp11.Connection:=DM.MyConnection1;
 
     sqlstr:='Insert into treat_slave ('+
-                        ' item_type,tm_unid,item_name,group_num,dosage,unit_dosage,use_method,made_method,drug_freq,drug_num,unit_drug,unit_price,item_advice,item_unid,drug_days) values ('+
-                        ' :item_type,:tm_unid,:item_name,:group_num,:dosage,:unit_dosage,:use_method,:made_method,:drug_freq,:drug_num,:unit_drug,:unit_price,:item_advice,:item_unid,:drug_days) ';
+                        ' item_type,tm_unid,item_name,group_num,dosage,unit_dosage,use_method,made_method,drug_freq,drug_num,unit_drug,unit_price,item_advice,item_unid,drug_days,prescription_no) values ('+
+                        ' :item_type,:tm_unid,:item_name,:group_num,:dosage,:unit_dosage,:use_method,:made_method,:drug_freq,:drug_num,:unit_drug,:unit_price,:item_advice,:item_unid,:drug_days,:prescription_no) ';
     adotemp11.Close;
     adotemp11.SQL.Clear;
     adotemp11.SQL.Add(sqlstr);
@@ -1976,6 +1981,7 @@ begin
     if trystrtoint(LabeledEdit35.Text,i_drug_days) then
       adotemp11.ParamByName('drug_days').Value:=i_drug_days
     else adotemp11.ParamByName('drug_days').Value:=null;
+    adotemp11.ParamByName('prescription_no').Value:=RadioGroup2.ItemIndex;
     try
       adotemp11.ExecSQL;
       iUnid:=adotemp11.fieldbyname('Insert_Identity').AsInteger;
@@ -2058,7 +2064,7 @@ begin
 
   MyQuery8.Close;
   MyQuery8.SQL.Clear;
-  MyQuery8.SQL.Text:='select item_type,item_name,group_num as 组号,dosage as 用量,unit_dosage as 用量单位,'+
+  MyQuery8.SQL.Text:='select item_type,prescription_no as 处方序号,item_name,group_num as 组号,dosage as 用量,unit_dosage as 用量单位,'+
                      'made_method as 煎法,use_method as 用法,if_skin_test as 皮试,drug_freq as 频次,'+
                      'drug_days as 天数,drug_num as 数量,unit_drug as 数量单位,'+
                      'item_value as 结果,'+
@@ -2071,7 +2077,7 @@ begin
                      //要求【模板内容类型】的中文名称具有唯一性，否则此SQL查出的结果会重复
                      ' left JOIN commcode cc on cc.TypeName=''模板内容类型'' AND cc.name=item_type '+
                      ' where tm_unid='+MyQuery1.fieldbyname('unid').AsString+
-                     ' order by cc.code,group_num';
+                     ' order by cc.code,prescription_no,group_num';
   MyQuery8.Open;
 end;
 
@@ -2085,25 +2091,26 @@ begin
   if not DataSet.Active then exit;
 
   dbgrid8.Columns.Items[0].Width:=55;//项目类型
-  dbgrid8.Columns.Items[1].Width:=60;//项目名称
-  dbgrid8.Columns.Items[2].Width:=30;//组号
-  dbgrid8.Columns.Items[3].Width:=30;//用量
-  dbgrid8.Columns.Items[4].Width:=55;//用量单位
-  dbgrid8.Columns.Items[5].Width:=30;//煎法
-  dbgrid8.Columns.Items[6].Width:=30;//用法
-  dbgrid8.Columns.Items[7].Width:=30;//皮试
-  dbgrid8.Columns.Items[8].Width:=30;//频次
-  dbgrid8.Columns.Items[9].Width:=30;//天数
-  dbgrid8.Columns.Items[10].Width:=30;//数量
-  dbgrid8.Columns.Items[11].Width:=55;//数量单位
-  dbgrid8.Columns.Items[12].Width:=100;//结果
-  dbgrid8.Columns.Items[13].Width:=30;//单价
-  dbgrid8.Columns.Items[14].Width:=50;//金额
-  dbgrid8.Columns.Items[15].Width:=55;//院注次数
-  dbgrid8.Columns.Items[16].Width:=55;//项目嘱托
-  dbgrid8.Columns.Items[17].Width:=30;//部位
-  dbgrid8.Columns.Items[18].Width:=30;//备注
-  dbgrid8.Columns.Items[19].Width:=135;//创建时间
+  dbgrid8.Columns.Items[1].Width:=55;//处方序号
+  dbgrid8.Columns.Items[2].Width:=60;//项目名称
+  dbgrid8.Columns.Items[3].Width:=30;//组号
+  dbgrid8.Columns.Items[4].Width:=30;//用量
+  dbgrid8.Columns.Items[5].Width:=55;//用量单位
+  dbgrid8.Columns.Items[6].Width:=30;//煎法
+  dbgrid8.Columns.Items[7].Width:=30;//用法
+  dbgrid8.Columns.Items[8].Width:=30;//皮试
+  dbgrid8.Columns.Items[9].Width:=30;//频次
+  dbgrid8.Columns.Items[10].Width:=30;//天数
+  dbgrid8.Columns.Items[11].Width:=30;//数量
+  dbgrid8.Columns.Items[12].Width:=55;//数量单位
+  dbgrid8.Columns.Items[13].Width:=100;//结果
+  dbgrid8.Columns.Items[14].Width:=30;//单价
+  dbgrid8.Columns.Items[15].Width:=50;//金额
+  dbgrid8.Columns.Items[16].Width:=55;//院注次数
+  dbgrid8.Columns.Items[17].Width:=55;//项目嘱托
+  dbgrid8.Columns.Items[18].Width:=30;//部位
+  dbgrid8.Columns.Items[19].Width:=30;//备注
+  dbgrid8.Columns.Items[20].Width:=135;//创建时间
 end;
 
 procedure TfrmMain.ClearJianYanEdit;
@@ -2517,9 +2524,9 @@ begin
   end;
 
   if PageControl1.ActivePageIndex=1 then//西药
-    UpdateMyQuery3;//耗时45ms
+    UpdateMyQuery3(RadioGroup1.ItemIndex);//耗时45ms
   if PageControl1.ActivePageIndex=2 then//中药
-    UpdateMyQuery7;//耗时40ms
+    UpdateMyQuery7(RadioGroup2.ItemIndex);//耗时40ms
   if PageControl1.ActivePageIndex=3 then//治疗
     UpdateMyQuery5;//耗时31ms
   if PageControl1.ActivePageIndex=4 then//检验
@@ -2578,12 +2585,13 @@ begin
   mq_slave.SQL.Clear;
   mq_slave.SQL.Text:='select ts.*,'+
     ' dm.min_content, '+
+    ' CONCAT(ts.item_type,IFNULL(ts.prescription_no,'''')) as GroupCondition,'+
     ' (select pack_name from drug_pack where drug_unid=ts.item_unid and unit_min_content=1 LIMIT 1) as unit_min_content '+
     ' from treat_slave ts '+
     ' left join drug_manage dm on dm.unid=ts.item_unid '+
     ' where ts.tm_unid='+sUnid+
     ' and ts.item_type not in (''体温'',''收缩压'',''舒张压'',''心率'',''主诉'',''简要病史'',''体查'',''辅助检查'',''嘱托'',''诊断'') '+
-    ' order by ts.item_type,ts.group_num ';
+    ' order by ts.item_type,GroupCondition,ts.group_num ';
   mq_slave.Open;
   if mq_slave.RecordCount<=0 then exit;
 
@@ -3159,7 +3167,7 @@ begin
       adotemp11.Connection:=DM.MyConnection1;
       adotemp11.Close;
       adotemp11.SQL.Clear;
-      adotemp11.SQL.Add('Insert into treat_slave (tm_unid,item_Type,item_unid,item_name,group_num,dosage,unit_dosage,use_method,drug_freq,drug_days,drug_num,unit_drug,unit_price) values '+' (:tm_unid,:item_Type,:item_unid,:item_name,:group_num,:dosage,:unit_dosage,:use_method,:drug_freq,:drug_days,:drug_num,:unit_drug,:unit_price)');
+      adotemp11.SQL.Add('Insert into treat_slave (tm_unid,item_Type,item_unid,item_name,group_num,dosage,unit_dosage,use_method,drug_freq,drug_days,drug_num,unit_drug,unit_price,prescription_no) values '+' (:tm_unid,:item_Type,:item_unid,:item_name,:group_num,:dosage,:unit_dosage,:use_method,:drug_freq,:drug_days,:drug_num,:unit_drug,:unit_price,:prescription_no)');
       //执行多条MySQL语句，要用分号分隔
       adotemp11.SQL.Add('; SELECT LAST_INSERT_ID() AS Insert_Identity ');
       if trystrtoint(MyQuery2.fieldbyname('unid').AsString,i_tm_unid) then
@@ -3186,6 +3194,9 @@ begin
         adotemp11.ParamByName('drug_num').Value:=f_drug_num
       else adotemp11.ParamByName('drug_num').Value:=null;
       adotemp11.ParamByName('unit_drug').Value:=unit_drug;
+      if '西药'=type_name then adotemp11.ParamByName('prescription_no').Value:=RadioGroup1.ItemIndex
+        else if '中药'=type_name then adotemp11.ParamByName('prescription_no').Value:=RadioGroup2.ItemIndex
+          else adotemp11.ParamByName('prescription_no').Value:=null;
 
       if('西药'=type_name)or('中药'=type_name)then
         s_unit_price:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select unit_price from drug_pack where drug_unid='+inttostr(i_item_unid)+' and pack_name='''+unit_drug+''' ')
@@ -3253,6 +3264,18 @@ begin
     end;
   end;
  //==========================================================================//
+end;
+
+procedure TfrmMain.RadioGroup1Click(Sender: TObject);
+begin
+  //very good!点击时若ItemIndex没变化则不会触发该事件
+  UpdateMyQuery3(TRadioGroup(Sender).ItemIndex);
+end;
+
+procedure TfrmMain.RadioGroup2Click(Sender: TObject);
+begin
+  //very good!点击时若ItemIndex没变化则不会触发该事件
+  UpdateMyQuery7(TRadioGroup(Sender).ItemIndex);
 end;
 
 end.

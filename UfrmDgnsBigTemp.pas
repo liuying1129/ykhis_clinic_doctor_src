@@ -356,7 +356,7 @@ begin
     adotemp11.Connection:=DM.MyConnection1;
     adotemp11.Close;
     adotemp11.SQL.Clear;
-    adotemp11.SQL.Add('Insert into treat_slave (tm_unid,item_Type,item_unid,item_name,group_num,dosage,unit_dosage,use_method,drug_freq,drug_days,drug_num,unit_drug,unit_price) values '+' (:tm_unid,:item_Type,:item_unid,:item_name,:group_num,:dosage,:unit_dosage,:use_method,:drug_freq,:drug_days,:drug_num,:unit_drug,:unit_price)');
+    adotemp11.SQL.Add('Insert into treat_slave (tm_unid,item_Type,item_unid,item_name,group_num,dosage,unit_dosage,use_method,drug_freq,drug_days,drug_num,unit_drug,unit_price,prescription_no) values '+' (:tm_unid,:item_Type,:item_unid,:item_name,:group_num,:dosage,:unit_dosage,:use_method,:drug_freq,:drug_days,:drug_num,:unit_drug,:unit_price,:prescription_no)');
     //执行多条MySQL语句，要用分号分隔
     adotemp11.SQL.Add('; SELECT LAST_INSERT_ID() AS Insert_Identity ');
     if trystrtoint(frmMain.MyQuery2.fieldbyname('unid').AsString,i_tm_unid) then
@@ -383,6 +383,9 @@ begin
       adotemp11.ParamByName('drug_num').Value:=f_drug_num
     else adotemp11.ParamByName('drug_num').Value:=null;
     adotemp11.ParamByName('unit_drug').Value:=unit_drug;
+    if '西药'=type_name then adotemp11.ParamByName('prescription_no').Value:=frmMain.RadioGroup1.ItemIndex
+      else if '中药'=type_name then adotemp11.ParamByName('prescription_no').Value:=frmMain.RadioGroup2.ItemIndex
+        else adotemp11.ParamByName('prescription_no').Value:=null;  
 
     if('西药'=type_name)or('中药'=type_name)then
       s_unit_price:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select unit_price from drug_pack where drug_unid='+inttostr(i_item_unid)+' and pack_name='''+unit_drug+''' ')

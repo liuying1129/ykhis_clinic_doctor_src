@@ -88,7 +88,7 @@ var
   Save_Cursor:TCursor;
 begin
   sqlstr1:='select creat_date_time as 创建日期,patient_name as 姓名,patient_sex as 性别,patient_age as 年龄,audit_doctor as 审核者, '+
-           'patient_birthday as 出生日期,certificate_type as 证件类型,certificate_num as 证件号码,'+
+           'certificate_type as 证件类型,certificate_num as 证件号码,'+
            'clinic_card_num as 诊疗卡号,health_care_num as 医保卡号,address as 住址,work_company as 工作单位,work_address as 工作地址, '+
            'if_marry as 婚否,native_place as 籍贯,telephone as 联系电话,remark as 备注,audit_date as 审核时间,patient_unid,unid '+
            ' from treat_master_bak order by unid desc ';
@@ -144,7 +144,7 @@ begin
                      'remark as 备注,creat_date_time as 创建时间,unid,tm_unid,item_unid '+
                      ' from treat_slave_bak '+
                      ' where tm_unid='+ADObasic.fieldbyname('unid').AsString+
-                     ' order by item_type,group_num';
+                     ' order by item_type,prescription_no,group_num';
   ADOQuery1.Open;
 end;
 

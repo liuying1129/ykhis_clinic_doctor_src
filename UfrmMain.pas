@@ -2591,7 +2591,7 @@ begin
     ' left join drug_manage dm on dm.unid=ts.item_unid '+
     ' where ts.tm_unid='+sUnid+
     ' and ts.item_type not in (''体温'',''收缩压'',''舒张压'',''心率'',''主诉'',''简要病史'',''体查'',''辅助检查'',''嘱托'',''诊断'') '+
-    ' order by ts.item_type,GroupCondition,ts.group_num ';
+    ' order by ts.item_type,prescription_no,ts.group_num ';
   mq_slave.Open;
   if mq_slave.RecordCount<=0 then exit;
 

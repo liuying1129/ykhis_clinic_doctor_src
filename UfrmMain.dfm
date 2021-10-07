@@ -1511,9 +1511,9 @@ object frmMain: TfrmMain
         object DBGrid1: TDBGrid
           Left = 0
           Top = 0
-          Width = 275
-          Height = 503
-          Align = alLeft
+          Width = 756
+          Height = 140
+          Align = alTop
           DataSource = DataSource1
           PopupMenu = PopupMenu1
           ReadOnly = True
@@ -1525,10 +1525,10 @@ object frmMain: TfrmMain
           TitleFont.Style = []
         end
         object DBGrid8: TDBGrid
-          Left = 275
-          Top = 0
-          Width = 481
-          Height = 503
+          Left = 0
+          Top = 140
+          Width = 756
+          Height = 363
           Align = alClient
           DataSource = DataSource8
           ReadOnly = True

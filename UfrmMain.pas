@@ -394,6 +394,8 @@ type
     function CalcXiYaoNum(const dosage,drug_freq,drug_days:string):single;
     function UnitsConverterMethod(const ADrug_Unid,AUnit_Dosage,AUnit_Fee:String):integer;
     procedure ShowTreatSlave;
+    procedure DeletePrescriptionDetail(Sender: TObject;const APrescriptionType:Integer);//删除处方明细
+    procedure DeleteSheetPrescription(Sender: TObject;const APrescriptionType:Integer);//删除整张处方
   public
     { Public declarations }
     procedure SaveMedicalRecord(Sender: TObject);//保存病历
@@ -941,45 +943,12 @@ end;
 
 procedure TfrmMain.N14Click(Sender: TObject);
 begin
-  if not ifhaspower(sender,operator_id) then exit;//权限检查
-
-  if not MyQuery3.Active then exit;
-  if MyQuery3.RecordCount<=0 then exit;
-
-  if not Check_audit_doctor then
-  begin
-    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
-    exit;
-  end;
-
-  //if (MessageDlg('确实要删除该处方明细吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
-
-  MyQuery3.Delete;
-
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  DeletePrescriptionDetail(Sender,3);
 end;
 
 procedure TfrmMain.N44Click(Sender: TObject);
 begin
-  if not ifhaspower(sender,operator_id) then exit;//权限检查
-
-  if not MyQuery3.Active then exit;
-  if MyQuery3.RecordCount<=0 then exit;
-
-  if not Check_audit_doctor then
-  begin
-    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
-    exit;
-  end;
-
-  if (MessageDlg('确实要删除整张处方吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
-
-  while not MyQuery3.IsEmpty do
-  begin
-    MyQuery3.Delete;
-  end;
-
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  DeleteSheetPrescription(Sender,3);
 end;
 
 procedure TfrmMain.N12Click(Sender: TObject);
@@ -1449,45 +1418,12 @@ end;
 
 procedure TfrmMain.N18Click(Sender: TObject);
 begin
-  if not ifhaspower(sender,operator_id) then exit;//权限检查
-
-  if not MyQuery5.Active then exit;
-  if MyQuery5.RecordCount<=0 then exit;
-
-  if not Check_audit_doctor then
-  begin
-    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
-    exit;
-  end;
-
-  //if (MessageDlg('确实要删除该处方明细吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
-
-  MyQuery5.Delete;
-
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  DeletePrescriptionDetail(Sender,5);
 end;
 
 procedure TfrmMain.N46Click(Sender: TObject);
 begin
-  if not ifhaspower(sender,operator_id) then exit;//权限检查
-
-  if not MyQuery5.Active then exit;
-  if MyQuery5.RecordCount<=0 then exit;
-
-  if not Check_audit_doctor then
-  begin
-    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
-    exit;
-  end;
-
-  if (MessageDlg('确实要删除整张处方吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
-
-  while not MyQuery5.IsEmpty do
-  begin
-    MyQuery5.Delete;
-  end;
-
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  DeleteSheetPrescription(Sender,5);
 end;
 
 procedure TfrmMain.BitBtn6Click(Sender: TObject);
@@ -1688,45 +1624,12 @@ end;
 
 procedure TfrmMain.N21Click(Sender: TObject);
 begin
-  if not ifhaspower(sender,operator_id) then exit;//权限检查
-
-  if not MyQuery6.Active then exit;
-  if MyQuery6.RecordCount<=0 then exit;
-
-  if not Check_audit_doctor then
-  begin
-    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
-    exit;
-  end;
-
-  //if (MessageDlg('确实要删除该处方明细吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
-
-  MyQuery6.Delete;
-
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  DeletePrescriptionDetail(Sender,6);
 end;
 
 procedure TfrmMain.N48Click(Sender: TObject);
 begin
-  if not ifhaspower(sender,operator_id) then exit;//权限检查
-
-  if not MyQuery6.Active then exit;
-  if MyQuery6.RecordCount<=0 then exit;
-
-  if not Check_audit_doctor then
-  begin
-    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
-    exit;
-  end;
-
-  if (MessageDlg('确实要删除整张处方吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
-
-  while not MyQuery6.IsEmpty do
-  begin
-    MyQuery6.Delete;
-  end;
-
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  DeleteSheetPrescription(Sender,6);
 end;
 
 procedure TfrmMain.LabeledEdit15KeyDown(Sender: TObject; var Key: Word;
@@ -2131,45 +2034,12 @@ end;
 
 procedure TfrmMain.N24Click(Sender: TObject);
 begin
-  if not ifhaspower(sender,operator_id) then exit;//权限检查
-
-  if not MyQuery7.Active then exit;
-  if MyQuery7.RecordCount<=0 then exit;
-
-  if not Check_audit_doctor then
-  begin
-    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
-    exit;
-  end;
-
-  //if (MessageDlg('确实要删除该处方明细吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
-
-  MyQuery7.Delete;
-
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  DeletePrescriptionDetail(Sender,7);
 end;
 
 procedure TfrmMain.N45Click(Sender: TObject);
 begin
-  if not ifhaspower(sender,operator_id) then exit;//权限检查
-
-  if not MyQuery7.Active then exit;
-  if MyQuery7.RecordCount<=0 then exit;
-
-  if not Check_audit_doctor then
-  begin
-    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
-    exit;
-  end;
-
-  if (MessageDlg('确实要删除整张处方吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
-
-  while not MyQuery7.IsEmpty do
-  begin
-    MyQuery7.Delete;
-  end;
-
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  DeleteSheetPrescription(Sender,7);
 end;
 
 procedure TfrmMain.BitBtn9Click(Sender: TObject);
@@ -2439,45 +2309,12 @@ end;
 
 procedure TfrmMain.N27Click(Sender: TObject);
 begin
-  if not ifhaspower(sender,operator_id) then exit;//权限检查
-
-  if not MyQuery9.Active then exit;
-  if MyQuery9.RecordCount<=0 then exit;
-
-  if not Check_audit_doctor then
-  begin
-    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
-    exit;
-  end;
-
-  //if (MessageDlg('确实要删除该处方明细吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
-
-  MyQuery9.Delete;
-
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  DeletePrescriptionDetail(Sender,9);
 end;
 
 procedure TfrmMain.N47Click(Sender: TObject);
 begin
-  if not ifhaspower(sender,operator_id) then exit;//权限检查
-
-  if not MyQuery9.Active then exit;
-  if MyQuery9.RecordCount<=0 then exit;
-
-  if not Check_audit_doctor then
-  begin
-    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
-    exit;
-  end;
-
-  if (MessageDlg('确实要删除整张处方吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
-
-  while not MyQuery9.IsEmpty do
-  begin
-    MyQuery9.Delete;
-  end;
-
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  DeleteSheetPrescription(Sender,9);
 end;
 
 function TfrmMain.CalcZhiLiaoNum(const drug_freq,drug_days:string): integer;
@@ -3421,6 +3258,108 @@ procedure TfrmMain.RadioGroup2Click(Sender: TObject);
 begin
   //very good!点击时若ItemIndex没变化则不会触发该事件
   UpdateMyQuery7(TRadioGroup(Sender).ItemIndex);
+end;
+
+procedure TfrmMain.DeletePrescriptionDetail(Sender: TObject;const APrescriptionType:Integer);//删除处方明细
+begin
+  if not ifhaspower(sender,operator_id) then exit;//权限检查
+
+  case APrescriptionType of
+    3://西药
+    begin
+      if not MyQuery3.Active then exit;
+      if MyQuery3.RecordCount<=0 then exit;
+    end;
+    7://中药
+    begin
+      if not MyQuery7.Active then exit;
+      if MyQuery7.RecordCount<=0 then exit;
+    end;
+    5://治疗
+    begin
+      if not MyQuery5.Active then exit;
+      if MyQuery5.RecordCount<=0 then exit;
+    end;
+    9://检验
+    begin
+      if not MyQuery9.Active then exit;
+      if MyQuery9.RecordCount<=0 then exit;
+    end;
+    6://检查
+    begin
+      if not MyQuery6.Active then exit;
+      if MyQuery6.RecordCount<=0 then exit;
+    end;
+  end;
+
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  //if (MessageDlg('确实要删除该处方明细吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+
+  case APrescriptionType of
+    3:MyQuery3.Delete;//西药
+    7:MyQuery7.Delete;//中药
+    5:MyQuery5.Delete;//治疗
+    9:MyQuery9.Delete;//检验
+    6:MyQuery6.Delete;//检查
+  end;
+
+  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+end;
+
+procedure TfrmMain.DeleteSheetPrescription(Sender: TObject;const APrescriptionType:Integer);//删除整张处方
+begin
+  if not ifhaspower(sender,operator_id) then exit;//权限检查
+
+  case APrescriptionType of
+    3://西药
+    begin
+      if not MyQuery3.Active then exit;
+      if MyQuery3.RecordCount<=0 then exit;
+    end;
+    7://中药
+    begin
+      if not MyQuery7.Active then exit;
+      if MyQuery7.RecordCount<=0 then exit;
+    end;
+    5://治疗
+    begin
+      if not MyQuery5.Active then exit;
+      if MyQuery5.RecordCount<=0 then exit;
+    end;
+    9://检验
+    begin
+      if not MyQuery9.Active then exit;
+      if MyQuery9.RecordCount<=0 then exit;
+    end;
+    6://检查
+    begin
+      if not MyQuery6.Active then exit;
+      if MyQuery6.RecordCount<=0 then exit;
+    end;
+  end;
+
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  if (MessageDlg('确实要删除整张处方吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+
+  case APrescriptionType of
+    3:while not MyQuery3.IsEmpty do MyQuery3.Delete;//西药
+    7:while not MyQuery7.IsEmpty do MyQuery7.Delete;//中药
+    5:while not MyQuery5.IsEmpty do MyQuery5.Delete;//治疗
+    9:while not MyQuery9.IsEmpty do MyQuery9.Delete;//检验
+    6:while not MyQuery6.IsEmpty do MyQuery6.Delete;//检查
+  end;
+
+  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
 
 end.

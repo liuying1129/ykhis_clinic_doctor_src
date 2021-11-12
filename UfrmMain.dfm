@@ -203,7 +203,7 @@ object frmMain: TfrmMain
       Top = 1
       Width = 764
       Height = 531
-      ActivePage = TabSheet7
+      ActivePage = TabSheet6
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change

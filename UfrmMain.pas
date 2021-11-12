@@ -248,6 +248,11 @@ type
     RadioGroup1: TRadioGroup;
     DBGrid3: TDBGrid;
     RadioGroup2: TRadioGroup;
+    N44: TMenuItem;
+    N45: TMenuItem;
+    N46: TMenuItem;
+    N47: TMenuItem;
+    N48: TMenuItem;
     procedure FormShow(Sender: TObject);
     procedure N3Click(Sender: TObject);
     procedure N5Click(Sender: TObject);
@@ -307,7 +312,6 @@ type
     procedure N25Click(Sender: TObject);
     procedure N27Click(Sender: TObject);
     procedure ComboBox9Change(Sender: TObject);
-    procedure LabeledEdit16Change(Sender: TObject);
     procedure ComboBox3Change(Sender: TObject);
     procedure LabeledEdit3Change(Sender: TObject);
     procedure ComboBox15Change(Sender: TObject);
@@ -343,10 +347,8 @@ type
     procedure frxReport1GetValue(const VarName: String;
       var Value: Variant);
     procedure N36Click(Sender: TObject);
-    procedure Edit1Change(Sender: TObject);
     procedure Edit1KeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure Edit2Change(Sender: TObject);
     procedure Edit2KeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure LabeledEdit2KeyDown(Sender: TObject; var Key: Word;
@@ -359,6 +361,11 @@ type
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure RadioGroup1Click(Sender: TObject);
     procedure RadioGroup2Click(Sender: TObject);
+    procedure N44Click(Sender: TObject);
+    procedure N45Click(Sender: TObject);
+    procedure N48Click(Sender: TObject);
+    procedure N47Click(Sender: TObject);
+    procedure N46Click(Sender: TObject);
   private
     { Private declarations }
     //==为了通过发送消息更新主窗体状态栏而增加==//
@@ -937,11 +944,40 @@ begin
   if not ifhaspower(sender,operator_id) then exit;//权限检查
 
   if not MyQuery3.Active then exit;
-  if MyQuery3.RecordCount=0 then exit;
+  if MyQuery3.RecordCount<=0 then exit;
 
-  if (MessageDlg('确实要删除吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  //if (MessageDlg('确实要删除该处方明细吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
 
   MyQuery3.Delete;
+
+  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+end;
+
+procedure TfrmMain.N44Click(Sender: TObject);
+begin
+  if not ifhaspower(sender,operator_id) then exit;//权限检查
+
+  if not MyQuery3.Active then exit;
+  if MyQuery3.RecordCount<=0 then exit;
+
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  if (MessageDlg('确实要删除整张处方吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+
+  while not MyQuery3.IsEmpty do
+  begin
+    MyQuery3.Delete;
+  end;
 
   Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
@@ -956,17 +992,20 @@ begin
   Label16.Caption:=MyQuery3.fieldbyname('item_unid').AsString;
   LabeledEdit1.Text:=MyQuery3.fieldbyname('项目').AsString;
   LabeledEdit2.Text:=MyQuery3.fieldbyname('组号').AsString;
-  LabeledEdit3.Text:=MyQuery3.fieldbyname('用量').AsString;
-  ComboBox4.Text:=MyQuery3.fieldbyname('用量单位').AsString;
   ComboBox5.Text:=MyQuery3.fieldbyname('用法').AsString;
   CheckBox1.Checked:=MyQuery3.fieldbyname('if_skin_test').AsBoolean;
-  ComboBox2.Text:=MyQuery3.fieldbyname('频次').AsString;
-  LabeledEdit7.Text:=MyQuery3.fieldbyname('天数').AsString;
-  LabeledEdit8.Text:=MyQuery3.fieldbyname('数量').AsString;
-  Edit2.Text:=MyQuery3.fieldbyname('数量单位').AsString;
-  LabeledEdit9.Text:=MyQuery3.fieldbyname('单价').AsString;
   LabeledEdit10.Text:=MyQuery3.fieldbyname('院注次数').AsString;
   LabeledEdit11.Text:=MyQuery3.fieldbyname('项目嘱托').AsString;
+  
+  LabeledEdit3.Text:=MyQuery3.fieldbyname('用量').AsString;
+  ComboBox4.Text:=MyQuery3.fieldbyname('用量单位').AsString;
+  ComboBox2.Text:=MyQuery3.fieldbyname('频次').AsString;
+  LabeledEdit7.Text:=MyQuery3.fieldbyname('天数').AsString;
+  Edit2.Text:=MyQuery3.fieldbyname('数量单位').AsString;
+  
+  //数量、单价会受上面控件(用量、用量单位、频次、天数、数量单位)的change事件影响,故放在最后
+  LabeledEdit8.Text:=MyQuery3.fieldbyname('数量').AsString;
+  LabeledEdit9.Text:=MyQuery3.fieldbyname('单价').AsString;
 end;
 
 procedure TfrmMain.Panel5DblClick(Sender: TObject);
@@ -1396,13 +1435,16 @@ begin
 
   LabeledEdit13.Text:=MyQuery5.fieldbyname('项目').AsString;
   LabeledEdit14.Text:=MyQuery5.fieldbyname('组号').AsString;
-  ComboBox9.Text:=MyQuery5.fieldbyname('频次').AsString;
-  LabeledEdit16.Text:=MyQuery5.fieldbyname('天数').AsString;
-  LabeledEdit17.Text:=MyQuery5.fieldbyname('数量').AsString;
   ComboBox10.Text:=MyQuery5.fieldbyname('数量单位').AsString;
   LabeledEdit18.Text:=MyQuery5.fieldbyname('单价').AsString;
   ComboBox8.Text:=MyQuery5.fieldbyname('部位').AsString;
   LabeledEdit20.Text:=MyQuery5.fieldbyname('项目嘱托').AsString;
+
+  ComboBox9.Text:=MyQuery5.fieldbyname('频次').AsString;
+  LabeledEdit16.Text:=MyQuery5.fieldbyname('天数').AsString;
+  
+  //数量会受上面控件(频次、天数)的change事件影响,故放在最后
+  LabeledEdit17.Text:=MyQuery5.fieldbyname('数量').AsString;
 end;
 
 procedure TfrmMain.N18Click(Sender: TObject);
@@ -1412,9 +1454,38 @@ begin
   if not MyQuery5.Active then exit;
   if MyQuery5.RecordCount<=0 then exit;
 
-  if (MessageDlg('确实要删除吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  //if (MessageDlg('确实要删除该处方明细吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
 
   MyQuery5.Delete;
+
+  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+end;
+
+procedure TfrmMain.N46Click(Sender: TObject);
+begin
+  if not ifhaspower(sender,operator_id) then exit;//权限检查
+
+  if not MyQuery5.Active then exit;
+  if MyQuery5.RecordCount<=0 then exit;
+
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  if (MessageDlg('确实要删除整张处方吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+
+  while not MyQuery5.IsEmpty do
+  begin
+    MyQuery5.Delete;
+  end;
 
   Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
@@ -1622,9 +1693,38 @@ begin
   if not MyQuery6.Active then exit;
   if MyQuery6.RecordCount<=0 then exit;
 
-  if (MessageDlg('确实要删除吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  //if (MessageDlg('确实要删除该处方明细吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
 
   MyQuery6.Delete;
+
+  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+end;
+
+procedure TfrmMain.N48Click(Sender: TObject);
+begin
+  if not ifhaspower(sender,operator_id) then exit;//权限检查
+
+  if not MyQuery6.Active then exit;
+  if MyQuery6.RecordCount<=0 then exit;
+
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  if (MessageDlg('确实要删除整张处方吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+
+  while not MyQuery6.IsEmpty do
+  begin
+    MyQuery6.Delete;
+  end;
 
   Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
@@ -2014,16 +2114,19 @@ begin
   Label17.Caption:=MyQuery7.fieldbyname('item_unid').AsString;
   LabeledEdit21.Text:=MyQuery7.fieldbyname('项目').AsString;
   LabeledEdit25.Text:=MyQuery7.fieldbyname('组号').AsString;
-  LabeledEdit26.Text:=MyQuery7.fieldbyname('用量').AsString;
-  ComboBox16.Text:=MyQuery7.fieldbyname('用量单位').AsString;
   ComboBox17.Text:=MyQuery7.fieldbyname('用法').AsString;
   ComboBox11.Text:=MyQuery7.fieldbyname('煎法').AsString;
-  ComboBox14.Text:=MyQuery7.fieldbyname('频次').AsString;
-  LabeledEdit28.Text:=MyQuery7.fieldbyname('数量').AsString;
-  Edit1.Text:=MyQuery7.fieldbyname('数量单位').AsString;
-  LabeledEdit29.Text:=MyQuery7.fieldbyname('单价').AsString;
   LabeledEdit31.Text:=MyQuery7.fieldbyname('项目嘱托').AsString;
+
+  LabeledEdit26.Text:=MyQuery7.fieldbyname('用量').AsString;
+  ComboBox16.Text:=MyQuery7.fieldbyname('用量单位').AsString;
+  ComboBox14.Text:=MyQuery7.fieldbyname('频次').AsString;
   LabeledEdit35.Text:=MyQuery7.fieldbyname('剂数').AsString;
+  Edit1.Text:=MyQuery7.fieldbyname('数量单位').AsString;
+  
+  //数量、单价会受上面控件(用量、用量单位、频次、剂数、数量单位)的change事件影响,故放在最后
+  LabeledEdit28.Text:=MyQuery7.fieldbyname('数量').AsString;
+  LabeledEdit29.Text:=MyQuery7.fieldbyname('单价').AsString;
 end;
 
 procedure TfrmMain.N24Click(Sender: TObject);
@@ -2033,9 +2136,38 @@ begin
   if not MyQuery7.Active then exit;
   if MyQuery7.RecordCount<=0 then exit;
 
-  if (MessageDlg('确实要删除吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  //if (MessageDlg('确实要删除该处方明细吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
 
   MyQuery7.Delete;
+
+  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+end;
+
+procedure TfrmMain.N45Click(Sender: TObject);
+begin
+  if not ifhaspower(sender,operator_id) then exit;//权限检查
+
+  if not MyQuery7.Active then exit;
+  if MyQuery7.RecordCount<=0 then exit;
+
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  if (MessageDlg('确实要删除整张处方吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+
+  while not MyQuery7.IsEmpty do
+  begin
+    MyQuery7.Delete;
+  end;
 
   Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
@@ -2064,7 +2196,7 @@ begin
 
   MyQuery8.Close;
   MyQuery8.SQL.Clear;
-  MyQuery8.SQL.Text:='select item_type,prescription_no as 处方序号,item_name,group_num as 组号,dosage as 用量,unit_dosage as 用量单位,'+
+  MyQuery8.SQL.Text:='select item_type as 项目类型,prescription_no as 处方序号,item_name as 项目名称,group_num as 组号,dosage as 用量,unit_dosage as 用量单位,'+
                      'made_method as 煎法,use_method as 用法,if_skin_test as 皮试,drug_freq as 频次,'+
                      'drug_days as 天数,drug_num as 数量,unit_drug as 数量单位,'+
                      'item_value as 结果,'+
@@ -2312,9 +2444,38 @@ begin
   if not MyQuery9.Active then exit;
   if MyQuery9.RecordCount<=0 then exit;
 
-  if (MessageDlg('确实要删除吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  //if (MessageDlg('确实要删除该处方明细吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
 
   MyQuery9.Delete;
+
+  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+end;
+
+procedure TfrmMain.N47Click(Sender: TObject);
+begin
+  if not ifhaspower(sender,operator_id) then exit;//权限检查
+
+  if not MyQuery9.Active then exit;
+  if MyQuery9.RecordCount<=0 then exit;
+
+  if not Check_audit_doctor then
+  begin
+    MessageDlg('非您审核，无权修改!',mtInformation,[MBOK],0);
+    exit;
+  end;
+
+  if (MessageDlg('确实要删除整张处方吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
+
+  while not MyQuery9.IsEmpty do
+  begin
+    MyQuery9.Delete;
+  end;
 
   Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
@@ -2333,18 +2494,7 @@ end;
 
 procedure TfrmMain.ComboBox9Change(Sender: TObject);
 begin
-  LabeledEdit17.Text:=inttostr(CalcZhiLiaoNum((Sender as TComboBox).Text,LabeledEdit16.Text));
-end;
-
-procedure TfrmMain.LabeledEdit16Change(Sender: TObject);
-begin
-  LabeledEdit17.Text:=inttostr(CalcZhiLiaoNum(ComboBox9.Text,(Sender as TLabeledEdit).Text));
-end;
-
-procedure TfrmMain.ComboBox3Change(Sender: TObject);
-begin
-  Edit2.Text:=TComboBox(Sender).Text;
-  if Edit2.CanFocus then Edit2.SetFocus;
+  LabeledEdit17.Text:=inttostr(CalcZhiLiaoNum(ComboBox9.Text,LabeledEdit16.Text));
 end;
 
 function TfrmMain.CalcXiYaoNum(const dosage, drug_freq, drug_days: string): single;
@@ -2364,13 +2514,24 @@ begin
 end;
 
 procedure TfrmMain.LabeledEdit3Change(Sender: TObject);
+//用量、用量单位、频次、天数、数量单位change事件
 var
   f1:single;
   i1:integer;
 begin
+  //实际上，只有数量单位(Edit2)change时才需要重新计算LabeledEdit9.Text(单价).简化代码而已
+  LabeledEdit9.Text:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select unit_price from drug_pack where drug_unid='+Label16.Caption+' and pack_name='''+Edit2.Text+''' ');//单价
+
   f1:=CalcXiYaoNum(LabeledEdit3.Text,ComboBox2.Text,LabeledEdit7.Text);
   i1:=UnitsConverterMethod(Label16.Caption,ComboBox4.Text,Edit2.Text);
-  if i1<0 then LabeledEdit8.Text:=inttostr(ceil(f1/abs(i1))) else LabeledEdit8.Text:=inttostr(ceil(f1*i1));
+  if i1<0 then LabeledEdit8.Text:=inttostr(ceil(f1/abs(i1))) else LabeledEdit8.Text:=inttostr(ceil(f1*i1));//数量}
+end;
+
+procedure TfrmMain.ComboBox3Change(Sender: TObject);
+//数量单位change事件
+begin
+  Edit2.Text:=TComboBox(Sender).Text;
+  if Edit2.CanFocus then Edit2.SetFocus;
 end;
 
 function TfrmMain.UnitsConverterMethod(const ADrug_Unid,AUnit_Dosage,AUnit_Fee:String):integer;
@@ -2404,6 +2565,8 @@ begin
     adotemp12.Open;
 
     if adotemp12.RecordCount<=0 then begin adotemp12.Free;break;end;
+    //2021-11-12
+    if adotemp12.fieldbyname('Pack_Name').AsString=adotemp12.fieldbyname('Son_Pack_Name').AsString then begin adotemp12.Free;break;end;
         	
     s2 := adotemp12.fieldbyname('Son_Pack_Name').AsString;
     if s2='' then begin adotemp12.Free;break;end;
@@ -2427,6 +2590,8 @@ begin
     adotemp12.Open;
 
     if adotemp12.RecordCount<=0 then begin adotemp12.Free;break;end;
+    //2021-11-12
+    if adotemp12.fieldbyname('Pack_Name').AsString=adotemp12.fieldbyname('Son_Pack_Name').AsString then begin adotemp12.Free;break;end;
         	
     s3 := adotemp12.fieldbyname('Pack_Name').AsString;
     ii1 := adotemp12.fieldbyname('Parent_num').AsInteger;
@@ -2443,13 +2608,17 @@ begin
 end;
 
 procedure TfrmMain.LabeledEdit26Change(Sender: TObject);
+//用量、用量单位、频次、剂数、数量单位change事件
 var
   f1:single;
   i1:integer;
 begin
+  //实际上，只有数量单位(Edit1)change时才需要重新计算LabeledEdit29.Text(单价).简化代码而已
+  LabeledEdit29.Text:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select unit_price from drug_pack where drug_unid='+Label17.Caption+' and pack_name='''+Edit1.Text+''' ');//单价
+
   f1:=CalcXiYaoNum(LabeledEdit26.Text,ComboBox14.Text,LabeledEdit35.Text);
   i1:=UnitsConverterMethod(Label17.Caption,ComboBox16.Text,Edit1.Text);
-  if i1<0 then LabeledEdit28.Text:=inttostr(ceil(f1/abs(i1))) else LabeledEdit28.Text:=inttostr(ceil(f1*i1));
+  if i1<0 then LabeledEdit28.Text:=inttostr(ceil(f1/abs(i1))) else LabeledEdit28.Text:=inttostr(ceil(f1*i1));//数量}
 end;
 
 procedure TfrmMain.N28Click(Sender: TObject);
@@ -2944,18 +3113,6 @@ begin
   frmSaveAsTemp.ShowModal;
 end;
 
-procedure TfrmMain.Edit1Change(Sender: TObject);
-var
-  f1:single;
-  i1:integer;
-begin
-  LabeledEdit29.Text:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select unit_price from drug_pack where drug_unid='+Label17.Caption+' and pack_name='''+Edit1.Text+''' ');
-
-  f1:=CalcXiYaoNum(LabeledEdit26.Text,ComboBox14.Text,LabeledEdit35.Text);
-  i1:=UnitsConverterMethod(Label17.Caption,ComboBox16.Text,Edit1.Text);
-  if i1<0 then LabeledEdit28.Text:=inttostr(ceil(f1/abs(i1))) else LabeledEdit28.Text:=inttostr(ceil(f1*i1));
-end;
-
 procedure TfrmMain.Edit1KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
@@ -2976,18 +3133,6 @@ begin
     TEdit(SENDER).Text:=tmpADOLYGetcode.OutValue[0];
   end;
   tmpADOLYGetcode.Free;
-end;
-
-procedure TfrmMain.Edit2Change(Sender: TObject);
-var
-  f1:single;
-  i1:integer;
-begin
-  LabeledEdit9.Text:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select unit_price from drug_pack where drug_unid='+Label16.Caption+' and pack_name='''+Edit2.Text+''' ');
-
-  f1:=CalcXiYaoNum(LabeledEdit3.Text,ComboBox2.Text,LabeledEdit7.Text);
-  i1:=UnitsConverterMethod(Label16.Caption,ComboBox4.Text,Edit2.Text);
-  if i1<0 then LabeledEdit8.Text:=inttostr(ceil(f1/abs(i1))) else LabeledEdit8.Text:=inttostr(ceil(f1*i1));
 end;
 
 procedure TfrmMain.Edit2KeyDown(Sender: TObject; var Key: Word;

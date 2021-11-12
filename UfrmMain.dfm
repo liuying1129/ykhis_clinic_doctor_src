@@ -203,7 +203,7 @@ object frmMain: TfrmMain
       Top = 1
       Width = 764
       Height = 531
-      ActivePage = TabSheet4
+      ActivePage = TabSheet7
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change
@@ -791,7 +791,7 @@ object frmMain: TfrmMain
             Width = 32
             Height = 21
             TabOrder = 9
-            OnChange = Edit2Change
+            OnChange = LabeledEdit3Change
             OnKeyDown = Edit2KeyDown
           end
           object CheckBox1: TCheckBox
@@ -965,7 +965,6 @@ object frmMain: TfrmMain
             ItemHeight = 13
             TabOrder = 6
             OnChange = LabeledEdit26Change
-            OnExit = LabeledEdit26Change
             OnSelect = LabeledEdit26Change
           end
           object ComboBox15: TComboBox
@@ -1048,7 +1047,7 @@ object frmMain: TfrmMain
             Width = 32
             Height = 21
             TabOrder = 9
-            OnChange = Edit1Change
+            OnChange = LabeledEdit26Change
             OnKeyDown = Edit1KeyDown
           end
         end
@@ -1141,7 +1140,7 @@ object frmMain: TfrmMain
             EditLabel.Height = 13
             EditLabel.Caption = #22825#25968
             TabOrder = 3
-            OnChange = LabeledEdit16Change
+            OnChange = ComboBox9Change
           end
           object LabeledEdit17: TLabeledEdit
             Left = 359
@@ -1732,8 +1731,12 @@ object frmMain: TfrmMain
       Caption = '-'
     end
     object N14: TMenuItem
-      Caption = #21024#38500#22788#26041
+      Caption = #21024#38500#22788#26041#26126#32454
       OnClick = N14Click
+    end
+    object N44: TMenuItem
+      Caption = #21024#38500#25972#24352#22788#26041
+      OnClick = N44Click
     end
   end
   object PopupMenu2: TPopupMenu
@@ -1791,8 +1794,12 @@ object frmMain: TfrmMain
       Caption = '-'
     end
     object N18: TMenuItem
-      Caption = #21024#38500#22788#26041
+      Caption = #21024#38500#22788#26041#26126#32454
       OnClick = N18Click
+    end
+    object N46: TMenuItem
+      Caption = #21024#38500#25972#24352#22788#26041
+      OnClick = N46Click
     end
   end
   object DataSource6: TDataSource
@@ -1817,8 +1824,12 @@ object frmMain: TfrmMain
       Caption = '-'
     end
     object N21: TMenuItem
-      Caption = #21024#38500#22788#26041
+      Caption = #21024#38500#22788#26041#26126#32454
       OnClick = N21Click
+    end
+    object N48: TMenuItem
+      Caption = #21024#38500#25972#24352#22788#26041
+      OnClick = N48Click
     end
   end
   object DataSource7: TDataSource
@@ -1838,8 +1849,12 @@ object frmMain: TfrmMain
       Caption = '-'
     end
     object N24: TMenuItem
-      Caption = #21024#38500#22788#26041
+      Caption = #21024#38500#22788#26041#26126#32454
       OnClick = N24Click
+    end
+    object N45: TMenuItem
+      Caption = #21024#38500#25972#24352#22788#26041
+      OnClick = N45Click
     end
   end
   object MyQuery7: TMyQuery
@@ -1879,8 +1894,12 @@ object frmMain: TfrmMain
       Caption = '-'
     end
     object N27: TMenuItem
-      Caption = #21024#38500#22788#26041
+      Caption = #21024#38500#22788#26041#26126#32454
       OnClick = N27Click
+    end
+    object N47: TMenuItem
+      Caption = #21024#38500#25972#24352#22788#26041
+      OnClick = N47Click
     end
   end
   object mq_slave: TMyQuery

@@ -11,7 +11,8 @@ uses
   UfrmDgnsBigTemp in 'UfrmDgnsBigTemp.pas' {frmDgnsBigTemp},
   UfrmCommQuery in 'UfrmCommQuery.pas' {frmCommQuery},
   UfrmSaveAsTemp in 'UfrmSaveAsTemp.pas' {frmSaveAsTemp},
-  softMeter_globalVar in 'softMeter_globalVar.pas';
+  softMeter_globalVar in 'softMeter_globalVar.pas',
+  UfrmPrintTreatFlow in 'UfrmPrintTreatFlow.pas' {frmPrintTreatFlow};
 
 {$R *.res}
 

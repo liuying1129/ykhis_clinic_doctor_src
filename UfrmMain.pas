@@ -253,6 +253,8 @@ type
     N46: TMenuItem;
     N47: TMenuItem;
     N48: TMenuItem;
+    ToolButton6: TToolButton;
+    SpeedButton8: TSpeedButton;
     procedure FormShow(Sender: TObject);
     procedure N3Click(Sender: TObject);
     procedure N5Click(Sender: TObject);
@@ -366,6 +368,7 @@ type
     procedure N48Click(Sender: TObject);
     procedure N47Click(Sender: TObject);
     procedure N46Click(Sender: TObject);
+    procedure SpeedButton8Click(Sender: TObject);
   private
     { Private declarations }
     //==为了通过发送消息更新主窗体状态栏而增加==//
@@ -407,7 +410,8 @@ var
 implementation
 
 uses UfrmLogin, UDM, UfrmModifyPwd, UfrmSelPatient, UfrmModifyAge,
-  UfrmDgnsBigTemp, UfrmCommQuery, UfrmSaveAsTemp, softMeter_globalVar;
+  UfrmDgnsBigTemp, UfrmCommQuery, UfrmSaveAsTemp, softMeter_globalVar,
+  UfrmPrintTreatFlow;
 var
   g_group_num:integer;//西药组号
   g_zhiliao_group_num:integer;//治疗组号
@@ -3360,6 +3364,11 @@ begin
   end;
 
   Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+end;
+
+procedure TfrmMain.SpeedButton8Click(Sender: TObject);
+begin
+  frmPrintTreatFlow.ShowModal;
 end;
 
 end.

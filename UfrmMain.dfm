@@ -189,6 +189,22 @@ object frmMain: TfrmMain
         Caption = #27169#26495
         OnClick = BitBtn9Click
       end
+      object ToolButton6: TToolButton
+        Left = 553
+        Top = 2
+        Width = 8
+        Caption = 'ToolButton6'
+        ImageIndex = 3
+        Style = tbsSeparator
+      end
+      object SpeedButton8: TSpeedButton
+        Left = 561
+        Top = 2
+        Width = 106
+        Height = 22
+        Caption = #25171#21360#23601#35786#27969#27700
+        OnClick = SpeedButton8Click
+      end
     end
   end
   object Panel2: TPanel

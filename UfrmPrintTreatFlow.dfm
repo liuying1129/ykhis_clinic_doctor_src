@@ -32,6 +32,19 @@ object frmPrintTreatFlow: TfrmPrintTreatFlow
     Height = 13
     Caption = '-'
   end
+  object Label3: TLabel
+    Left = 24
+    Top = 156
+    Width = 182
+    Height = 13
+    Caption = #27880#65306#20165#25171#21360#12304#24050#23457#26680#12305#23601#35786#35760#24405
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clRed
+    Font.Height = -13
+    Font.Name = #23435#20307
+    Font.Style = []
+    ParentFont = False
+  end
   object DateTimePicker1: TDateTimePicker
     Left = 50
     Top = 55

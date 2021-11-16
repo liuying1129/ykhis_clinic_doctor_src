@@ -82,15 +82,46 @@ object frmPrintTreatFlow: TfrmPrintTreatFlow
     OnClick = BitBtn2Click
   end
   object MyQuery1: TMyQuery
+    Connection = DM.MyConnection1
     SQL.Strings = (
-      'select tm.*,'
-      
-        '(SELECT GROUP_CONCAT(ts.item_name SEPARATOR '#39';'#39') FROM treat_slav' +
-        'e ts WHERE ts.item_type='#39#35786#26029#39' and ts.tm_unid=tm.unid) as '#35786#26029','
-      
-        '(SELECT ts.item_value FROM treat_slave ts WHERE ts.item_type='#39#20027#35785 +
-        #39' and ts.tm_unid=tm.unid LIMIT 1) as '#20027#35785
-      'from treat_master tm WHERE 1=0')
+      'select '
+      '  0 as unid,'
+      '  0 as patient_unid,'
+      '  0 as register_unid,'
+      '  '#39#39' as patient_name,'
+      '  '#39#39' as patient_pinyin,'
+      '  '#39#39' as patient_wbm,'
+      '  '#39#39' as patient_sex,'
+      '  '#39#39' as patient_age,'
+      '  '#39#39' as certificate_type,'
+      '  '#39#39' as certificate_num,'
+      '  '#39#39' as clinic_card_num,'
+      '  '#39#39' as health_care_num,'
+      '  '#39#39' as address,'
+      '  '#39#39' as work_company,'
+      '  '#39#39' as work_address,'
+      '  '#39#39' as if_marry,'
+      '  '#39#39' as native_place,'
+      '  '#39#39' as telephone,'
+      '  '#39#39' as remark,'
+      '  '#39#39' as reserve1,'
+      '  '#39#39' as reserve2,'
+      '  '#39#39' as reserve3,'
+      '  '#39#39' as reserve4,'
+      '  0 as reserve5,'
+      '  0 as reserve6,'
+      '  0 as reserve7,'
+      '  0 as reserve8,'
+      '  NOW() as reserve9,'
+      '  NOW() as reserve10,'
+      '  '#39#39' as operator,'
+      '  '#39#39' as department,'
+      '  '#39#39' as audit_doctor,'
+      '  NOW() as audit_date,'
+      '  NOW() as creat_date_time,'
+      '  NOW() as update_date_time,'
+      '  '#39#39' as `'#35786#26029'`,'
+      '  '#39#39' as `'#20027#35785'`')
     Left = 194
     Top = 7
   end
@@ -103,7 +134,7 @@ object frmPrintTreatFlow: TfrmPrintTreatFlow
     PrintOptions.Printer = #39044#35774
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 44513.465943726800000000
-    ReportOptions.LastChange = 44514.730727164350000000
+    ReportOptions.LastChange = 44516.414267835700000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'begin'
@@ -144,10 +175,11 @@ object frmPrintTreatFlow: TfrmPrintTreatFlow
         DataSet = frxDBDataset1
         DataSetName = 'tfset'
         RowCount = 0
+        Stretched = True
         object frxDBDataset1patient_name: TfrxMemoView
           Left = 170.078850000000000000
           Top = 1.677180000000000000
-          Width = 56.692913385826770000
+          Width = 56.692913390000000000
           Height = 18.897650000000000000
           DataField = 'patient_name'
           DataSet = frxDBDataset1
@@ -212,8 +244,9 @@ object frmPrintTreatFlow: TfrmPrintTreatFlow
         object Memo2: TfrxMemoView
           Left = 396.850650000000000000
           Top = 2.133890000000000000
-          Width = 166.299320000000000000
+          Width = 151.181200000000000000
           Height = 18.897650000000000000
+          StretchMode = smActualHeight
           DataField = #35786#26029
           DataSet = frxDBDataset1
           DataSetName = 'tfset'
@@ -221,15 +254,27 @@ object frmPrintTreatFlow: TfrmPrintTreatFlow
             '[tfset."'#29831#23107#26567'"]')
         end
         object Memo12: TfrxMemoView
-          Left = 566.929500000000000000
+          Left = 548.031850000000000000
           Top = 2.133890000000000000
-          Width = 151.181200000000000000
+          Width = 75.590600000000000000
           Height = 18.897650000000000000
+          StretchMode = smActualHeight
           DataField = #20027#35785
           DataSet = frxDBDataset1
           DataSetName = 'tfset'
           Memo.UTF8 = (
             '[tfset."'#28051#26127#30228'"]')
+        end
+        object Memo15: TfrxMemoView
+          Left = 631.181510000000000000
+          Top = 3.779530000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          StretchMode = smActualHeight
+          DataSet = frxDBDataset1
+          DataSetName = 'tfset'
+          Memo.UTF8 = (
+            '[tfset."testcol"]')
         end
       end
       object PageHeader1: TfrxPageHeader
@@ -335,7 +380,7 @@ object frmPrintTreatFlow: TfrmPrintTreatFlow
           ParentFont = False
         end
         object Memo11: TfrxMemoView
-          Left = 566.929500000000000000
+          Left = 548.031850000000000000
           Top = 69.826840000000000000
           Width = 41.574830000000000000
           Height = 18.897650000000000000
@@ -388,14 +433,40 @@ object frmPrintTreatFlow: TfrmPrintTreatFlow
           Font.Color = clBlack
           Font.Height = -27
           Font.Name = #23435#20307
-          Font.Style = []
+          Font.Style = [fsBold]
           HAlign = haCenter
           Memo.UTF8 = (
-            #28751#36779#30230#23092#20345#25353)
+            '[SCSYDW]-'#28751#36779#30230#23092#20345#25353)
           ParentFont = False
         end
         object Line1: TfrxLineView
           Top = 90.283550000000000000
+          Width = 718.110700000000000000
+          Color = clBlack
+          Frame.Typ = [ftTop]
+        end
+      end
+      object PageFooter1: TfrxPageFooter
+        FillType = ftBrush
+        Height = 41.574830000000000000
+        Top = 260.787570000000000000
+        Width = 718.110700000000000000
+        object Memo14: TfrxMemoView
+          Top = 11.338590000000000000
+          Width = 718.110700000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = #23435#20307
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '')
+          ParentFont = False
+        end
+        object Line2: TfrxLineView
+          Top = 3.779530000000000000
           Width = 718.110700000000000000
           Color = clBlack
           Frame.Typ = [ftTop]

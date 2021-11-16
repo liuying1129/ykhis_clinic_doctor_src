@@ -2584,8 +2584,6 @@ begin
   mq_master.Close;
   mq_master.SQL.Clear;
   mq_master.SQL.Text:='select tm.*,'+
-    //'(select use_method from treat_slave where tm_unid=tm.unid and item_type=''÷–“©'' LIMIT 1) as Chinese_Medicine_Use_Method, '+
-    //'(select drug_days from treat_slave where tm_unid=tm.unid and item_type=''÷–“©'' LIMIT 1) as Chinese_Medicine_Drug_Days, '+
     '(SELECT GROUP_CONCAT(ts.item_name SEPARATOR '';'') FROM treat_slave ts WHERE ts.item_type=''’Ô∂œ'' and ts.tm_unid=tm.unid) as diagnose '+
     'from treat_master tm where tm.unid='+sUnid;
   mq_master.Open;

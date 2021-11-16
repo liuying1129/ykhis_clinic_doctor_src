@@ -1919,12 +1919,46 @@ object frmMain: TfrmMain
     end
   end
   object mq_slave: TMyQuery
+    Connection = DM.MyConnection1
     SQL.Strings = (
-      'select *,'
-      #39#39' as GroupCondition,'
-      '0 as min_content,'#39'1'#39' as unit_min_content,'
-      '0 as amount'
-      'from treat_slave')
+      'select '
+      '  0 as unid,'
+      '  0 as tm_unid,'
+      '  '#39#39' as item_type,'
+      '  0 as item_unid,'
+      '  '#39#39' as item_name,'
+      '  0 as group_num,'
+      '  0 as dosage,'
+      '  '#39#39' as unit_dosage,'
+      '  '#39#39' as made_method,'
+      '  '#39#39' as use_method,'
+      '  0 as if_skin_test,'
+      '  '#39#39' as drug_freq,'
+      '  0 as drug_days,'
+      '  0 as drug_num,'
+      '  '#39#39' as unit_drug,'
+      '  0 as unit_price,'
+      '  0 as hosp_inje_num,'
+      '  '#39#39' as item_advice,'
+      '  '#39#39' as item_value,'
+      '  '#39#39' as body_position,'
+      '  '#39#39' as remark,'
+      '  '#39#39' as reserve1,'
+      '  '#39#39' as reserve2,'
+      '  '#39#39' as reserve3,'
+      '  '#39#39' as reserve4,'
+      '  0 as reserve5,'
+      '  0 as reserve6,'
+      '  0 as reserve7,'
+      '  0 as reserve8,'
+      '  NOW() as reserve9,'
+      '  NOW() as reserve10,'
+      '  NOW() as creat_date_time,'
+      '  NOW() as update_date_time,'
+      '  0 as prescription_no,'
+      '  '#39#39' as GroupCondition,'
+      '  0 as min_content,'
+      '  '#39'1'#39' as unit_min_content')
     Left = 689
     Top = 40
   end
@@ -2761,14 +2795,88 @@ object frmMain: TfrmMain
     end
   end
   object mq_master: TMyQuery
+    Connection = DM.MyConnection1
     SQL.Strings = (
-      'select * from treat_master')
+      'select '
+      '  0 as unid,'
+      '  0 as patient_unid,'
+      '  0 as register_unid,'
+      '  '#39#39' as patient_name,'
+      '  '#39#39' as patient_pinyin,'
+      '  '#39#39' as patient_wbm,'
+      '  '#39#39' as patient_sex,'
+      '  '#39#39' as patient_age,'
+      '  '#39#39' as certificate_type,'
+      '  '#39#39' as certificate_num,'
+      '  '#39#39' as clinic_card_num,'
+      '  '#39#39' as health_care_num,'
+      '  '#39#39' as address,'
+      '  '#39#39' as work_company,'
+      '  '#39#39' as work_address,'
+      '  '#39#39' as if_marry,'
+      '  '#39#39' as native_place,'
+      '  '#39#39' as telephone,'
+      '  '#39#39' as remark,'
+      '  '#39#39' as reserve1,'
+      '  '#39#39' as reserve2,'
+      '  '#39#39' as reserve3,'
+      '  '#39#39' as reserve4,'
+      '  0 as reserve5,'
+      '  0 as reserve6,'
+      '  0 as reserve7,'
+      '  0 as reserve8,'
+      '  NOW() as reserve9,'
+      '  NOW() as reserve10,'
+      '  '#39#39' as operator,'
+      '  '#39#39' as department,'
+      '  '#39#39' as audit_doctor,'
+      '  NOW() as audit_date,'
+      '  NOW() as creat_date_time,'
+      '  NOW() as update_date_time,'
+      '  '#39#39' as diagnose')
     Left = 689
     Top = 8
   end
   object masterDBfrx: TfrxDBDataset
     UserName = 'master'
     CloseDataSource = False
+    FieldAliases.Strings = (
+      'unid=unid'
+      'patient_unid=patient_unid'
+      'register_unid=register_unid'
+      'patient_name=patient_name'
+      'patient_pinyin=patient_pinyin'
+      'patient_wbm=patient_wbm'
+      'patient_sex=patient_sex'
+      'patient_age=patient_age'
+      'certificate_type=certificate_type'
+      'certificate_num=certificate_num'
+      'clinic_card_num=clinic_card_num'
+      'health_care_num=health_care_num'
+      'address=address'
+      'work_company=work_company'
+      'work_address=work_address'
+      'if_marry=if_marry'
+      'native_place=native_place'
+      'telephone=telephone'
+      'remark=remark'
+      'reserve1=reserve1'
+      'reserve2=reserve2'
+      'reserve3=reserve3'
+      'reserve4=reserve4'
+      'reserve5=reserve5'
+      'reserve6=reserve6'
+      'reserve7=reserve7'
+      'reserve8=reserve8'
+      'reserve9=reserve9'
+      'reserve10=reserve10'
+      'operator=operator'
+      'department=department'
+      'audit_doctor=audit_doctor'
+      'audit_date=audit_date'
+      'creat_date_time=creat_date_time'
+      'update_date_time=update_date_time'
+      'diagnose=diagnose')
     DataSet = mq_master
     BCDToCurrency = False
     Left = 721
@@ -2811,10 +2919,10 @@ object frmMain: TfrmMain
       'reserve10=reserve10'
       'creat_date_time=creat_date_time'
       'update_date_time=update_date_time'
+      'prescription_no=prescription_no'
       'GroupCondition=GroupCondition'
       'min_content=min_content'
-      'unit_min_content=unit_min_content'
-      'amount=amount')
+      'unit_min_content=unit_min_content')
     DataSet = mq_slave
     BCDToCurrency = False
     Left = 721

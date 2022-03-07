@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls,StrUtils, Menus, StdCtrls,IniFiles, ExtCtrls, ToolWin,
   Buttons, Grids, DBGrids, DB, MemDS, DBAccess, MyAccess, CheckLst, DosMove,
-  ADOLYGetcode,Math, FR_Class, frxClass, frxDBSet;
+  ADOLYGetcode,Math, FR_Class, frxClass, frxDBSet, LYAboutBox;
   
 //==为了通过发送消息更新主窗体状态栏而增加==//
 const
@@ -255,6 +255,7 @@ type
     N48: TMenuItem;
     ToolButton6: TToolButton;
     SpeedButton8: TSpeedButton;
+    LYAboutBox1: TLYAboutBox;
     procedure FormShow(Sender: TObject);
     procedure N3Click(Sender: TObject);
     procedure N5Click(Sender: TObject);
@@ -369,6 +370,7 @@ type
     procedure N47Click(Sender: TObject);
     procedure N46Click(Sender: TObject);
     procedure SpeedButton8Click(Sender: TObject);
+    procedure N4Click(Sender: TObject);
   private
     { Private declarations }
     //==为了通过发送消息更新主窗体状态栏而增加==//
@@ -3367,6 +3369,24 @@ end;
 procedure TfrmMain.SpeedButton8Click(Sender: TObject);
 begin
   frmPrintTreatFlow.ShowModal;
+end;
+
+procedure TfrmMain.N4Click(Sender: TObject);
+var
+  ini:tinifile;
+  sWeChat:String;
+begin
+  LYAboutBox1.ProcuctName:=Caption;
+  LYAboutBox1.Version:=GetVersionLY(pchar(APPLICATION.ExeName));//函数返回的Pchar类型还真能直接赋值给string!!!
+  LYAboutBox1.Copyright:='版权所有,严禁反编译，反汇编';
+  ini:=TINIFILE.Create(ChangeFileExt(Application.ExeName,'.ini'));
+  LYAboutBox1.Comments:=ini.ReadString('Interface','companyname','广东誉凯软件工作室');
+  LYAboutBox1.Author:=ini.ReadString('Interface','companytel','13710248644、QQ:46524223');
+  LYAboutBox1.WebPage:=ini.ReadString('Interface','companywww','http://yklis.ys168.com');//会员帐号:yklis;密码是:liu771129
+  sWeChat:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select Name from CommCode where TypeName=''系统代码'' and ReMark=''微信公众号'' ');
+  LYAboutBox1.WeChat:=ifThen(sWeChat='','http://weixin.qq.com/r/GDvN1Y7EmtPlrcq2924K',sWeChat);
+  ini.Free;
+  LYAboutBox1.Execute;
 end;
 
 end.

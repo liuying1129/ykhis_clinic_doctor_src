@@ -269,7 +269,7 @@ object frmMain: TfrmMain
               Width = 157
               Height = 21
               DropDownCount = 20
-              ItemHeight = 13
+              ItemHeight = 0
               TabOrder = 0
             end
             object ComboBox7: TComboBox
@@ -278,7 +278,7 @@ object frmMain: TfrmMain
               Width = 157
               Height = 21
               DropDownCount = 20
-              ItemHeight = 13
+              ItemHeight = 0
               TabOrder = 1
             end
             object BitBtn4: TBitBtn
@@ -978,7 +978,7 @@ object frmMain: TfrmMain
             Width = 58
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 6
             OnChange = LabeledEdit26Change
             OnSelect = LabeledEdit26Change
@@ -1042,7 +1042,7 @@ object frmMain: TfrmMain
             Width = 75
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 4
             OnKeyDown = ComboBox17KeyDown
           end
@@ -1200,7 +1200,7 @@ object frmMain: TfrmMain
             Width = 58
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 2
             OnChange = ComboBox9Change
             OnSelect = ComboBox9Change
@@ -1211,7 +1211,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 5
             OnKeyDown = ComboBox10KeyDown
           end
@@ -1246,7 +1246,7 @@ object frmMain: TfrmMain
             Width = 62
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 7
             OnKeyDown = ComboBox8KeyDown
           end
@@ -1338,7 +1338,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 3
             OnKeyDown = ComboBox18KeyDown
           end
@@ -1463,7 +1463,7 @@ object frmMain: TfrmMain
             Width = 48
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 3
             OnKeyDown = ComboBox12KeyDown
           end
@@ -1498,7 +1498,7 @@ object frmMain: TfrmMain
             Width = 62
             Height = 21
             DropDownCount = 20
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 5
             OnKeyDown = ComboBox13KeyDown
           end
@@ -1688,6 +1688,7 @@ object frmMain: TfrmMain
       end
       object N4: TMenuItem
         Caption = #20851#20110'...'
+        OnClick = N4Click
       end
     end
   end
@@ -2966,5 +2967,15 @@ object frmMain: TfrmMain
       Caption = #22797#21046#30149#21382'+'#22788#26041
       OnClick = N37Click
     end
+  end
+  object LYAboutBox1: TLYAboutBox
+    ProcuctName = 'ProductName'
+    Version = 'Version'
+    Copyright = 'Copyright'
+    Comments = 'Comments'
+    Author = 'Author'
+    WebPage = 'WebPage'
+    Left = 913
+    Top = 8
   end
 end

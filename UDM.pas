@@ -54,6 +54,7 @@ function TryStrToFloatExt(const pSourStr:Pchar; var Value: Double): Boolean;stdc
 function DeCryptStr(aStr: Pchar; aKey: Pchar): Pchar;stdcall;external 'DESCrypt.dll';//Ω‚√‹
 function EnCryptStr(aStr: Pchar; aKey: Pchar): Pchar;stdcall;external 'DESCrypt.dll';//º”√‹
 function ShowOptionForm(const pCaption,pTabSheetCaption,pItemInfo,pInifile:Pchar):boolean;stdcall;external 'OptionSetForm.dll';
+function GetVersionLY(const AFileName:pchar):pchar;stdcall;external 'LYFunction.dll';
   
 function MakeDBConn:boolean;
 function ExecSQLCmd(AServer:string;APort:integer;ADataBase:string;AUserName:string;APassword:string;ASQL:string):boolean;

@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, Grids, DBGrids, StdCtrls, DB, ADODB, Buttons,
   ActnList, UfrmLocateRecord,inifiles, MemDS, DBAccess, MyAccess,
-  ADOLYGetcode,Math, DosMove;
+  ADOLYGetcode,Math, DosMove, VirtualTable;
 
 type
   TfrmDgnsBigTemp = class(TForm)
@@ -247,7 +247,7 @@ end;
 
 procedure TfrmDgnsBigTemp.BitBtn2Click(Sender: TObject);
 var
-  adotemp22:TMyQuery;
+  VirtualTable:TVirtualTable;
 begin
   if not ifhaspower(sender,operator_id) then exit;//权限检查
 
@@ -257,19 +257,17 @@ begin
   if not adoquery1.Active then exit;
   if adoquery1.RecordCount<=0 then exit;
 
-  adotemp22:=TMyQuery.Create(nil);
-  adotemp22.Connection:=DM.MyConnection1;
-  adotemp22.Close;
-  adotemp22.SQL.Clear;
-  adotemp22.SQL:=adoquery1.SQL;
-  adotemp22.Open;
-  while not adotemp22.Eof do
+  VirtualTable:=TVirtualTable.Create(nil);
+  VirtualTable.Assign(adoquery1);//clone数据集
+  VirtualTable.Open;
+  while not VirtualTable.Eof do
   begin
-    SingleInsertTemp(adotemp22.fieldbyname('unid').AsString);
+    SingleInsertTemp(VirtualTable.fieldbyname('unid').AsString);
     
-    adotemp22.Next;
+    VirtualTable.Next;
   end;
-  adotemp22.Free;
+  VirtualTable.Close;
+  VirtualTable.Free;
 end;
 
 procedure TfrmDgnsBigTemp.DBGrid1DblClick(Sender: TObject);

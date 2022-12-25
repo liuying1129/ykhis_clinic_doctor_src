@@ -401,6 +401,7 @@ type
     procedure ShowTreatSlave;
     procedure DeletePrescriptionDetail(Sender: TObject;const APrescriptionType:Integer);//删除处方明细
     procedure DeleteSheetPrescription(Sender: TObject;const APrescriptionType:Integer);//删除整张处方
+    function InsertTreatMaster(const APatient_Unid:integer):integer;
   public
     { Public declarations }
     procedure SaveMedicalRecord(Sender: TObject);//保存病历
@@ -583,24 +584,28 @@ var
   s1:String;
   aJson:ISuperObject;
   Unid_TreatMaster:integer;
+  patient_unid:integer;
 begin
   if not ifhaspower(sender,operator_id) then exit;//权限检查
 
-  //frmSelPatient.ShowModal;
   p1:=ShowPatientForm(Application.Handle,PChar(g_Server),g_Port,PChar(g_Database),PChar(g_Username),PChar(g_Password),PChar(operator_name),PChar(operator_dep_name));
   s1:=StrPas(p1);
 
   aJson:=SO(s1);
 
-  if aJson.N['success'].AsBoolean then
+  if not aJson.N['success'].AsBoolean then exit;
+
+  if aJson.N['method'].AsString='selected' then//表示双击病人
   begin
+    patient_unid:=aJson.N['patient_unid'].AsInteger;
+    
+    Unid_TreatMaster:=InsertTreatMaster(patient_unid);
+    
     MyQuery2.Refresh;
-    if aJson.N['method'].AsString='insert' then
-    begin
-      Unid_TreatMaster:=aJson.N['unid'].AsInteger;
-      MyQuery2.Locate('unid',Unid_TreatMaster,[loCaseInsensitive]);
-    end;
-  end;  
+    MyQuery2.Locate('unid',Unid_TreatMaster,[loCaseInsensitive]);
+  end;
+  
+  if aJson.N['method'].AsString='update' then MyQuery2.Refresh;//表示修改病人信息
 end;
 
 procedure TfrmMain.UpdateMyQuery1;
@@ -3406,6 +3411,66 @@ begin
   LYAboutBox1.WeChat:=ifThen(sWeChat='','http://weixin.qq.com/r/GDvN1Y7EmtPlrcq2924K',sWeChat);
   ini.Free;
   LYAboutBox1.Execute;
+end;
+
+function TfrmMain.InsertTreatMaster(const APatient_Unid: integer): integer;
+var
+  adotemp11,adotemp22:TMyQuery;
+  sqlstr:string;
+begin
+  Result:=-1;
+  
+  adotemp22:=TMyQuery.Create(nil);
+  adotemp22.Connection:=DM.MyConnection1;
+  adotemp22.Close;
+  adotemp22.SQL.Clear;
+  adotemp22.SQL.Text:='select TIMESTAMPDIFF(YEAR,patient_birthday,CURDATE()) as patient_age,pi.* from patient_info pi where unid='+inttostr(APatient_Unid);
+  adotemp22.Open;
+  if adotemp22.RecordCount<>1 then begin adotemp22.Free;exit;end;
+
+  adotemp11:=TMyQuery.Create(nil);
+  adotemp11.Connection:=DM.MyConnection1;
+
+  sqlstr:='Insert into treat_master ('+
+                      ' patient_unid, patient_name, patient_sex, patient_age, certificate_type, certificate_num, clinic_card_num, health_care_num, address, work_company, work_address, if_marry, native_place, telephone, operator, department) values ('+
+                      ':patient_unid,:patient_name,:patient_sex,:patient_age,:certificate_type,:certificate_num,:clinic_card_num,:health_care_num,:address,:work_company,:work_address,:if_marry,:native_place,:telephone,:operator,:department) ';
+  adotemp11.Close;
+  adotemp11.SQL.Clear;
+  adotemp11.SQL.Add(sqlstr);
+  //执行多条MySQL语句，要用分号分隔
+  adotemp11.SQL.Add('; SELECT LAST_INSERT_ID() AS Insert_Identity ');
+  adotemp11.ParamByName('patient_unid').Value:=APatient_Unid;
+  adotemp11.ParamByName('patient_name').Value:=adotemp22.fieldbyname('patient_name').AsString;
+  adotemp11.ParamByName('patient_sex').Value:=adotemp22.fieldbyname('patient_sex').AsString;
+  adotemp11.ParamByName('patient_age').Value:=adotemp22.fieldbyname('patient_age').AsString;
+  adotemp11.ParamByName('certificate_type').Value:=adotemp22.fieldbyname('certificate_type').AsString;
+  adotemp11.ParamByName('certificate_num').Value:=adotemp22.fieldbyname('certificate_num').AsString;
+  adotemp11.ParamByName('clinic_card_num').Value:=adotemp22.fieldbyname('clinic_card_num').AsString;
+  adotemp11.ParamByName('health_care_num').Value:=adotemp22.fieldbyname('health_care_num').AsString;
+  adotemp11.ParamByName('address').Value:=adotemp22.fieldbyname('address').AsString;
+  adotemp11.ParamByName('work_company').Value:=adotemp22.fieldbyname('work_company').AsString;
+  adotemp11.ParamByName('work_address').Value:=adotemp22.fieldbyname('work_address').AsString;
+  adotemp11.ParamByName('if_marry').Value:=adotemp22.fieldbyname('if_marry').AsString;
+  adotemp11.ParamByName('native_place').Value:=adotemp22.fieldbyname('native_place').AsString;
+  adotemp11.ParamByName('telephone').Value:=adotemp22.fieldbyname('telephone').AsString;
+  adotemp11.ParamByName('operator').Value:=operator_name;
+  adotemp11.ParamByName('department').Value:=operator_dep_name;
+  try
+    adotemp11.ExecSQL;
+  except
+    on E:Exception do
+    begin
+      adotemp11.Free;
+      adotemp22.Free;
+      MESSAGEDLG('新增诊疗记录失败!'+E.Message,mtError,[mbOK],0);
+      exit;
+    end;
+  end;
+
+  Result:=adotemp11.fieldbyname('Insert_Identity').AsInteger;
+  adotemp11.Free;
+
+  adotemp22.Free;
 end;
 
 end.

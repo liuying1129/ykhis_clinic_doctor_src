@@ -411,9 +411,9 @@ var
 
 implementation
 
-uses UfrmLogin, UDM, UfrmModifyPwd, UfrmSelPatient, UfrmModifyAge,
+uses UfrmLogin, UDM, UfrmModifyPwd, UfrmModifyAge,
   UfrmDgnsBigTemp, UfrmCommQuery, UfrmSaveAsTemp, softMeter_globalVar,
-  UfrmPrintTreatFlow;
+  UfrmPrintTreatFlow, superobject;
 var
   g_group_num:integer;//西药组号
   g_zhiliao_group_num:integer;//治疗组号
@@ -578,10 +578,29 @@ begin
 end;
 
 procedure TfrmMain.SpeedButton1Click(Sender: TObject);
+var
+  p1:PChar;
+  s1:String;
+  aJson:ISuperObject;
+  Unid_TreatMaster:integer;
 begin
   if not ifhaspower(sender,operator_id) then exit;//权限检查
 
-  frmSelPatient.ShowModal;
+  //frmSelPatient.ShowModal;
+  p1:=ShowPatientForm(Application.Handle,PChar(g_Server),g_Port,PChar(g_Database),PChar(g_Username),PChar(g_Password),PChar(operator_name),PChar(operator_dep_name));
+  s1:=StrPas(p1);
+
+  aJson:=SO(s1);
+
+  if aJson.N['success'].AsBoolean then
+  begin
+    MyQuery2.Refresh;
+    if aJson.N['method'].AsString='insert' then
+    begin
+      Unid_TreatMaster:=aJson.N['unid'].AsInteger;
+      MyQuery2.Locate('unid',Unid_TreatMaster,[loCaseInsensitive]);
+    end;
+  end;  
 end;
 
 procedure TfrmMain.UpdateMyQuery1;

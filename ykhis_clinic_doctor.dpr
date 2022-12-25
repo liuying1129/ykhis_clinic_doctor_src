@@ -6,13 +6,15 @@ uses
   UDM in 'UDM.pas' {DM: TDataModule},
   UfrmLogin in 'UfrmLogin.pas' {frmLogin},
   UfrmModifyPwd in 'UfrmModifyPwd.pas' {frmModifyPwd},
-  UfrmSelPatient in 'UfrmSelPatient.pas' {frmSelPatient},
   UfrmModifyAge in 'UfrmModifyAge.pas' {frmModifyAge},
   UfrmDgnsBigTemp in 'UfrmDgnsBigTemp.pas' {frmDgnsBigTemp},
   UfrmCommQuery in 'UfrmCommQuery.pas' {frmCommQuery},
   UfrmSaveAsTemp in 'UfrmSaveAsTemp.pas' {frmSaveAsTemp},
   softMeter_globalVar in 'softMeter_globalVar.pas',
-  UfrmPrintTreatFlow in 'UfrmPrintTreatFlow.pas' {frmPrintTreatFlow};
+  UfrmPrintTreatFlow in 'UfrmPrintTreatFlow.pas' {frmPrintTreatFlow},
+  superobject in 'superobject.pas',
+  superdate in 'superdate.pas',
+  supertypes in 'supertypes.pas';
 
 {$R *.res}
 

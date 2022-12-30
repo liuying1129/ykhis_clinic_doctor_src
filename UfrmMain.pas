@@ -401,7 +401,6 @@ type
     procedure ShowTreatSlave;
     procedure DeletePrescriptionDetail(Sender: TObject;const APrescriptionType:Integer);//删除处方明细
     procedure DeleteSheetPrescription(Sender: TObject;const APrescriptionType:Integer);//删除整张处方
-    function InsertTreatMaster(const APatient_Unid:integer):integer;
   public
     { Public declarations }
     procedure SaveMedicalRecord(Sender: TObject);//保存病历
@@ -599,8 +598,8 @@ begin
   begin
     patient_unid:=aJson.N['patient_unid'].AsInteger;
     
-    Unid_TreatMaster:=InsertTreatMaster(patient_unid);
-    
+    Unid_TreatMaster:=InsertTreatMaster(PChar(g_Server),g_Port,PChar(g_Database),PChar(g_Username),PChar(g_Password),patient_unid,PChar(operator_name),PChar(operator_dep_name),'',Now(),'','','');
+
     MyQuery2.Refresh;
     MyQuery2.Locate('unid',Unid_TreatMaster,[loCaseInsensitive]);
   end;
@@ -1019,7 +1018,7 @@ end;
 
 procedure TfrmMain.SpeedButton2Click(Sender: TObject);
 var
-  unid,RecNum:integer;
+  unid:integer;
 begin
   if not ifhaspower(sender,operator_id) then exit;//权限检查
 
@@ -1028,8 +1027,7 @@ begin
 
   unid:=MyQuery2.fieldbyname('unid').AsInteger;
 
-  RecNum:=strtoint(ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select count(*) as RecNum from treat_slave where tm_unid='+inttostr(unid)));
-  if RecNum<=0 then
+  if '1'<>ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from treat_slave where tm_unid='+inttostr(unid)+' limit 1') then
   begin
     MESSAGEDLG('未录入处方,不允许审核!',mtError,[mbOK],0);
     exit;
@@ -1085,7 +1083,7 @@ begin
   result:=false;
   if trim(DBGrid2.DataSource.DataSet.FieldByName('审核者').AsString)='' then begin result:=true;exit; end;
 
-  if strtoint(ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select count(*) from worker where code='''+operator_id+''' and ifSuperUser=1'))>=1 then
+  if '1'=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from worker where code='''+operator_id+''' and ifSuperUser=1 limit 1') then
   begin result:=true;exit; end;
   
   if uppercase(trim(DBGrid2.DataSource.DataSet.FieldByName('审核者').AsString))=uppercase(trim(operator_name)) then result:=true;
@@ -2636,11 +2634,11 @@ begin
   end;
 
   //如果非中药treat_slave记录为0,则Pages[1](Page_No_Chinese_Medicine)不显示
-  if strtoint(ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select count(*) from treat_slave where tm_unid='+sUnid+' and item_type not in (''中药'',''体温'',''收缩压'',''舒张压'',''心率'',''主诉'',''简要病史'',''体查'',''辅助检查'',''嘱托'',''诊断'') LIMIT 1'))<=0 then
+  if '1'<>ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from treat_slave where tm_unid='+sUnid+' and item_type not in (''中药'',''体温'',''收缩压'',''舒张压'',''心率'',''主诉'',''简要病史'',''体查'',''辅助检查'',''嘱托'',''诊断'') LIMIT 1') then
     frxReport1.Pages[1].Visible := False;//索引从1开始
     
   //如果中药treat_slave记录为0,则Pages[2](Page_Chinese_Medicine)不显示
-  if strtoint(ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select count(*) from treat_slave where tm_unid='+sUnid+' and item_type=''中药'' LIMIT 1'))<=0 then
+  if '1'<>ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from treat_slave where tm_unid='+sUnid+' and item_type=''中药'' LIMIT 1') then
     frxReport1.Pages[2].Visible := False;//索引从1开始
 
   frxReport1.ShowReport;
@@ -2673,7 +2671,7 @@ begin
   if TCustomEdit(Sender).Name='Memo4' then ss:='辅助检查';
   if TCustomEdit(Sender).Name='Memo5' then ss:='嘱托';
 
-  if strtoint(ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select count(*) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type='''+ss+''' LIMIT 1'))<=0 then
+  if '1'<>ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type='''+ss+''' LIMIT 1') then
   begin
     if trim(TCustomEdit(Sender).Text)<>'' then
     begin
@@ -3411,66 +3409,6 @@ begin
   LYAboutBox1.WeChat:=ifThen(sWeChat='','http://weixin.qq.com/r/GDvN1Y7EmtPlrcq2924K',sWeChat);
   ini.Free;
   LYAboutBox1.Execute;
-end;
-
-function TfrmMain.InsertTreatMaster(const APatient_Unid: integer): integer;
-var
-  adotemp11,adotemp22:TMyQuery;
-  sqlstr:string;
-begin
-  Result:=-1;
-  
-  adotemp22:=TMyQuery.Create(nil);
-  adotemp22.Connection:=DM.MyConnection1;
-  adotemp22.Close;
-  adotemp22.SQL.Clear;
-  adotemp22.SQL.Text:='select TIMESTAMPDIFF(YEAR,patient_birthday,CURDATE()) as patient_age,pi.* from patient_info pi where unid='+inttostr(APatient_Unid);
-  adotemp22.Open;
-  if adotemp22.RecordCount<>1 then begin adotemp22.Free;exit;end;
-
-  adotemp11:=TMyQuery.Create(nil);
-  adotemp11.Connection:=DM.MyConnection1;
-
-  sqlstr:='Insert into treat_master ('+
-                      ' patient_unid, patient_name, patient_sex, patient_age, certificate_type, certificate_num, clinic_card_num, health_care_num, address, work_company, work_address, if_marry, native_place, telephone, operator, department) values ('+
-                      ':patient_unid,:patient_name,:patient_sex,:patient_age,:certificate_type,:certificate_num,:clinic_card_num,:health_care_num,:address,:work_company,:work_address,:if_marry,:native_place,:telephone,:operator,:department) ';
-  adotemp11.Close;
-  adotemp11.SQL.Clear;
-  adotemp11.SQL.Add(sqlstr);
-  //执行多条MySQL语句，要用分号分隔
-  adotemp11.SQL.Add('; SELECT LAST_INSERT_ID() AS Insert_Identity ');
-  adotemp11.ParamByName('patient_unid').Value:=APatient_Unid;
-  adotemp11.ParamByName('patient_name').Value:=adotemp22.fieldbyname('patient_name').AsString;
-  adotemp11.ParamByName('patient_sex').Value:=adotemp22.fieldbyname('patient_sex').AsString;
-  adotemp11.ParamByName('patient_age').Value:=adotemp22.fieldbyname('patient_age').AsString;
-  adotemp11.ParamByName('certificate_type').Value:=adotemp22.fieldbyname('certificate_type').AsString;
-  adotemp11.ParamByName('certificate_num').Value:=adotemp22.fieldbyname('certificate_num').AsString;
-  adotemp11.ParamByName('clinic_card_num').Value:=adotemp22.fieldbyname('clinic_card_num').AsString;
-  adotemp11.ParamByName('health_care_num').Value:=adotemp22.fieldbyname('health_care_num').AsString;
-  adotemp11.ParamByName('address').Value:=adotemp22.fieldbyname('address').AsString;
-  adotemp11.ParamByName('work_company').Value:=adotemp22.fieldbyname('work_company').AsString;
-  adotemp11.ParamByName('work_address').Value:=adotemp22.fieldbyname('work_address').AsString;
-  adotemp11.ParamByName('if_marry').Value:=adotemp22.fieldbyname('if_marry').AsString;
-  adotemp11.ParamByName('native_place').Value:=adotemp22.fieldbyname('native_place').AsString;
-  adotemp11.ParamByName('telephone').Value:=adotemp22.fieldbyname('telephone').AsString;
-  adotemp11.ParamByName('operator').Value:=operator_name;
-  adotemp11.ParamByName('department').Value:=operator_dep_name;
-  try
-    adotemp11.ExecSQL;
-  except
-    on E:Exception do
-    begin
-      adotemp11.Free;
-      adotemp22.Free;
-      MESSAGEDLG('新增诊疗记录失败!'+E.Message,mtError,[mbOK],0);
-      exit;
-    end;
-  end;
-
-  Result:=adotemp11.fieldbyname('Insert_Identity').AsInteger;
-  adotemp11.Free;
-
-  adotemp22.Free;
 end;
 
 end.

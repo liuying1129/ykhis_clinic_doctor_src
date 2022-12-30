@@ -129,12 +129,9 @@ end;
 
 procedure TfrmSaveAsTemp.BitBtn1Click(Sender: TObject);
 var
-  RecNum:integer;
   SelectID:string;
 begin
-  RecNum:=strtoint(ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select count(*) as RecNum from temp_dir LIMIT 1'));
-
-  if RecNum<>0 then//否则,没有记录SelectID为默认值空('')
+  if '1'=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from temp_dir LIMIT 1') then//否则,没有记录SelectID为默认值空('')
   begin
     if tvWareHouse.Selected=nil then
     begin
@@ -210,8 +207,6 @@ begin
 end;
 
 procedure TfrmSaveAsTemp.BitBtn4Click(Sender: TObject);
-var
-  RecNum,RecNum33:integer;
 begin
   if tvWareHouse.Selected=nil then
   begin
@@ -219,17 +214,13 @@ begin
     exit;
   end;
   
-  RecNum:=strtoint(ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select count(*) as RecNum from temp_dir where up_unid='+PDescriptType(tvWareHouse.Selected.Data)^.unid));
-
-  if RecNum<>0 then
+  if '1'=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from temp_dir where up_unid='+PDescriptType(tvWareHouse.Selected.Data)^.unid+' limit 1') then
   begin
     MessageDlg('该节点有子节点,不能删除！',mtError,[mbOK],0);
     exit;
   end;
 
-  RecNum33:=strtoint(ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select count(*) as RecNum33 from temp_body where dir_unid='+PDescriptType(tvWareHouse.Selected.Data)^.unid));
-
-  if RecNum33<>0 then
+  if '1'=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from temp_body where dir_unid='+PDescriptType(tvWareHouse.Selected.Data)^.unid+' limit 1') then
   begin
     MessageDlg('该节点下有模板内容,不能删除！',mtError,[mbOK],0);
     exit;

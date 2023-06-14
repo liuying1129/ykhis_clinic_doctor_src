@@ -7,7 +7,7 @@ uses
   Dialogs, DB, Grids, DBGrids, StdCtrls, Buttons, ExtCtrls,ADODB,StrUtils,
   FR_DSet, FR_DBSet, FR_Class, TeEngine, Series, TeeProcs, Chart,fr_chart,
   UADOLYQuery,ComObj,Jpeg, Menus,inifiles,Printers, ULYDataToExcel, MemDS,
-  DBAccess, MyAccess;
+  DBAccess, Uni;
 
 type
   TfieldList=array of string;
@@ -34,9 +34,9 @@ type
     LYDataToExcel1: TLYDataToExcel;
     N4: TMenuItem;
     Excel1: TMenuItem;
-    ADObasic: TMyQuery;
-    ADOQuery1: TMyQuery;
-    ADO_print: TMyQuery;
+    ADObasic: TUniQuery;
+    ADOQuery1: TUniQuery;
+    ADO_print: TUniQuery;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure BitBtnCommQryClick(Sender: TObject);
     procedure BitBtnCommQryCloseClick(Sender: TObject);
@@ -95,7 +95,7 @@ begin
 
   lyquery1.MyConnection:=DM.MyConnection1;
   lyquery1.SelectString:=sqlstr1;
-  lyquery1.DataBaseType:=dbtMySQL;
+  lyquery1.DataBaseType:=dbtDAC;
   if lyquery1.Execute then
   begin
     ADObasic.SQL.Text:=lyquery1.ResultSelect;

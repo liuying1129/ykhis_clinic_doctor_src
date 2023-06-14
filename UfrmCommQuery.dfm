@@ -186,18 +186,18 @@ object frmCommQuery: TfrmCommQuery
     Left = 368
     Top = 8
   end
-  object ADObasic: TMyQuery
+  object ADObasic: TUniQuery
     AfterOpen = ADObasicAfterOpen
     AfterScroll = ADObasicAfterScroll
     Left = 304
     Top = 136
   end
-  object ADOQuery1: TMyQuery
+  object ADOQuery1: TUniQuery
     AfterOpen = ADOQuery1AfterOpen
     Left = 304
     Top = 280
   end
-  object ADO_print: TMyQuery
+  object ADO_print: TUniQuery
     Left = 616
     Top = 8
   end

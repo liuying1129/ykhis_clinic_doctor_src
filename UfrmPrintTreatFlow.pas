@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, StdCtrls, Buttons, frxClass, frxDBSet, DB, MemDS,
-  DBAccess, MyAccess;
+  DBAccess, Uni;
 
 type
   TfrmPrintTreatFlow = class(TForm)
@@ -14,7 +14,7 @@ type
     Label1: TLabel;
     Label2: TLabel;
     BitBtn1: TBitBtn;
-    MyQuery1: TMyQuery;
+    MyQuery1: TUniQuery;
     frxReport1: TfrxReport;
     frxDBDataset1: TfrxDBDataset;
     BitBtn2: TBitBtn;

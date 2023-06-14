@@ -58,7 +58,7 @@ end;
 
 procedure TfrmModifyAge.BitBtn1Click(Sender: TObject);
 begin
-  if ExecSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'update treat_master set patient_age='''+LabeledEdit4.Text+''' where unid='+tm_unid) then
+  if ExecSQLCmd(HisConn,'update treat_master set patient_age='''+LabeledEdit4.Text+''' where unid='+tm_unid) then
   begin
     frmMain.MyQuery2.Refresh;
     close;

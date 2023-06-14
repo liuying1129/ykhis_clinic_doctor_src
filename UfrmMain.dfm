@@ -1704,13 +1704,13 @@ object frmMain: TfrmMain
     Left = 117
     Top = 176
   end
-  object MyQuery2: TMyQuery
+  object MyQuery2: TUniQuery
     AfterOpen = MyQuery2AfterOpen
     AfterScroll = MyQuery2AfterScroll
     Left = 85
     Top = 176
   end
-  object MyQuery1: TMyQuery
+  object MyQuery1: TUniQuery
     AfterOpen = MyQuery1AfterOpen
     AfterScroll = MyQuery1AfterScroll
     Left = 333
@@ -1731,7 +1731,7 @@ object frmMain: TfrmMain
     Left = 365
     Top = 263
   end
-  object MyQuery3: TMyQuery
+  object MyQuery3: TUniQuery
     AfterOpen = MyQuery3AfterOpen
     Left = 333
     Top = 263
@@ -1784,7 +1784,7 @@ object frmMain: TfrmMain
     Left = 532
     Top = 398
   end
-  object MyQuery4: TMyQuery
+  object MyQuery4: TUniQuery
     AfterOpen = MyQuery4AfterOpen
     Left = 500
     Top = 398
@@ -1794,7 +1794,7 @@ object frmMain: TfrmMain
     Left = 365
     Top = 303
   end
-  object MyQuery5: TMyQuery
+  object MyQuery5: TUniQuery
     AfterOpen = MyQuery5AfterOpen
     Left = 333
     Top = 303
@@ -1824,7 +1824,7 @@ object frmMain: TfrmMain
     Left = 365
     Top = 335
   end
-  object MyQuery6: TMyQuery
+  object MyQuery6: TUniQuery
     AfterOpen = MyQuery6AfterOpen
     Left = 333
     Top = 335
@@ -1874,7 +1874,7 @@ object frmMain: TfrmMain
       OnClick = N45Click
     end
   end
-  object MyQuery7: TMyQuery
+  object MyQuery7: TUniQuery
     AfterOpen = MyQuery7AfterOpen
     Left = 333
     Top = 367
@@ -1884,7 +1884,7 @@ object frmMain: TfrmMain
     Left = 365
     Top = 399
   end
-  object MyQuery8: TMyQuery
+  object MyQuery8: TUniQuery
     AfterOpen = MyQuery8AfterOpen
     Left = 333
     Top = 399
@@ -1894,7 +1894,7 @@ object frmMain: TfrmMain
     Left = 365
     Top = 431
   end
-  object MyQuery9: TMyQuery
+  object MyQuery9: TUniQuery
     AfterOpen = MyQuery9AfterOpen
     Left = 333
     Top = 431
@@ -1919,7 +1919,7 @@ object frmMain: TfrmMain
       OnClick = N47Click
     end
   end
-  object mq_slave: TMyQuery
+  object mq_slave: TUniQuery
     Connection = DM.MyConnection1
     SQL.Strings = (
       'select '
@@ -2795,7 +2795,7 @@ object frmMain: TfrmMain
       end
     end
   end
-  object mq_master: TMyQuery
+  object mq_master: TUniQuery
     Connection = DM.MyConnection1
     SQL.Strings = (
       'select '

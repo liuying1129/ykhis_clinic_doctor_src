@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls,StrUtils, Menus, StdCtrls,IniFiles, ExtCtrls, ToolWin,
-  Buttons, Grids, DBGrids, DB, MemDS, DBAccess, MyAccess, CheckLst, DosMove,
-  ADOLYGetcode,Math, FR_Class, frxClass, frxDBSet, LYAboutBox;
+  Buttons, Grids, DBGrids, DB, MemDS, DBAccess, CheckLst, DosMove,
+  ADOLYGetcode,Math, FR_Class, frxClass, frxDBSet, LYAboutBox, Uni;
   
 //==为了通过发送消息更新主窗体状态栏而增加==//
 const
@@ -40,12 +40,12 @@ type
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
     DataSource2: TDataSource;
-    MyQuery2: TMyQuery;
+    MyQuery2: TUniQuery;
     GroupBox2: TGroupBox;
     DBGrid2: TDBGrid;
     TabSheet4: TTabSheet;
     DBGrid1: TDBGrid;
-    MyQuery1: TMyQuery;
+    MyQuery1: TUniQuery;
     DataSource1: TDataSource;
     TabSheet5: TTabSheet;
     TabSheet6: TTabSheet;
@@ -67,7 +67,7 @@ type
     DosMove1: TDosMove;
     BitBtn1: TBitBtn;
     DataSource3: TDataSource;
-    MyQuery3: TMyQuery;
+    MyQuery3: TUniQuery;
     PopupMenu3: TPopupMenu;
     N12: TMenuItem;
     N13: TMenuItem;
@@ -83,7 +83,7 @@ type
     PopupMenu2: TPopupMenu;
     N15: TMenuItem;
     DataSource4: TDataSource;
-    MyQuery4: TMyQuery;
+    MyQuery4: TUniQuery;
     Panel26: TPanel;
     Panel27: TPanel;
     Panel12: TPanel;
@@ -109,7 +109,7 @@ type
     Label9: TLabel;
     ComboBox8: TComboBox;
     DataSource5: TDataSource;
-    MyQuery5: TMyQuery;
+    MyQuery5: TUniQuery;
     PopupMenu5: TPopupMenu;
     N16: TMenuItem;
     N17: TMenuItem;
@@ -127,7 +127,7 @@ type
     ComboBox13: TComboBox;
     DBGrid6: TDBGrid;
     DataSource6: TDataSource;
-    MyQuery6: TMyQuery;
+    MyQuery6: TUniQuery;
     PopupMenu6: TPopupMenu;
     N19: TMenuItem;
     N20: TMenuItem;
@@ -152,7 +152,7 @@ type
     DBGrid7: TDBGrid;
     DataSource7: TDataSource;
     PopupMenu7: TPopupMenu;
-    MyQuery7: TMyQuery;
+    MyQuery7: TUniQuery;
     N22: TMenuItem;
     N23: TMenuItem;
     N24: TMenuItem;
@@ -160,7 +160,7 @@ type
     SpeedButton5: TSpeedButton;
     DBGrid8: TDBGrid;
     DataSource8: TDataSource;
-    MyQuery8: TMyQuery;
+    MyQuery8: TUniQuery;
     Panel34: TPanel;
     LabeledEdit27: TLabeledEdit;
     LabeledEdit30: TLabeledEdit;
@@ -172,7 +172,7 @@ type
     Panel35: TPanel;
     DBGrid9: TDBGrid;
     DataSource9: TDataSource;
-    MyQuery9: TMyQuery;
+    MyQuery9: TUniQuery;
     PopupMenu9: TPopupMenu;
     N25: TMenuItem;
     N26: TMenuItem;
@@ -186,9 +186,9 @@ type
     N31: TMenuItem;
     ToolButton3: TToolButton;
     SpeedButton6: TSpeedButton;
-    mq_slave: TMyQuery;
+    mq_slave: TUniQuery;
     frxReport1: TfrxReport;
-    mq_master: TMyQuery;
+    mq_master: TUniQuery;
     masterDBfrx: TfrxDBDataset;
     slaveDBfrx: TfrxDBDataset;
     PopupMenu4: TPopupMenu;
@@ -535,7 +535,7 @@ var
   i:integer;
 begin
   //读系统代码
-  SCSYDW:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select Name from commcode where TypeName=''系统代码'' and ReMark=''授权使用单位'' ');
+  SCSYDW:=ScalarSQLCmd(HisConn,'select Name from commcode where TypeName=''系统代码'' and ReMark=''授权使用单位'' ');
   if SCSYDW='' then SCSYDW:='2F3A054F64394BBBE3D81033FDE12313';//'未授权单位'加密后的字符串
   //======解密SCSYDW
   pInStr:=pchar(SCSYDW);
@@ -587,7 +587,7 @@ var
 begin
   if not ifhaspower(sender,operator_id) then exit;//权限检查
 
-  p1:=ShowPatientForm(Application.Handle,PChar(g_Server),g_Port,PChar(g_Database),PChar(g_Username),PChar(g_Password),PChar(operator_name),PChar(operator_dep_name));
+  p1:=ShowPatientForm(Application.Handle,PChar(HisConn),PChar(operator_name),PChar(operator_dep_name));
   s1:=StrPas(p1);
 
   aJson:=SO(s1);
@@ -598,7 +598,7 @@ begin
   begin
     patient_unid:=aJson.N['patient_unid'].AsInteger;
     
-    Unid_TreatMaster:=InsertTreatMaster(PChar(g_Server),g_Port,PChar(g_Database),PChar(g_Username),PChar(g_Password),patient_unid,PChar(operator_name),PChar(operator_dep_name),'',Now(),'','','');
+    Unid_TreatMaster:=InsertTreatMaster(PChar(HisConn),patient_unid,PChar(operator_name),PChar(operator_dep_name),'',Now(),'','','');
 
     MyQuery2.Refresh;
     MyQuery2.Locate('unid',Unid_TreatMaster,[loCaseInsensitive]);
@@ -732,7 +732,7 @@ begin
 
   Panel3.Caption:=MyQuery2.fieldbyname('姓名').AsString;
 
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+ifThen(MyQuery2.fieldbyname('unid').AsString='','-1',MyQuery2.fieldbyname('unid').AsString));
+  Panel36.Caption:=ScalarSQLCmd(HisConn,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+ifThen(MyQuery2.fieldbyname('unid').AsString='','-1',MyQuery2.fieldbyname('unid').AsString));
 
   ShowTreatSlave;
 end;
@@ -784,7 +784,7 @@ end;
 
 procedure TfrmMain.BitBtn1Click(Sender: TObject);
 var
-  adotemp11,adotemp12:TMyQuery;
+  adotemp11,adotemp12:TUniQuery;
   sqlstr:string;
   iUnid,i_group_num,i_drug_days,i_hosp_inje_num,i_item_unid:integer;
   f_unit_price,f_dosage,f_drug_num:single;
@@ -801,7 +801,7 @@ begin
   begin
     iUnid:=MyQuery3.fieldbyname('unid').AsInteger;
 
-    adotemp12:=TMyQuery.Create(nil);
+    adotemp12:=TUniQuery.Create(nil);
     adotemp12.Connection:=DM.MyConnection1;
 
     adotemp12.Close;
@@ -845,7 +845,7 @@ begin
     Panel5.Caption:='新增';
   end else
   begin
-    adotemp11:=TMyQuery.Create(nil);
+    adotemp11:=TUniQuery.Create(nil);
     adotemp11.Connection:=DM.MyConnection1;
 
     sqlstr:='Insert into treat_slave ('+
@@ -908,7 +908,7 @@ begin
   
   ClearXiyaoEdit;
 
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  Panel36.Caption:=ScalarSQLCmd(HisConn,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
 
 procedure TfrmMain.UpdateMyQuery3(const APrescription_No:integer);
@@ -1027,7 +1027,7 @@ begin
 
   unid:=MyQuery2.fieldbyname('unid').AsInteger;
 
-  if '1'<>ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from treat_slave where tm_unid='+inttostr(unid)+' limit 1') then
+  if '1'<>ScalarSQLCmd(HisConn,'select 1 from treat_slave where tm_unid='+inttostr(unid)+' limit 1') then
   begin
     MESSAGEDLG('未录入处方,不允许审核!',mtError,[mbOK],0);
     exit;
@@ -1038,7 +1038,7 @@ begin
       if MessageDlg('已被审核过，想修改审核者？', mtWarning	, [mbNo,mbYes], 0 ) = mrNo then  exit;
    end;
 
-  ExecSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'update treat_master set audit_doctor='''+operator_name+''',audit_date=NOW() where unid='+inttostr(unid));
+  ExecSQLCmd(HisConn,'update treat_master set audit_doctor='''+operator_name+''',audit_date=NOW() where unid='+inttostr(unid));
 
   MyQuery2.Refresh;//刷新界面
 end;
@@ -1061,7 +1061,7 @@ begin
     exit;
   end;
 
-  ExecSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'update treat_master set audit_doctor=null,audit_date=null where unid='+inttostr(unid));
+  ExecSQLCmd(HisConn,'update treat_master set audit_doctor=null,audit_date=null where unid='+inttostr(unid));
 
   MyQuery2.Refresh; //刷新界面
 end;
@@ -1083,7 +1083,7 @@ begin
   result:=false;
   if trim(DBGrid2.DataSource.DataSet.FieldByName('审核者').AsString)='' then begin result:=true;exit; end;
 
-  if '1'=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from worker where code='''+operator_id+''' and ifSuperUser=1 limit 1') then
+  if '1'=ScalarSQLCmd(HisConn,'select 1 from worker where code='''+operator_id+''' and ifSuperUser=1 limit 1') then
   begin result:=true;exit; end;
   
   if uppercase(trim(DBGrid2.DataSource.DataSet.FieldByName('审核者').AsString))=uppercase(trim(operator_name)) then result:=true;
@@ -1302,7 +1302,7 @@ end;
 
 procedure TfrmMain.BitBtn4Click(Sender: TObject);
 var
-  adotemp11:TMyQuery;
+  adotemp11:TUniQuery;
   sqlstr:string;
   Insert_Identity:integer;
 begin
@@ -1313,7 +1313,7 @@ begin
   if not MyQuery2.Active then exit;
   if MyQuery2.RecordCount<=0 then exit;
 
-  adotemp11:=TMyQuery.Create(nil);
+  adotemp11:=TUniQuery.Create(nil);
   adotemp11.Connection:=DM.MyConnection1;
   
   if Panel38.Caption='修改' then
@@ -1456,7 +1456,7 @@ end;
 
 procedure TfrmMain.BitBtn6Click(Sender: TObject);
 var
-  adotemp11,adotemp12:TMyQuery;
+  adotemp11,adotemp12:TUniQuery;
   sqlstr:string;
   iUnid,i_zhiliao_group_num,i_drug_days:integer;
   f_unit_price,f_drug_num:single;
@@ -1473,7 +1473,7 @@ begin
   begin
     iUnid:=MyQuery5.fieldbyname('unid').AsInteger;
 
-    adotemp12:=TMyQuery.Create(nil);
+    adotemp12:=TUniQuery.Create(nil);
     adotemp12.Connection:=DM.MyConnection1;
 
     adotemp12.Close;
@@ -1509,7 +1509,7 @@ begin
     if not MyQuery2.Active then exit;
     if MyQuery2.RecordCount<=0 then exit;
     
-    adotemp11:=TMyQuery.Create(nil);
+    adotemp11:=TUniQuery.Create(nil);
     adotemp11.Connection:=DM.MyConnection1;
 
     sqlstr:='Insert into treat_slave ('+
@@ -1560,7 +1560,7 @@ begin
   
   ClearZhiLiaoEdit;
 
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  Panel36.Caption:=ScalarSQLCmd(HisConn,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
 
 procedure TfrmMain.LabeledEdit13KeyDown(Sender: TObject; var Key: Word;
@@ -1691,7 +1691,7 @@ end;
 
 procedure TfrmMain.BitBtn7Click(Sender: TObject);
 var
-  adotemp11,adotemp12:TMyQuery;
+  adotemp11,adotemp12:TUniQuery;
   sqlstr:string;
   iUnid,i_jiancha_group_num,i_drug_num:integer;
   f_unit_price:single;
@@ -1708,7 +1708,7 @@ begin
   begin
     iUnid:=MyQuery6.fieldbyname('unid').AsInteger;
 
-    adotemp12:=TMyQuery.Create(nil);
+    adotemp12:=TUniQuery.Create(nil);
     adotemp12.Connection:=DM.MyConnection1;
 
     adotemp12.Close;
@@ -1740,7 +1740,7 @@ begin
     if not MyQuery2.Active then exit;
     if MyQuery2.RecordCount<=0 then exit;
     
-    adotemp11:=TMyQuery.Create(nil);
+    adotemp11:=TUniQuery.Create(nil);
     adotemp11.Connection:=DM.MyConnection1;
 
     sqlstr:='Insert into treat_slave ('+
@@ -1787,7 +1787,7 @@ begin
   
   ClearJianChaEdit;
 
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  Panel36.Caption:=ScalarSQLCmd(HisConn,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
 
 procedure TfrmMain.MyQuery6AfterOpen(DataSet: TDataSet);
@@ -1909,7 +1909,7 @@ end;
 
 procedure TfrmMain.BitBtn8Click(Sender: TObject);
 var
-  adotemp11,adotemp12:TMyQuery;
+  adotemp11,adotemp12:TUniQuery;
   sqlstr:string;
   iUnid,i_zhongyao_group_num,i_item_unid,i_drug_days:integer;
   f_unit_price,f_dosage,f_drug_num:single;
@@ -1928,7 +1928,7 @@ begin
     
     iUnid:=MyQuery7.fieldbyname('unid').AsInteger;
 
-    adotemp12:=TMyQuery.Create(nil);
+    adotemp12:=TUniQuery.Create(nil);
     adotemp12.Connection:=DM.MyConnection1;
 
     adotemp12.Close;
@@ -1972,7 +1972,7 @@ begin
     if not MyQuery2.Active then exit;
     if MyQuery2.RecordCount<=0 then exit;
 
-    adotemp11:=TMyQuery.Create(nil);
+    adotemp11:=TUniQuery.Create(nil);
     adotemp11.Connection:=DM.MyConnection1;
 
     sqlstr:='Insert into treat_slave ('+
@@ -2032,7 +2032,7 @@ begin
   
   ClearZhongYaoEdit;
 
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  Panel36.Caption:=ScalarSQLCmd(HisConn,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
 
 procedure TfrmMain.N22Click(Sender: TObject);
@@ -2172,7 +2172,7 @@ end;
 
 procedure TfrmMain.BitBtn10Click(Sender: TObject);
 var
-  adotemp11,adotemp12:TMyQuery;
+  adotemp11,adotemp12:TUniQuery;
   sqlstr:string;
   iUnid,i_jianyan_group_num,i_drug_num:integer;
   f_unit_price:single;
@@ -2189,7 +2189,7 @@ begin
   begin
     iUnid:=MyQuery9.fieldbyname('unid').AsInteger;
 
-    adotemp12:=TMyQuery.Create(nil);
+    adotemp12:=TUniQuery.Create(nil);
     adotemp12.Connection:=DM.MyConnection1;
 
     adotemp12.Close;
@@ -2220,7 +2220,7 @@ begin
     if not MyQuery2.Active then exit;
     if MyQuery2.RecordCount<=0 then exit;
     
-    adotemp11:=TMyQuery.Create(nil);
+    adotemp11:=TUniQuery.Create(nil);
     adotemp11.Connection:=DM.MyConnection1;
 
     sqlstr:='Insert into treat_slave ('+
@@ -2266,7 +2266,7 @@ begin
   
   ClearJianYanEdit;
 
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  Panel36.Caption:=ScalarSQLCmd(HisConn,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
 
 procedure TfrmMain.MyQuery9AfterOpen(DataSet: TDataSet);
@@ -2351,7 +2351,7 @@ var
   i1,i2:integer;
 begin
   Result:=0;
-  s1:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select Reserve5 from commcode where TypeName=''给药频次'' AND name='''+drug_freq+''' LIMIT 1');
+  s1:=ScalarSQLCmd(HisConn,'select Reserve5 from commcode where TypeName=''给药频次'' AND name='''+drug_freq+''' LIMIT 1');
   if not trystrtoint(s1,i1) then exit;
   if not trystrtoint(drug_days,i2) then exit;
   Result:=i1*i2;
@@ -2371,7 +2371,7 @@ var
   f1:single;
 begin
   Result:=0;
-  s1:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select Reserve5 from commcode where TypeName=''给药频次'' AND name='''+drug_freq+''' LIMIT 1');
+  s1:=ScalarSQLCmd(HisConn,'select Reserve5 from commcode where TypeName=''给药频次'' AND name='''+drug_freq+''' LIMIT 1');
   if not trystrtoint(s1,i1) then exit;
   if not trystrtoint(drug_days,i2) then exit;
   if not trystrtofloat(dosage,f1) then exit;
@@ -2385,7 +2385,7 @@ var
   i1:integer;
 begin
   //实际上，只有数量单位(Edit2)change时才需要重新计算LabeledEdit9.Text(单价).简化代码而已
-  LabeledEdit9.Text:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select unit_price from drug_pack where drug_unid='+Label16.Caption+' and pack_name='''+Edit2.Text+''' ');//单价
+  LabeledEdit9.Text:=ScalarSQLCmd(HisConn,'select unit_price from drug_pack where drug_unid='+Label16.Caption+' and pack_name='''+Edit2.Text+''' ');//单价
 
   f1:=CalcXiYaoNum(LabeledEdit3.Text,ComboBox2.Text,LabeledEdit7.Text);
   i1:=UnitsConverterMethod(Label16.Caption,ComboBox4.Text,Edit2.Text);
@@ -2406,7 +2406,7 @@ function TfrmMain.UnitsConverterMethod(const ADrug_Unid,AUnit_Dosage,AUnit_Fee:S
 var
   iiDown,ii1,iiUp:integer;
   s2,s3:string;
-  adotemp12:TMyQuery;
+  adotemp12:TUniQuery;
 begin
   Result:=0;
 		
@@ -2422,7 +2422,7 @@ begin
   s2 := AUnit_Dosage;
   while AUnit_Fee<>s2 do
   begin
-    adotemp12:=TMyQuery.Create(nil);
+    adotemp12:=TUniQuery.Create(nil);
     adotemp12.Connection:=DM.MyConnection1;
     adotemp12.Close;
     adotemp12.SQL.Clear;
@@ -2447,7 +2447,7 @@ begin
   s3 := AUnit_Dosage;
   while AUnit_Fee<>s3 do
   begin			
-    adotemp12:=TMyQuery.Create(nil);
+    adotemp12:=TUniQuery.Create(nil);
     adotemp12.Connection:=DM.MyConnection1;
     adotemp12.Close;
     adotemp12.SQL.Clear;
@@ -2479,7 +2479,7 @@ var
   i1:integer;
 begin
   //实际上，只有数量单位(Edit1)change时才需要重新计算LabeledEdit29.Text(单价).简化代码而已
-  LabeledEdit29.Text:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select unit_price from drug_pack where drug_unid='+Label17.Caption+' and pack_name='''+Edit1.Text+''' ');//单价
+  LabeledEdit29.Text:=ScalarSQLCmd(HisConn,'select unit_price from drug_pack where drug_unid='+Label17.Caption+' and pack_name='''+Edit1.Text+''' ');//单价
 
   f1:=CalcXiYaoNum(LabeledEdit26.Text,ComboBox14.Text,LabeledEdit35.Text);
   i1:=UnitsConverterMethod(Label17.Caption,ComboBox16.Text,Edit1.Text);
@@ -2488,7 +2488,7 @@ end;
 
 procedure TfrmMain.N28Click(Sender: TObject);
 var
-  adotemp12:TMyQuery;
+  adotemp12:TUniQuery;
   if_succ:integer;
 begin
   if not ifhaspower(sender,operator_id) then exit;//权限检查
@@ -2499,7 +2499,7 @@ begin
   IF NOT MyQuery2.Active THEN EXIT;
   IF MyQuery2.RecordCount<=0 THEN EXIT;
 
-  adotemp12:=TMyQuery.Create(nil);
+  adotemp12:=TUniQuery.Create(nil);
   adotemp12.Connection:=DM.MyConnection1;
   adotemp12.Close;
   adotemp12.SQL.Clear;
@@ -2521,7 +2521,7 @@ end;
 
 procedure TfrmMain.ShowTreatSlave;
 var
-  adotemp12:TMyQuery;
+  adotemp12:TUniQuery;
 begin
   if PageControl1.ActivePageIndex=0 then//病历
   begin
@@ -2534,7 +2534,7 @@ begin
     Memo3.Clear;//体查
     Memo4.Clear;//辅助检查
     Memo5.Clear;//嘱托
-    adotemp12:=TMyQuery.Create(nil);
+    adotemp12:=TUniQuery.Create(nil);
     adotemp12.Connection:=DM.MyConnection1;
     adotemp12.Close;
     adotemp12.SQL.Clear;
@@ -2629,16 +2629,16 @@ begin
 
   if ifAutoCheck and(sAudit_Doctor='') then
   begin
-    ExecSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'update treat_master set audit_doctor='''+operator_name+''',audit_date=NOW() where unid='+sUnid);
+    ExecSQLCmd(HisConn,'update treat_master set audit_doctor='''+operator_name+''',audit_date=NOW() where unid='+sUnid);
     MyQuery2.Refresh;
   end;
 
   //如果非中药treat_slave记录为0,则Pages[1](Page_No_Chinese_Medicine)不显示
-  if '1'<>ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from treat_slave where tm_unid='+sUnid+' and item_type not in (''中药'',''体温'',''收缩压'',''舒张压'',''心率'',''主诉'',''简要病史'',''体查'',''辅助检查'',''嘱托'',''诊断'') LIMIT 1') then
+  if '1'<>ScalarSQLCmd(HisConn,'select 1 from treat_slave where tm_unid='+sUnid+' and item_type not in (''中药'',''体温'',''收缩压'',''舒张压'',''心率'',''主诉'',''简要病史'',''体查'',''辅助检查'',''嘱托'',''诊断'') LIMIT 1') then
     frxReport1.Pages[1].Visible := False;//索引从1开始
     
   //如果中药treat_slave记录为0,则Pages[2](Page_Chinese_Medicine)不显示
-  if '1'<>ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from treat_slave where tm_unid='+sUnid+' and item_type=''中药'' LIMIT 1') then
+  if '1'<>ScalarSQLCmd(HisConn,'select 1 from treat_slave where tm_unid='+sUnid+' and item_type=''中药'' LIMIT 1') then
     frxReport1.Pages[2].Visible := False;//索引从1开始
 
   frxReport1.ShowReport;
@@ -2671,20 +2671,20 @@ begin
   if TCustomEdit(Sender).Name='Memo4' then ss:='辅助检查';
   if TCustomEdit(Sender).Name='Memo5' then ss:='嘱托';
 
-  if '1'<>ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type='''+ss+''' LIMIT 1') then
+  if '1'<>ScalarSQLCmd(HisConn,'select 1 from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type='''+ss+''' LIMIT 1') then
   begin
     if trim(TCustomEdit(Sender).Text)<>'' then
     begin
-      ExecSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'insert into treat_slave (tm_unid,item_type,item_value) values ('+MyQuery2.fieldbyname('unid').AsString+','''+ss+''','''+TCustomEdit(Sender).Text+''')');
+      ExecSQLCmd(HisConn,'insert into treat_slave (tm_unid,item_type,item_value) values ('+MyQuery2.fieldbyname('unid').AsString+','''+ss+''','''+TCustomEdit(Sender).Text+''')');
     end;
   end else
   begin
     if trim(TCustomEdit(Sender).Text)<>'' then
     begin
-      ExecSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'update treat_slave set item_value='''+TCustomEdit(Sender).Text+''' where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type='''+ss+''' ');
+      ExecSQLCmd(HisConn,'update treat_slave set item_value='''+TCustomEdit(Sender).Text+''' where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type='''+ss+''' ');
     end else
     begin
-      ExecSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'delete from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type='''+ss+''' ');
+      ExecSQLCmd(HisConn,'delete from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString+' and item_type='''+ss+''' ');
     end;
   end;
 end;
@@ -3023,7 +3023,7 @@ end;
 procedure TfrmMain.LabeledEdit2KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
-  adotemp12:TMyQuery;
+  adotemp12:TUniQuery;
   i_group_num:integer;  
 begin
   if key<>13 then exit;
@@ -3032,7 +3032,7 @@ begin
   if MyQuery2.RecordCount<=0 then exit;
   if not trystrtoint(TLabeledEdit(Sender).Text,i_group_num) then exit;
 
-  adotemp12:=TMyQuery.Create(nil);
+  adotemp12:=TUniQuery.Create(nil);
   adotemp12.Connection:=DM.MyConnection1;
   adotemp12.Close;
   adotemp12.SQL.Clear;
@@ -3052,7 +3052,7 @@ end;
 procedure TfrmMain.LabeledEdit25KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
-  adotemp12:TMyQuery;
+  adotemp12:TUniQuery;
   i_group_num:integer;  
 begin
   if key<>13 then exit;
@@ -3061,7 +3061,7 @@ begin
   if MyQuery2.RecordCount<=0 then exit;
   if not trystrtoint(TLabeledEdit(Sender).Text,i_group_num) then exit;
 
-  adotemp12:=TMyQuery.Create(nil);
+  adotemp12:=TUniQuery.Create(nil);
   adotemp12.Connection:=DM.MyConnection1;
   adotemp12.Close;
   adotemp12.SQL.Clear;
@@ -3091,7 +3091,7 @@ end;
 
 procedure TfrmMain.N43Click(Sender: TObject);
 var
-  adotemp11,adotemp22:TMyQuery;
+  adotemp11,adotemp22:TUniQuery;
   type_name:String;
   content:string;
   i_tm_unid,i_item_unid,i_group_num,i_drug_days:integer;
@@ -3120,7 +3120,7 @@ begin
 
   if (MessageDlg('确实要复制【'+Copy_Creat_Date_Time+' '+Copy_Patient_Name+'】的'+Copy_Type+'吗？',mtWarning,[mbYes,mbNo],0)<>mrYes) then exit;
 
-  adotemp22:=TMyQuery.Create(nil);
+  adotemp22:=TUniQuery.Create(nil);
   adotemp22.Connection:=DM.MyConnection1;
   adotemp22.Close;
   adotemp22.SQL.Clear;
@@ -3171,7 +3171,7 @@ begin
     if(((Copy_Type='病历')or(Copy_Type='病历+处方'))and('诊断'=type_name))
     or(((Copy_Type='处方')or(Copy_Type='病历+处方'))and(('西药'=type_name)or('中药'=type_name)or('治疗'=type_name)or('检验'=type_name)or('检查'=type_name))) then
     BEGIN
-      adotemp11:=TMyQuery.Create(nil);
+      adotemp11:=TUniQuery.Create(nil);
       adotemp11.Connection:=DM.MyConnection1;
       adotemp11.Close;
       adotemp11.SQL.Clear;
@@ -3207,9 +3207,9 @@ begin
           else adotemp11.ParamByName('prescription_no').Value:=null;
 
       if('西药'=type_name)or('中药'=type_name)then
-        s_unit_price:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select unit_price from drug_pack where drug_unid='+inttostr(i_item_unid)+' and pack_name='''+unit_drug+''' ')
+        s_unit_price:=ScalarSQLCmd(HisConn,'select unit_price from drug_pack where drug_unid='+inttostr(i_item_unid)+' and pack_name='''+unit_drug+''' ')
         else if('治疗'=type_name)or('检验'=type_name)or('检查'=type_name) then
-          s_unit_price:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select reserve7 from commcode where unid='+inttostr(i_item_unid));
+          s_unit_price:=ScalarSQLCmd(HisConn,'select reserve7 from commcode where unid='+inttostr(i_item_unid));
       if trystrtofloat(s_unit_price,f_unit_price) then
         adotemp11.ParamByName('unit_price').Value:=f_unit_price
       else adotemp11.ParamByName('unit_price').Value:=null;
@@ -3334,7 +3334,7 @@ begin
     6:MyQuery6.Delete;//检查
   end;
 
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  Panel36.Caption:=ScalarSQLCmd(HisConn,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
 
 procedure TfrmMain.DeleteSheetPrescription(Sender: TObject;const APrescriptionType:Integer);//删除整张处方
@@ -3385,7 +3385,7 @@ begin
     6:while not MyQuery6.IsEmpty do MyQuery6.Delete;//检查
   end;
 
-  Panel36.Caption:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
+  Panel36.Caption:=ScalarSQLCmd(HisConn,'select sum(drug_num*unit_price) from treat_slave where tm_unid='+MyQuery2.fieldbyname('unid').AsString);
 end;
 
 procedure TfrmMain.SpeedButton8Click(Sender: TObject);
@@ -3405,7 +3405,7 @@ begin
   LYAboutBox1.Comments:=ini.ReadString('Interface','companyname','广东誉凯软件工作室');
   LYAboutBox1.Author:=ini.ReadString('Interface','companytel','13710248644、QQ:46524223');
   LYAboutBox1.WebPage:=ini.ReadString('Interface','companywww','http://yklis.ys168.com');//会员帐号:yklis;密码是:liu771129
-  sWeChat:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select Name from CommCode where TypeName=''系统代码'' and ReMark=''微信公众号'' ');
+  sWeChat:=ScalarSQLCmd(HisConn,'select Name from CommCode where TypeName=''系统代码'' and ReMark=''微信公众号'' ');
   LYAboutBox1.WeChat:=ifThen(sWeChat='','http://weixin.qq.com/r/GDvN1Y7EmtPlrcq2924K',sWeChat);
   ini.Free;
   LYAboutBox1.Execute;

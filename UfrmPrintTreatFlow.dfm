@@ -81,7 +81,7 @@ object frmPrintTreatFlow: TfrmPrintTreatFlow
     TabOrder = 3
     OnClick = BitBtn2Click
   end
-  object MyQuery1: TMyQuery
+  object MyQuery1: TUniQuery
     Connection = DM.MyConnection1
     SQL.Strings = (
       'select '

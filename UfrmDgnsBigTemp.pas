@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, Grids, DBGrids, StdCtrls, DB, ADODB, Buttons,
-  ActnList, UfrmLocateRecord,inifiles, MemDS, DBAccess, MyAccess,
-  ADOLYGetcode,Math, DosMove, VirtualTable;
+  ActnList, UfrmLocateRecord,inifiles, MemDS, DBAccess, 
+  ADOLYGetcode,Math, DosMove, VirtualTable, Uni;
 
 type
   TfrmDgnsBigTemp = class(TForm)
@@ -25,7 +25,7 @@ type
     Panel3: TPanel;
     Panel4: TPanel;
     Splitter2: TSplitter;
-    ADOQuery1: TMyQuery;
+    ADOQuery1: TUniQuery;
     DosMove1: TDosMove;
     Memo1: TMemo;
     DBGrid1: TDBGrid;
@@ -79,12 +79,12 @@ end;
 
 procedure TfrmDgnsBigTemp.UpdatetvWareHouse;
 var
-  adotemp11:TMyQuery;
+  adotemp11:TUniQuery;
   Node: TTreeNode;
   DescriptType:PDescriptType;
 begin
   tvWareHouse.Items.Clear;
-  adotemp11:=TMyQuery.Create(nil);
+  adotemp11:=TUniQuery.Create(nil);
   adotemp11.Connection:=dm.MyConnection1;
 
   adotemp11.Close;
@@ -128,13 +128,13 @@ end;
 
 procedure TfrmDgnsBigTemp.tvWareHouseChange(Sender: TObject; Node: TTreeNode);
 var
-  adotemp11:TMyQuery;
+  adotemp11:TUniQuery;
   ChildNode:ttreenode;
   DescriptType:PDescriptType;
 begin
   node.DeleteChildren;//清除节点下的所有子节点
 
-  adotemp11:=TMyQuery.Create(nil);
+  adotemp11:=TUniQuery.Create(nil);
   adotemp11.Connection:=dm.MyConnection1;
 
   adotemp11.Close;
@@ -283,7 +283,7 @@ end;
 
 procedure TfrmDgnsBigTemp.SingleInsertTemp(const AUnid:String);
 VAR
-  adotemp11:TMyQuery;
+  adotemp11:TUniQuery;
   Insert_Identity:integer;
 
   i_tm_unid,i_item_unid,i_group_num,i_drug_days:integer;
@@ -303,7 +303,7 @@ VAR
   drug_num:string;
   unit_drug:string;
 begin
-  adotemp11:=TMyQuery.Create(nil);
+  adotemp11:=TUniQuery.Create(nil);
   adotemp11.Connection:=DM.MyConnection1;
   adotemp11.Close;
   adotemp11.SQL.Clear;
@@ -350,7 +350,7 @@ begin
   end;
   if('诊断'=type_name)or('西药'=type_name)or('中药'=type_name)or('治疗'=type_name)or('检验'=type_name)or('检查'=type_name) then
   BEGIN
-    adotemp11:=TMyQuery.Create(nil);
+    adotemp11:=TUniQuery.Create(nil);
     adotemp11.Connection:=DM.MyConnection1;
     adotemp11.Close;
     adotemp11.SQL.Clear;
@@ -386,9 +386,9 @@ begin
         else adotemp11.ParamByName('prescription_no').Value:=null;  
 
     if('西药'=type_name)or('中药'=type_name)then
-      s_unit_price:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select unit_price from drug_pack where drug_unid='+inttostr(i_item_unid)+' and pack_name='''+unit_drug+''' ')
+      s_unit_price:=ScalarSQLCmd(HisConn,'select unit_price from drug_pack where drug_unid='+inttostr(i_item_unid)+' and pack_name='''+unit_drug+''' ')
       else if('治疗'=type_name)or('检验'=type_name)or('检查'=type_name) then
-        s_unit_price:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select reserve7 from commcode where unid='+inttostr(i_item_unid));
+        s_unit_price:=ScalarSQLCmd(HisConn,'select reserve7 from commcode where unid='+inttostr(i_item_unid));
     if trystrtofloat(s_unit_price,f_unit_price) then
       adotemp11.ParamByName('unit_price').Value:=f_unit_price
     else adotemp11.ParamByName('unit_price').Value:=null;

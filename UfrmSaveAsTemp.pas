@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, ExtCtrls, Buttons,ADODB,StrUtils,
-  DosMove, ActnList, DBCtrls, DB, MemDS, DBAccess, MyAccess;
+  DosMove, ActnList, DBCtrls, DB, MemDS, DBAccess, Uni;
 
 type
   TfrmSaveAsTemp = class(TForm)
@@ -92,12 +92,12 @@ end;
 
 procedure TfrmSaveAsTemp.UpdatetvWareHouse;
 var
-  adotemp11:TMyQuery;
+  adotemp11:TUniQuery;
   Node: TTreeNode;
   DescriptType:PDescriptType;
 begin
   tvWareHouse.Items.Clear;
-  adotemp11:=TMyQuery.Create(nil);
+  adotemp11:=TUniQuery.Create(nil);
   adotemp11.Connection:=dm.MyConnection1;
 
   adotemp11.Close;
@@ -131,7 +131,7 @@ procedure TfrmSaveAsTemp.BitBtn1Click(Sender: TObject);
 var
   SelectID:string;
 begin
-  if '1'=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from temp_dir LIMIT 1') then//否则,没有记录SelectID为默认值空('')
+  if '1'=ScalarSQLCmd(HisConn,'select 1 from temp_dir LIMIT 1') then//否则,没有记录SelectID为默认值空('')
   begin
     if tvWareHouse.Selected=nil then
     begin
@@ -139,7 +139,7 @@ begin
       exit;
     end;
     SelectID:=PDescriptType(tvWareHouse.Selected.Data)^.unid;
-    InsertPwhid:=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select up_unid from temp_dir where unid='+SelectID);
+    InsertPwhid:=ScalarSQLCmd(HisConn,'select up_unid from temp_dir where unid='+SelectID);
   end;
 
   ClearEdit;
@@ -167,10 +167,10 @@ end;
 
 procedure TfrmSaveAsTemp.BitBtn3Click(Sender: TObject);
 var
-  adotemp11:TMyQuery;
+  adotemp11:TUniQuery;
   i_sort_num:integer;
 begin
-  adotemp11:=TMyQuery.Create(nil);
+  adotemp11:=TUniQuery.Create(nil);
   adotemp11.Connection:=dm.MyConnection1;
   adotemp11.Close;
   adotemp11.SQL.Clear;
@@ -214,13 +214,13 @@ begin
     exit;
   end;
   
-  if '1'=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from temp_dir where up_unid='+PDescriptType(tvWareHouse.Selected.Data)^.unid+' limit 1') then
+  if '1'=ScalarSQLCmd(HisConn,'select 1 from temp_dir where up_unid='+PDescriptType(tvWareHouse.Selected.Data)^.unid+' limit 1') then
   begin
     MessageDlg('该节点有子节点,不能删除！',mtError,[mbOK],0);
     exit;
   end;
 
-  if '1'=ScalarSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'select 1 from temp_body where dir_unid='+PDescriptType(tvWareHouse.Selected.Data)^.unid+' limit 1') then
+  if '1'=ScalarSQLCmd(HisConn,'select 1 from temp_body where dir_unid='+PDescriptType(tvWareHouse.Selected.Data)^.unid+' limit 1') then
   begin
     MessageDlg('该节点下有模板内容,不能删除！',mtError,[mbOK],0);
     exit;
@@ -228,7 +228,7 @@ begin
 
   if (MessageDlg('确定删除当前节点吗？', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then exit;
 
-  ExecSQLCmd(g_Server,g_Port,g_Database,g_Username,g_Password,'delete from temp_dir where unid='+PDescriptType(tvWareHouse.Selected.Data)^.unid);
+  ExecSQLCmd(HisConn,'delete from temp_dir where unid='+PDescriptType(tvWareHouse.Selected.Data)^.unid);
 
   UpdatetvWareHouse;
 end;
@@ -243,13 +243,13 @@ end;
 procedure TfrmSaveAsTemp.tvWareHouseChange(Sender: TObject;
   Node: TTreeNode);
 var
-  adotemp11:TMyQuery;
+  adotemp11:TUniQuery;
   ChildNode:ttreenode;
   DescriptType:PDescriptType;
 begin
   node.DeleteChildren;//清除节点下的所有子节点
 
-  adotemp11:=TMyQuery.Create(nil);
+  adotemp11:=TUniQuery.Create(nil);
   adotemp11.Connection:=dm.MyConnection1;
 
   adotemp11.Close;
@@ -304,7 +304,7 @@ end;
 
 procedure TfrmSaveAsTemp.BitBtn7Click(Sender: TObject);
 var
-  adotemp11,adotemp22:TMyQuery;
+  adotemp11,adotemp22:TUniQuery;
   sqlstr:string;
   i_group_num,i_drug_days,i_item_unid:integer;//i_ji_num
   f_dosage,f_drug_num:single;
@@ -324,7 +324,7 @@ begin
     exit;
   end;
 
-  adotemp22:=TMyQuery.Create(nil);
+  adotemp22:=TUniQuery.Create(nil);
   adotemp22.Connection:=dm.MyConnection1;
   adotemp22.Close;
   adotemp22.SQL.Clear;
@@ -344,7 +344,7 @@ begin
     if(adotemp22.fieldbyname('item_type').AsString='检验')and(not CheckBox5.Checked)then begin adotemp22.Next;continue;end;
     if(adotemp22.fieldbyname('item_type').AsString='检查')and(not CheckBox6.Checked)then begin adotemp22.Next;continue;end; 
 
-    adotemp11:=TMyQuery.Create(nil);
+    adotemp11:=TUniQuery.Create(nil);
     adotemp11.Connection:=dm.MyConnection1;
     sqlstr:='Insert into temp_body ('+
                         ' dir_unid,item_unid,name,Content,type_name,group_num,dosage,unit_dosage,use_method,drug_freq,drug_days,drug_num,unit_drug) values ('+

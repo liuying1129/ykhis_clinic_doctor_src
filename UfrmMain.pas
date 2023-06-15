@@ -467,8 +467,8 @@ begin
   SendMessage(ComboBox15.handle,CB_SETDROPPEDWIDTH,48,0);
   SendMessage(ComboBox3.handle,CB_SETDROPPEDWIDTH,48,0);
 
-  // send a pageView hit on Form Show
-  dllSoftMeter.sendPageview(PChar(UTF8Encode(SCSYDW)+'/'+UTF8Encode(operator_id)),'frmMain Show Event');
+  //用户在登录界面【退出】,该语句也会执行(出乎我的意料),此时operator_id为空
+  dllSoftMeter.sendPageview(PChar(ChangeFileExt(ExtractFileName(Application.ExeName),'')+'/'+UTF8Encode(SCSYDW)+'/'+UTF8Encode(operator_id)),'frmMain Show Event');
 end;
 
 procedure TfrmMain.updatestatusBar(const text: string);
